@@ -31,7 +31,9 @@
 ;; V1.02 09Aug2003  Peter S Galbraith <psg@debian.org>
 ;;  - add `debian-bts-control-prompt' to Prompt for bug number using sensible
 ;;    default if found.
-
+;; V1.03 03Sep2003  Peter S Galbraith <psg@debian.org>
+;;  - Don't set `debian-bts-control-verbose-prompts-flag' to t for Emacs20
+;;    since it can't display multi-line prompts. (Closes: #208553)
 
 ;;; Code:
 (require 'debian-bug)
@@ -39,7 +41,13 @@
 (defcustom debian-bts-control-verbose-prompts-flag t
   "Non-nil means to be very verbose for `debian-bts-control' prompts."
   :group 'debian-bug
-  :type 'boolean)
+  :type 'boolean
+  :set (lambda (symbol value)
+         (if (<= 21 emacs-major-version)
+             (set-default symbol value)
+           (message
+            "debian-bts-control-verbose-prompts-flag overridden for Emacs20")
+           (set-default symbol nil))))            
 
 (defcustom debian-bts-control-modes-to-reuse
   '(mh-letter-mode mail-mode message-mode)
