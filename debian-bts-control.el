@@ -34,7 +34,8 @@
 ;; V1.03 03Sep2003  Peter S Galbraith <psg@debian.org>
 ;;  - Don't set `debian-bts-control-verbose-prompts-flag' to t for Emacs20
 ;;    since it can't display multi-line prompts. (Closes: #208553)
-
+;; V1.04 05Sep2003  Peter S Galbraith <psg@debian.org>
+;;  - debian-bts-help-control: was missing!
 ;;; Code:
 (require 'debian-bug)
 
@@ -493,8 +494,10 @@ in `debian-bts-control-modes-to-reuse'."
      )))
 
 
-(defvar debian-bts-help-control-text
-"Help text from http://www.debian.org/Bugs/server-control, Apr 22nd 2003.
+(defun debian-bts-help-control ()
+  (with-output-to-temp-buffer "*Help*"
+    (princ 
+     "Help text from http://www.debian.org/Bugs/server-control, Apr 22nd 2003.
 Copyright 1999 Darren O. Benham, 1994-1997 Ian Jackson,
  1997 nCipher Corporation Ltd.
 
@@ -672,7 +675,7 @@ thank...
 
 #...
 
-    One-line comment. The # must be at the start of the line.")
+    One-line comment. The # must be at the start of the line.")))
 
 (provide 'debian-bts-control)
 
