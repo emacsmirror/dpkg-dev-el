@@ -632,7 +632,7 @@ Upload to " val  " anyway?")))
       (error (substitute-command-keys "most recent version has been finalised - use \\[debian-changelog-unfinalise-last-version] or \\[debian-changelog-add-version]")))
   (let ((bug-number (completing-read 
                      "Bug number to close: " 
-                     debian-bug-alist nil nil)))
+                     debian-bug-open-alist nil nil)))
     (if (not (string-match "^[0-9]+$" bug-number))
         (error "The bug number should consists of only digits."))
     (debian-changelog-add-entry)
