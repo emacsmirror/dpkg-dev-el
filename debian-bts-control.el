@@ -2,6 +2,10 @@
 
 ;; Copyright (C) 2003 Peter S Galbraith
 ;;
+;; Help text from http://www.debian.org/Bugs/server-control:
+;; Copyright 1999 Darren O. Benham, 1994-1997 Ian Jackson,
+;;  1997 nCipher Corporation Ltd.
+;;
 ;; This file is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation; either version 2, or (at your option)
@@ -36,7 +40,9 @@
 ;;    since it can't display multi-line prompts. (Closes: #208553)
 ;; V1.04 05Sep2003  Peter S Galbraith <psg@debian.org>
 ;;  - debian-bts-help-control: was missing!
+
 ;;; Code:
+
 (require 'debian-bug)
 
 (defcustom debian-bts-control-verbose-prompts-flag t
@@ -497,11 +503,7 @@ in `debian-bts-control-modes-to-reuse'."
 (defun debian-bts-help-control ()
   (with-output-to-temp-buffer "*Help*"
     (princ 
-     "Help text from http://www.debian.org/Bugs/server-control, Apr 22nd 2003.
-Copyright 1999 Darren O. Benham, 1994-1997 Ian Jackson,
- 1997 nCipher Corporation Ltd.
-
-reassign bugnumber package
+     "reassign bugnumber package
 
     Records that bug #bugnumber is a bug in package. This can be used to
     set the package if the user forgot the pseudo-header, or to change an
@@ -675,7 +677,11 @@ thank...
 
 #...
 
-    One-line comment. The # must be at the start of the line.")))
+    One-line comment. The # must be at the start of the line.
+
+Help text from http://www.debian.org/Bugs/server-control, Apr 22nd 2003.
+Copyright 1999 Darren O. Benham, 1994-1997 Ian Jackson,
+ 1997 nCipher Corporation Ltd.")))
 
 (provide 'debian-bts-control)
 
