@@ -33,30 +33,52 @@
 (add-to-list 'auto-mode-alist '("debian/README.Debian$" . readme-debian-mode))
 (add-to-list 'auto-mode-alist '("^/usr/share/doc/.*/README.Debian.*$" . readme-debian-mode))
 
+(defvar readme-debian-font-lock-keywords
+  '(("^\\(.*\\) for \\(Debian\\)$"
+     (1 font-lock-keyword-face)
+     (2 font-lock-string-face))
+    ("^[-=]+$" 0 font-lock-string-face)
+    ("^ -- \\([^<]*\\)\\(<[^>]*>\\)\\(, \\(.*\\)\\)?$"
+     (1 font-lock-keyword-face)
+     (2 font-lock-function-name-face)
+     (3 font-lock-string-face)))
+  "Regexp keywords used to fontify README.Debian buffers.")
+
 (defun readme-debian-update-timestamp ()
   "Function to update timestamp in README.Debian files, automatically invoked when saving file."
   (save-excursion
     (goto-line 1)
-    (re-search-forward "^ -- ")
-    (delete-region (progn (beginning-of-line) (point)) (progn (end-of-line) (point)))
+    (if (re-search-forward "^ -- " nil t)
+        (delete-region (progn (beginning-of-line) (point)) (progn (end-of-line) (point)))
+      (goto-char (point-max))
+      (if (bolp)
+	  (insert "\n")
+	(insert "\n\n")))
     (insert (concat
 	     " -- "
 	     debian-changelog-full-name
 	     " <" debian-changelog-mailing-address ">, "
-	     (current-time-string)))))
+	     (current-time-string)))
+    (if (and (= (point)(point-max)) (not (bolp)))
+	(insert "\n"))))
 
 (defvar readme-debian-mode-map nil "Keymap for README.Debian mode.")
+(if readme-debian-mode-map
+    ()
+  (setq readme-debian-mode-map (make-sparse-keymap)))
 (defvar readme-debian-mode-syntax-table nil "Syntax table for README.Debian mode.")
 (if readme-debian-mode-syntax-table
-         ()              ; Do not change the table if it is already set up.
-       (setq readme-debian-mode-syntax-table (make-syntax-table))
-       (modify-syntax-entry ?\" ".   " readme-debian-mode-syntax-table)
-       (modify-syntax-entry ?\\ ".   " readme-debian-mode-syntax-table)
-       (modify-syntax-entry ?' "w   " readme-debian-mode-syntax-table))
+    ()                   ; Do not change the table if it is already set up.
+  (setq readme-debian-mode-syntax-table (make-syntax-table))
+  (modify-syntax-entry ?\" ".   " readme-debian-mode-syntax-table)
+  (modify-syntax-entry ?\\ ".   " readme-debian-mode-syntax-table)
+  (modify-syntax-entry ?' "w   " readme-debian-mode-syntax-table))
 
 (defvar font-lock-defaults)             ;For XEmacs byte-compilation
 (defun readme-debian-mode ()
   "Mode for reading and editing README.Debian files.
+Upon saving the visited README.Debian file, the timestamp at the bottom
+will be updated.
 
 \\{readme-debian-mode-map}"
   (interactive)
@@ -67,20 +89,13 @@
   (use-local-map readme-debian-mode-map)
   (set-syntax-table readme-debian-mode-syntax-table)
   (setq font-lock-defaults
-	'(
-					;keywords start here
-	  (("^\\(.*\\) for \\(Debian\\)$" (1 font-lock-keyword-face) (2 font-lock-string-face))
-	   ("^[-=]+$" 0 font-lock-string-face)
-	   ("^ -- \\([^<]*\\)\\(<[^>]*>\\)\\(, \\(.*\\)\\)?$"
-	    (1 font-lock-keyword-face)
-	    (2 font-lock-function-name-face)
-	    (3 font-lock-string-face))
-	   )
-	  nil		;keywords-only
-	  nil		;case-fold
-	  ()		;syntax-alist
-	  ))
-  (add-to-list 'write-file-hooks 'readme-debian-update-timestamp) ; add timestamp update func to write-file-hook
+   '(readme-debian-font-lock-keywords
+     nil ;; keywords-only? No, let it do syntax via table.
+     nil ;; case-fold?
+     nil ;; Local syntax table.
+     ))
+  ;; add timestamp update func to write-file-hook
+  (add-to-list 'write-file-hooks 'readme-debian-update-timestamp)
   (run-hooks 'readme-debian-mode-hook))
 
 (run-hooks 'readme-debian-mode-load-hook)
