@@ -248,6 +248,9 @@
 ;;    (Closes: #191285)
 ;; V1.70 28May2003 Peter S Galbraith <psg@debian.org>
 ;;  - Define (really) match-string-no-properties for XEmacs (Closes: #195181)
+;; V1.71 02Sep2003 Peter S Galbraith <psg@debian.org>
+;;  - When closing a bug, insert bug title and thanks if bug info was
+;;    downloaded from the web.
 ;; ----------------------------------------------------------------------------
 ;; TO DO List:
 ;;  - Menu to close bugs with each bug having a menu entry.
@@ -645,8 +648,14 @@ Upload to " val  " anyway?")))
   (if (not (string-match "^[0-9]+$" bug-number))
       (error "The bug number should consists of only digits."))
   (debian-changelog-add-entry)
-  (save-excursion (insert " (closes: #" bug-number ")"))
-  (message "Enter a brief description of what was done here."))
+  (cond
+   ((and debian-bug-open-alist
+         (assoc bug-number debian-bug-open-alist))
+    (insert (cadr (assoc bug-number debian-bug-open-alist)))
+    (fill-paragraph nil))
+   (t
+    (save-excursion (insert " (closes: #" bug-number ")"))
+    (message "Enter a brief description of what was done here."))))
 
 ;;
 ;; interactive functions to set urgency and distribution
