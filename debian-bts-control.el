@@ -26,6 +26,8 @@
 ;;
 ;; V1.00 30apr2003  Peter S Galbraith <psg@debian.org>
 ;;  - Initial release.
+;; V1.01 23May2003  Peter S Galbraith <psg@debian.org>
+;;  - Add `debian-bts-control-modes-to-reuse'.
 
 ;;; Code:
 (require 'debian-bug)
@@ -34,6 +36,14 @@
   "Non-nil means to be very verbose for `debian-bts-control' prompts."
   :group 'debian-bug
   :type 'boolean)
+
+(defcustom debian-bts-control-modes-to-reuse
+  '(mh-letter-mode mail-mode message-mode)
+  "List of modes in which calling `debian-bts-control' will reuse the buffer.
+No new draft will be created.  Instead control@bugs.debian.org will be
+added to the Cc: field and the comamnds added at t6he top of the message."
+  :group 'debian-bug
+  :type '(repeat symbol))
 
 (defvar debian-bts-control-minor-mode nil)
 (defvar debian-bts-control-minor-mode-map nil
@@ -182,13 +192,27 @@ a negative prefix argument turns it off.
     ("tags") ("close"))
   "List of available commands at control@bugs.debian.org.")
 
-(defun debian-bts-control (&optional action)
+(defun debian-bts-control (action &optional arg)
   "Contruct a message with initial ACTION command for control@bugs.debian.org.
 Contructs a new control command line if called from within the message
-being constructed."
+being constructed.
+
+If prefix arg is provided, use the current buffer instead instead of
+creating a new outgoing email message buffer.
+The current buffer is also used if the current major mode matches one listed
+in `debian-bts-control-modes-to-reuse'."
   (interactive (list (completing-read "Command: "
-                                      debian-bts-control-alist nil nil)))
-  (when (not debian-bts-control-minor-mode)
+                                      debian-bts-control-alist nil nil)
+                     current-prefix-arg))
+  (cond
+   ((or arg (car (memq t (mapcar '(lambda (item) (eq item major-mode)) 
+                                 debian-bts-control-modes-to-reuse))))
+    (debian-bug--set-CC "control@bugs.debian.org" "cc:")
+    (goto-char (mail-header-end))
+    (forward-line 1)
+    (insert "thanks\n\n")
+    (debian-bts-control-minor-mode 1))
+   ((not debian-bts-control-minor-mode)
     (reporter-compose-outgoing)
     (if (and (equal mail-user-agent 'gnus-user-agent)
              (string-equal " *nntpd*" (buffer-name)))
@@ -208,7 +232,7 @@ being constructed."
     (goto-char (mail-header-end))
     (forward-line 1)
     (insert "thanks\n")
-    (debian-bts-control-minor-mode 1))
+    (debian-bts-control-minor-mode 1)))
   (goto-char (mail-header-end))
   (if (re-search-forward "^thank" nil t)
       (beginning-of-line)
