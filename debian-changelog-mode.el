@@ -251,6 +251,8 @@
 ;; V1.71 02Sep2003 Peter S Galbraith <psg@debian.org>
 ;;  - When closing a bug, insert bug title and thanks if bug info was
 ;;    downloaded from the web.
+;; V1.72 17Sep2003 Peter S Galbraith <psg@debian.org>
+;;  - Added browse-url link to `Best Practices for debian/changelog' in menu.
 ;; ----------------------------------------------------------------------------
 ;; TO DO List:
 ;;  - Menu to close bugs with each bug having a menu entry.
@@ -602,6 +604,7 @@ Upload to " val  " anyway?")))
     (not (debian-changelog-finalised-p))]
    "--"
    "Access www.debian.org"
+   ["Best practices" (browse-url "http://www.debian.org/doc/developers-reference/ch-best-pkging-practices.en.html#s-bpp-debian-changelog") t]
    ["Bugs for this package" (debian-bug-web-bugs) t]
    ["Specific bug number" (debian-bug-web-bug) t]
    ["Package list (all archives)" (debian-bug-web-packages) t]
