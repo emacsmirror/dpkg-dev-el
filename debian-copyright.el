@@ -63,7 +63,8 @@
   (mapcar 'make-local-variable '(font-lock-defaults write-file-hooks))
   (use-local-map debian-copyright-mode-map)
   (set-syntax-table debian-copyright-mode-syntax-table)
-  (if (not (featurep 'browse-url))
+  (if (or (not (featurep 'goto-addr))
+          (not goto-address-highlight-p))
       (setq font-lock-defaults
             '((("http:.*$" . font-lock-function-name-face)
                ("ftp:.*$" . font-lock-function-name-face)
@@ -82,8 +83,6 @@
   (run-hooks 'debian-copyright-mode-hook))
 
 (run-hooks 'debian-copyright-mode-load-hook)
-
-(provide 'debian-copyright-mode)
 
 (provide 'debian-copyright)
 
