@@ -28,6 +28,10 @@
 ;;  - Initial release.
 ;; V1.01 23May2003  Peter S Galbraith <psg@debian.org>
 ;;  - Add `debian-bts-control-modes-to-reuse'.
+;; V1.02 09Aug2003  Peter S Galbraith <psg@debian.org>
+;;  - add `debian-bts-control-prompt' to Prompt for bug number using sensible
+;;    default if found.
+
 
 ;;; Code:
 (require 'debian-bug)
@@ -192,6 +196,19 @@ a negative prefix argument turns it off.
     ("tags") ("close"))
   "List of available commands at control@bugs.debian.org.")
 
+(defun debian-bts-control-prompt (prompt)
+  "Prompt for bug number using sensible default if found."
+  (save-excursion
+    (goto-char (point-min))
+    (let ((default-number
+            (cond ((re-search-forward "\\([0-9]+\\)@bugs.debian.org"
+                                      (mail-header-end) t)
+                   (match-string-no-properties 1)))))
+      (if default-number
+          (read-string (format "%s [%s]: " prompt default-number)
+                       nil nil default-number)
+        (read-string (format "%s: " prompt))))))
+
 (defun debian-bts-control (action &optional arg)
   "Contruct a message with initial ACTION command for control@bugs.debian.org.
 Contructs a new control command line if called from within the message
@@ -204,46 +221,51 @@ in `debian-bts-control-modes-to-reuse'."
   (interactive (list (completing-read "Command: "
                                       debian-bts-control-alist nil nil)
                      current-prefix-arg))
-  (cond
-   ((or arg 
-        (and (car (memq t (mapcar '(lambda (item) (eq item major-mode)) 
-                                 debian-bts-control-modes-to-reuse)))
-             (not debian-bts-control-minor-mode)))
-    (debian-bug--set-CC "control@bugs.debian.org" "cc:")
-    (goto-char (mail-header-end))
-    (forward-line 1)
-    (insert "thanks\n\n")
-    (debian-bts-control-minor-mode 1))
-   ((not debian-bts-control-minor-mode)
-    (reporter-compose-outgoing)
-    (if (and (equal mail-user-agent 'gnus-user-agent)
-             (string-equal " *nntpd*" (buffer-name)))
-        (set-buffer "*mail*"))   ; Bug in emacs21.1?  Moves to " *nntpd*"
-    (goto-char (point-min))
+  (let ((number-default))
     (cond
-     ((re-search-forward "To: " nil t)
-      (insert "control@bugs.debian.org"))
-     ((re-search-forward "To:" nil t)
-      (insert " control@bugs.debian.org"))
-     (t
-      (insert "To: control@bugs.debian.org")))
-    (if debian-bug-use-From-address
-        (debian-bug--set-custom-From))
-    (if debian-bug-always-CC-myself
-        (debian-bug--set-CC debian-bug-From-address "cc:"))
+     ((or arg 
+          (and (car (memq t (mapcar '(lambda (item) (eq item major-mode)) 
+                                    debian-bts-control-modes-to-reuse)))
+               (not debian-bts-control-minor-mode)))
+      (debian-bug--set-CC "control@bugs.debian.org" "cc:")
+      (goto-char (point-min))
+      (if (re-search-forward "\\([0-9]+\\)@bugs.debian.org"
+                             (mail-header-end) t)
+          (setq number-default (match-string 1)))
+      (goto-char (mail-header-end))
+      (forward-line 1)
+      (insert "thanks\n\n")
+      (debian-bts-control-minor-mode 1))
+     ((not debian-bts-control-minor-mode)
+      (reporter-compose-outgoing)
+      (if (and (equal mail-user-agent 'gnus-user-agent)
+               (string-equal " *nntpd*" (buffer-name)))
+          (set-buffer "*mail*"))   ; Bug in emacs21.1?  Moves to " *nntpd*"
+      (goto-char (point-min))
+      (cond
+       ((re-search-forward "To: " nil t)
+        (insert "control@bugs.debian.org"))
+       ((re-search-forward "To:" nil t)
+        (insert " control@bugs.debian.org"))
+       (t
+        (insert "To: control@bugs.debian.org")))
+      (if debian-bug-use-From-address
+          (debian-bug--set-custom-From))
+      (if debian-bug-always-CC-myself
+          (debian-bug--set-CC debian-bug-From-address "cc:"))
+      (goto-char (mail-header-end))
+      (forward-line 1)
+      (insert "thanks\n")
+      (debian-bts-control-minor-mode 1)))
     (goto-char (mail-header-end))
-    (forward-line 1)
-    (insert "thanks\n")
-    (debian-bts-control-minor-mode 1)))
-  (goto-char (mail-header-end))
-  (if (re-search-forward "^thank" nil t)
-      (beginning-of-line)
-    (goto-char (point-max)))
-  (cond
-   ((string-equal "reassign" action)
-    (debian-bug-fill-packages-obarray)
-    (let* ((verbose (if debian-bts-control-verbose-prompts-flag
-                        "reassign bugnumber package
+    (if (re-search-forward "^thank" nil t)
+        (beginning-of-line)
+      (goto-char (point-max)))
+    (cond
+     ((string-equal "reassign" action)
+      (debian-bug-fill-packages-obarray)
+      (let* ((verbose (if debian-bts-control-verbose-prompts-flag
+                          "reassign bugnumber package
 
  Records that bug #BUGNUMBER is a bug in PACKAGE. This can be used to
  set the package if the user forgot the pseudo-header, or to change an
@@ -251,16 +273,17 @@ in `debian-bts-control-modes-to-reuse'."
  usual information in the processing transcript).
 
 "
-                      ""
-                     "Package to reassign to: "))
-           (bug-number (read-string (concat verbose "Bug number: ")))
-           (package (completing-read
-                     (concat verbose "Package to reassign to: ")
-                     (debian-bug-fill-packages-obarray) nil nil)))
-      (insert (format "reassign %s %s\n" bug-number package))))
-   ((string-equal "reopen" action)
-    (let* ((verbose (if debian-bts-control-verbose-prompts-flag
-                        "reopen bugnumber [ originator-address | = | ! ]
+                        ""
+                        "Package to reassign to: "))
+             (bug-number (debian-bts-control-prompt
+                          (concat verbose "Bug number")))
+             (package (completing-read
+                       (concat verbose "Package to reassign to: ")
+                       (debian-bug-fill-packages-obarray) nil nil)))
+        (insert (format "reassign %s %s\n" bug-number package))))
+     ((string-equal "reopen" action)
+      (let* ((verbose (if debian-bts-control-verbose-prompts-flag
+                          "reopen bugnumber [ originator-address | = | ! ]
 
  Reopens #BUGNUMBER if it is closed.
 
@@ -277,14 +300,15 @@ in `debian-bts-control-modes-to-reuse'."
  the change.
 
 "
-                      ""))
-           (bug-number (read-string (concat verbose "Bug number: ")))
-           (originator (read-string
+                        ""))
+             (bug-number (debian-bts-control-prompt
+                          (concat verbose "Bug number")))
+             (originator (read-string
                         (concat verbose "Originator-address (optional): "))))
-      (insert (format "reopen %s %s\n" bug-number originator))))
-   ((string-equal "submitter" action)
-    (let* ((verbose (if debian-bts-control-verbose-prompts-flag
-                        "submitter bugnumber originator-address | !
+        (insert (format "reopen %s %s\n" bug-number originator))))
+     ((string-equal "submitter" action)
+      (let* ((verbose (if debian-bts-control-verbose-prompts-flag
+                          "submitter bugnumber originator-address | !
 
  Changes the originator of #BUGNUMBER to ORIGINATOR-ADDRESS.
 
@@ -295,14 +319,15 @@ in `debian-bts-control-modes-to-reuse'."
  with the one being reopened, submitter does not affect merged bugs.
 
 "
-                      ""))
-           (bug-number (read-string (concat verbose "Bug number: ")))
-           (originator (read-string
-                        (concat verbose "Originator-address (optional): "))))
-      (insert (format "submitter %s %s\n" bug-number originator))))
-   ((string-equal "forwarded" action)
-    (let* ((verbose (if debian-bts-control-verbose-prompts-flag
-"forwarded bugnumber address
+                        ""))
+             (bug-number (debian-bts-control-prompt
+                          (concat verbose "Bug number")))
+             (originator (read-string
+                          (concat verbose "Originator-address (optional): "))))
+        (insert (format "submitter %s %s\n" bug-number originator))))
+     ((string-equal "forwarded" action)
+      (let* ((verbose (if debian-bts-control-verbose-prompts-flag
+                          "forwarded bugnumber address
 
  Notes that BUGNUMBER has been forwarded to the upstream maintainer at
  ADDRESS. This does not actually forward the report. This can be used to
@@ -310,26 +335,28 @@ in `debian-bts-control-modes-to-reuse'."
  one for a bug that wasn't previously noted as having been forwarded.
 
 "
-                      ""))
-           (bug-number (read-string (concat verbose "Bug number: ")))
-           (address (read-string
-                     (concat verbose "Forwarded-address: "))))
-      (insert (format "forwarded %s %s\n" bug-number address))))
-   ((string-equal "notforwarded" action)
-    (let* ((verbose (if debian-bts-control-verbose-prompts-flag
-                        "notforwarded bugnumber
+                        ""))
+             (bug-number (debian-bts-control-prompt
+                          (concat verbose "Bug number")))
+             (address (read-string
+                       (concat verbose "Forwarded-address: "))))
+        (insert (format "forwarded %s %s\n" bug-number address))))
+     ((string-equal "notforwarded" action)
+      (let* ((verbose (if debian-bts-control-verbose-prompts-flag
+                          "notforwarded bugnumber
 
  Forgets any idea that BUGNUMBER has been forwarded to any upstream
  maintainer. If the bug was not recorded as having been forwarded then
  this will do nothing.
 
 "
-                      ""))
-           (bug-number (read-string (concat verbose "Bug number: "))))
-      (insert (format "notforwarded %s\n" bug-number))))
-   ((string-equal "retitle" action)
-    (let* ((verbose (if debian-bts-control-verbose-prompts-flag
-                        "retitle bugnumber new-title
+                        ""))
+             (bug-number (debian-bts-control-prompt
+                          (concat verbose "Bug number"))))
+        (insert (format "notforwarded %s\n" bug-number))))
+     ((string-equal "retitle" action)
+      (let* ((verbose (if debian-bts-control-verbose-prompts-flag
+                          "retitle bugnumber new-title
 
  Changes the TITLE of a bug report to that specified (the default is the
  Subject mail header from the original report).
@@ -339,14 +366,15 @@ in `debian-bts-control-modes-to-reuse'."
  individual bug requested, and not all those with which it is merged.
 
 "
-                      ""))
-           (bug-number (read-string (concat verbose "Bug number: ")))
-           (title (read-string
+                        ""))
+             (bug-number (debian-bts-control-prompt
+                          (concat verbose "Bug number")))
+             (title (read-string
                      (concat verbose "New title: "))))
-      (insert (format "retitle %s %s\n" bug-number title))))
-   ((string-equal "severity" action)
-    (let* ((verbose (if debian-bts-control-verbose-prompts-flag
-                        "severity bugnumber severity
+        (insert (format "retitle %s %s\n" bug-number title))))
+     ((string-equal "severity" action)
+      (let* ((verbose (if debian-bts-control-verbose-prompts-flag
+                          "severity bugnumber severity
 
  Set the severity level for bug report #BUGNUMBER to SEVERITY. No
  notification is sent to the user who reported the bug.
@@ -357,14 +385,15 @@ in `debian-bts-control-modes-to-reuse'."
  For their meanings, consult the Control->Help->Severities menu.
 
 "
-                      ""))
-           (bug-number (read-string (concat verbose "Bug number: ")))
-           (severity (completing-read "Severity: " debian-bug-severity-alist
-                                      nil t)))
-      (insert (format "severity %s %s\n" bug-number severity))))
-   ((string-equal "clone" action)
-    (let* ((verbose (if debian-bts-control-verbose-prompts-flag
-                        "clone bugnumber [ new IDs ]
+                        ""))
+             (bug-number (debian-bts-control-prompt
+                          (concat verbose "Bug number")))
+             (severity (completing-read "Severity: " debian-bug-severity-alist
+                                        nil t)))
+        (insert (format "severity %s %s\n" bug-number severity))))
+     ((string-equal "clone" action)
+      (let* ((verbose (if debian-bts-control-verbose-prompts-flag
+                          "clone bugnumber [ new IDs ]
 
  Duplicate a bug report. Useful when a single report indicates that
  multiple distinct bugs have occured. \"New IDs\" are negative numbers,
@@ -378,13 +407,14 @@ in `debian-bts-control-modes-to-reuse'."
      retitle -2 bar: bar sucks when used with foo
      severity -2 wishlist
 "
-                      ""))
-           (bug-number (read-string (concat verbose "Bug number: ")))
-           (ids (read-string (concat verbose "New IDs (e.g. -1 -2): "))))
-      (insert (format "clone %s %s\n" bug-number ids))))
-   ((string-equal "merge" action)
-    (let* ((verbose (if debian-bts-control-verbose-prompts-flag
-                        "merge bugnumber bugnumber ...
+                        ""))
+             (bug-number (debian-bts-control-prompt
+                          (concat verbose "Bug number")))
+             (ids (read-string (concat verbose "New IDs (e.g. -1 -2): "))))
+        (insert (format "clone %s %s\n" bug-number ids))))
+     ((string-equal "merge" action)
+      (let* ((verbose (if debian-bts-control-verbose-prompts-flag
+                          "merge bugnumber bugnumber ...
 
  Merges two or more bug reports. When reports are merged, opening, closing,
  marking or unmarking as forwarded and reassigning any of the bugs to a new
@@ -393,12 +423,12 @@ in `debian-bts-control-modes-to-reuse'."
  Before bugs can be merged they must be in exactly the same state.
 
 "
-                      ""))
-           (bug-numbers (read-string (concat verbose "All bug numbers: "))))
-      (insert (format "merge %s\n" bug-numbers))))
-   ((string-equal "unmerge" action)
-    (let* ((verbose (if debian-bts-control-verbose-prompts-flag
-"unmerge bugnumber
+                        ""))
+             (bug-numbers (read-string (concat verbose "All bug numbers: "))))
+        (insert (format "merge %s\n" bug-numbers))))
+     ((string-equal "unmerge" action)
+      (let* ((verbose (if debian-bts-control-verbose-prompts-flag
+                          "unmerge bugnumber
 
  Disconnects a bug report from any other reports with which it may have
  been merged. If the report listed is merged with several others then
@@ -406,12 +436,13 @@ in `debian-bts-control-modes-to-reuse'."
  the bug explicitly named are removed.
 
 "
-                      ""))
-           (bug-number (read-string (concat verbose "Bug number: "))))
-      (insert (format "unmerge %s\n" bug-number))))
-   ((string-equal "tags" action)
-    (let* ((verbose (if debian-bts-control-verbose-prompts-flag
-                        "tags bugnumber [ + | - | = ] tag
+                        ""))
+             (bug-number (debian-bts-control-prompt
+                          (concat verbose "Bug number"))))
+        (insert (format "unmerge %s\n" bug-number))))
+     ((string-equal "tags" action)
+      (let* ((verbose (if debian-bts-control-verbose-prompts-flag
+                          "tags bugnumber [ + | - | = ] tag
 
  Sets a particular tag for the bug report #BUGNUMBER to tag. No
  notification is sent to the user who reported the bug. + means adding, -
@@ -424,17 +455,18 @@ in `debian-bts-control-modes-to-reuse'."
  For their meanings, consult the Control->Help->Tags menu.
 
 "
-                      ""))
-           (bug-number (read-string (concat verbose "Bug number: ")))
-           (add (completing-read "+, -, = (default +): "
-                                 '(("+") ("-") ("=")) nil t nil nil "+"))
-           (tag (completing-read "Tag: " debian-bug-alltags-alist nil t)))
-      (insert (format "tags %s %s %s\n" bug-number add tag))))
-   ((string-equal "close" action)
-    (if (yes-or-no-p
-         "Deprecated in favor of #BUG-close@bugs.debian.org. Continue? ")
-        (let* ((verbose (if debian-bts-control-verbose-prompts-flag
-                            "close bugnumber
+                        ""))
+             (bug-number (debian-bts-control-prompt
+                          (concat verbose "Bug number")))
+             (add (completing-read "+, -, = (default +): "
+                                   '(("+") ("-") ("=")) nil t nil nil "+"))
+             (tag (completing-read "Tag: " debian-bug-alltags-alist nil t)))
+        (insert (format "tags %s %s %s\n" bug-number add tag))))
+     ((string-equal "close" action)
+      (if (yes-or-no-p
+           "Deprecated in favor of #BUG-close@bugs.debian.org. Continue? ")
+          (let* ((verbose (if debian-bts-control-verbose-prompts-flag
+                              "close bugnumber
 
  Close bug report #BUGNUMBER.
 
@@ -446,11 +478,11 @@ in `debian-bts-control-modes-to-reuse'."
  this command is therefore deprecated.
 
 "
-                          ""))
-               (bug-number (read-string (concat verbose "Bug number: "))))
-          (insert (format "close %s\n" bug-number)))))
-   ))
-
+                            ""))
+                 (bug-number (debian-bts-control-prompt
+                              (concat verbose "Bug number"))))
+            (insert (format "close %s\n" bug-number)))))
+     )))
 
 
 (defvar debian-bts-help-control-text
