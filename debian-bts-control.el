@@ -3,6 +3,7 @@
 ;; Copyright (C) 2003 Peter S Galbraith
 ;;
 ;; Help text from http://www.debian.org/Bugs/server-control:
+;; Debian BTS administrators <owner@bugs.debian.org>
 ;; Copyright 1999 Darren O. Benham, 1994-1997 Ian Jackson,
 ;;  1997 nCipher Corporation Ltd.
 ;;
@@ -40,6 +41,8 @@
 ;;    since it can't display multi-line prompts. (Closes: #208553)
 ;; V1.04 05Sep2003  Peter S Galbraith <psg@debian.org>
 ;;  - debian-bts-help-control: was missing!
+;; V1.05 18Sep2003  Peter S Galbraith <psg@debian.org>
+;;  - Add `package', `owner' and `noowner'.
 
 ;;; Code:
 
@@ -88,8 +91,11 @@ added to the Cc: field and the comamnds added at t6he top of the message."
       :selected (debian-bug--is-CC debian-bug-From-address "cc:")]
      )
      "--"
+    ["Package" (debian-bts-control "package") t]
     ["Reassign" (debian-bts-control "reassign") t]
     ["Reopen" (debian-bts-control "reopen") t]
+    ["Owner" (debian-bts-control "owner") t]
+    ["NoOwner" (debian-bts-control "noowner") t]
     ["Submitter" (debian-bts-control "submitter") t]
     ["Forwarded" (debian-bts-control "forwarded") t]
     ["NotForwarded" (debian-bts-control "notforwarded") t]
@@ -120,6 +126,17 @@ added to the Cc: field and the comamnds added at t6he top of the message."
 (defvar debian-bts-control-font-lock-keywords
   '(("#.*$" .  font-lock-comment-face)
     ("^ *thank.*$" . font-lock-function-name-face)
+    ("^ *\\(package\\)  +\\([a-z0-9\\.\\-]+\\)$"
+     (1 font-lock-function-name-face)
+     (2 font-lock-keyword-face nil t))
+    ("^ *\\(owner\\) +\\(-?[0-9]+\\) +\\(\\(!\\)\\|\\(.+\\)\\)$"
+     (1 font-lock-function-name-face)
+     (2 font-lock-type-face)
+     (4 font-lock-keyword-face nil t)
+     (5 font-lock-string-face nil t))
+    ("^ *\\(noowner\\) +\\(-?[0-9]+\\)"
+     (1 font-lock-function-name-face)
+     (2 font-lock-type-face))
     ("^ *\\(reassign\\) +\\(-?[0-9]+\\) +\\([a-z0-9\\.\\-]+\\)$"
      (1 font-lock-function-name-face)
      (2 font-lock-type-face)
@@ -208,7 +225,7 @@ a negative prefix argument turns it off.
 (defvar debian-bts-control-alist
   '(("reassign") ("severity") ("reopen") ("submitter") ("forwarded")
     ("notforwarded") ("retitle") ("clone") ("merge") ("unmerge")
-    ("tags") ("close"))
+    ("tags") ("close") ("package") ("owner") ("noowner"))
   "List of available commands at control@bugs.debian.org.")
 
 (defun debian-bts-control-prompt (prompt)
@@ -277,6 +294,23 @@ in `debian-bts-control-modes-to-reuse'."
         (beginning-of-line)
       (goto-char (point-max)))
     (cond
+     ((string-equal "package" action)
+      (debian-bug-fill-packages-obarray)
+      (let* ((verbose (if debian-bts-control-verbose-prompts-flag
+                          "package [ packagename ... ]
+
+ Limits the following commands so that they will only apply to bugs
+ filed against the listed packages. You can list one or more
+ packages. If you don't list any packages, the following commands will
+ apply to all bugs. You're encouraged to use this as a safety feature
+ in case you accidentally use the wrong bug numbers.
+
+"
+                        ""))
+             (package (completing-read
+                       (concat verbose "Package list to limit to: ")
+                       (debian-bug-fill-packages-obarray) nil nil)))
+        (insert (format "package %s\n" package))))
      ((string-equal "reassign" action)
       (debian-bug-fill-packages-obarray)
       (let* ((verbose (if debian-bts-control-verbose-prompts-flag
@@ -288,7 +322,6 @@ in `debian-bts-control-modes-to-reuse'."
  usual information in the processing transcript).
 
 "
-                        ""
                         "Package to reassign to: "))
              (bug-number (debian-bts-control-prompt
                           (concat verbose "Bug number")))
@@ -340,6 +373,38 @@ in `debian-bts-control-modes-to-reuse'."
              (originator (read-string
                           (concat verbose "Originator-address (optional): "))))
         (insert (format "submitter %s %s\n" bug-number originator))))
+     ((string-equal "owner" action)
+      (let* ((verbose (if debian-bts-control-verbose-prompts-flag
+                          "owner bugnumber address | !
+
+ Sets address to be the \"owner\" of #bugnumber. The owner of a bug
+ claims responsibility for fixing it and will receive all mail
+ regarding it. This is useful to share out work in cases where a
+ package has a team of maintainers.
+
+ If you wish to become the owner of the bug yourself, you can use the
+ ! shorthand or specify your own email address.
+
+"
+                        ""))
+             (bug-number (debian-bts-control-prompt
+                          (concat verbose "Bug number")))
+             (address (read-string
+                       (concat verbose "address (optional): "))))
+        (insert (format "owner %s %s\n" bug-number address))))
+     ((string-equal "noowner" action)
+      (let* ((verbose (if debian-bts-control-verbose-prompts-flag
+                          "noowner bugnumber
+
+ Forgets any idea that the bug has an owner other than the usual
+ maintainer. If the bug had no owner recorded then this will do
+ nothing.
+
+"
+                        ""))
+             (bug-number (debian-bts-control-prompt
+                          (concat verbose "Bug number"))))
+        (insert (format "noowner %s\n" bug-number))))
      ((string-equal "forwarded" action)
       (let* ((verbose (if debian-bts-control-verbose-prompts-flag
                           "forwarded bugnumber address
@@ -665,6 +730,42 @@ close bugnumber
     maintainer who closes a report needs to ensure, probably by sending a
     separate message, that the user who reported the bug knows why it is
     being closed. The use of this command is therefore deprecated.
+
+package [ packagename ... ]
+
+    Limits the following commands so that they will only apply to bugs
+    filed against the listed packages. You can list one or more packages. If
+    you don't list any packages, the following commands will apply to all
+    bugs. You're encouraged to use this as a safety feature in case you
+    accidentally use the wrong bug numbers.
+
+    Example usage:
+
+        package foo
+        reassign 123456 bar
+
+        package bar
+        retitle 123456 bar: bar sucks
+        severity 123456 normal
+
+        package
+        severity 234567 wishlist
+  
+owner bugnumber address | !
+
+    Sets address to be the \"owner\" of #bugnumber. The owner of a bug
+    claims responsibility for fixing it and will receive all mail
+    regarding it. This is useful to share out work in cases where a
+    package has a team of maintainers.
+
+    If you wish to become the owner of the bug yourself, you can use
+    the ! shorthand or specify your own email address.
+
+noowner bugnumber
+
+    Forgets any idea that the bug has an owner other than the usual
+    maintainer. If the bug had no owner recorded then this will do
+    nothing.
 
 quit
 stop
