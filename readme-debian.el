@@ -85,7 +85,7 @@ will be updated.
   (kill-all-local-variables)
   (setq major-mode 'readme-debian-mode)
   (setq mode-name "README.Debian")
-  (mapcar 'make-local-variable '(font-lock-defaults write-file-hooks))
+  (make-local-variable 'font-lock-defaults)
   (use-local-map readme-debian-mode-map)
   (set-syntax-table readme-debian-mode-syntax-table)
   (setq font-lock-defaults
@@ -94,8 +94,9 @@ will be updated.
      nil ;; case-fold?
      nil ;; Local syntax table.
      ))
-  ;; add timestamp update func to write-file-hook
-  (add-to-list 'write-file-hooks 'readme-debian-update-timestamp)
+  ;; add timestamp update func to write-contents-hooks
+  (add-hook 'write-contents-hooks 'readme-debian-update-timestamp
+	       nil t)
   (run-hooks 'readme-debian-mode-hook))
 
 (run-hooks 'readme-debian-mode-load-hook)
