@@ -246,6 +246,8 @@
 ;;  - defcustom debian-changelog-mode-hook added.  (Closes: #190853)
 ;;  - debian-changelog-add-version creates new version in empty file
 ;;    (Closes: #191285)
+;; V1.70 28May2003 Peter S Galbraith <psg@debian.org>
+;;  - Define (really) match-string-no-properties for XEmacs (Closes: #195181)
 ;; ----------------------------------------------------------------------------
 ;; TO DO List:
 ;;  - Menu to close bugs with each bug having a menu entry.
@@ -329,9 +331,23 @@ If you do not wish this behaviour, reset it in your .emacs file like so:
 (require 'easymenu)
 (eval-when-compile
   (require 'cl))
-;(if (not (fboundp 'match-string-no-properties))
-    (autoload 'match-string-no-properties "poe");) ;XEmacs21.1 doesn't autoload
 
+;; XEmacs21.1 compatibility -- from XEmacs's apel/poe.el
+(unless (fboundp 'match-string-no-properties)
+  (defun match-string-no-properties (num &optional string)
+    "Return string of text matched by last search, without text properties.
+NUM specifies which parenthesized expression in the last regexp.
+ Value is nil if NUMth pair didn't match, or there were less than NUM pairs.
+Zero means the entire text matched by the whole regexp or whole string.
+STRING should be given if the last search was by `string-match' on STRING."
+    (if (match-beginning num)
+        (if string
+            (let ((result
+                   (substring string (match-beginning num) (match-end num))))
+              (set-text-properties 0 (length result) nil result)
+              result)
+          (buffer-substring-no-properties (match-beginning num)
+                                          (match-end num))))))
 ;;
 ;; Clean up old "Local Variables:" entries
 ;; Peter Galbraith
