@@ -243,7 +243,9 @@
 ;; V1.68 21Apr2003 Peter S Galbraith <psg@debian.org>
 ;;    Byte-compilation cleanup.
 ;; V1.69 27Apr2003 Peter S Galbraith <psg@debian.org>
-;;    defcustom debian-changelog-mode-hook added.  (Closes: #190853)
+;;  - defcustom debian-changelog-mode-hook added.  (Closes: #190853)
+;;  - debian-changelog-add-version creates new version in empty file
+;;    (Closes: #191285)
 ;; ----------------------------------------------------------------------------
 ;; TO DO List:
 ;;  - Menu to close bugs with each bug having a menu entry.
@@ -679,9 +681,10 @@ release date."
 	(goto-char (point-max)))
     (if (re-search-backward "\n --" (point-min) t)
 	(forward-char 4)
-      (beginning-of-line)
-      (insert " --\n\n")
-      (backward-char 2))
+      ;;(beginning-of-line)
+      ;;(insert " --\n\n")
+      ;;(backward-char 2)
+      )
     (cond
      ((looking-at 
        "[ \n]+\\S-[^\n\t]+\\S- <[^ \t\n<>]+> +\\S-[^\t\n]+\\S-[ \t]*\n")
@@ -697,11 +700,13 @@ release date."
 
 (defvar debian-changelog-new-upstream-release-p nil)
 (defun debian-changelog-add-version ()
-  "Add a new version section to a debian-style changelog file."
+  "Add a new version section to a debian-style changelog file.
+If file is empty, create initial entry."
   (interactive)
-  (let ((f (debian-changelog-finalised-p)))
-    (and (stringp f) (error f))
-    (or f (error "previous version not yet finalised")))
+  (if (not (= (point-min)(point-max)))
+      (let ((f (debian-changelog-finalised-p)))
+        (and (stringp f) (error f))
+        (or f (error "previous version not yet finalised"))))
   (goto-char (point-min))
   (let ((pkg-name (or (debian-changelog-suggest-package-name)
                       (read-string "Package name: ")))
@@ -751,37 +756,37 @@ release date."
   "Return a suggested new version number to use for this changelog, or nil"
   (save-excursion
     (goto-char (point-min))
-    (cond
-     ((looking-at 
+    (let ((findmatch t))
+      (cond
+       ((looking-at 
 ;;; The following is not strictly correct.  The upstream version may actually
 ;;; contain a hyphen if a debian version number also exists, making two hyphens
 ;;; I'm also assuming it begins with a digit, which is not enforced
-      "\\(\\S-+\\) +(\\([0-9]:\\)?\\([0-9][0-9a-zA-Z.+:]*\\)\\(-\\([0-9a-zA-Z.+]+\\)\\)?\\() +[^\n]*\\)"))
+         "\\(\\S-+\\) +(\\([0-9]:\\)?\\([0-9][0-9a-zA-Z.+:]*\\)\\(-\\([0-9a-zA-Z.+]+\\)\\)?\\() +[^\n]*\\)"))
 
      ;; No match...
      ;; Check again for multiple hyphens, and adjust match-data if found
      ;; to leave only the bit past the last hyphen as the debian version
      ;; number.
-     ((looking-at 
-       "\\(\\S-+\\) +(\\([0-9]:\\)?\\([0-9][0-9a-zA-Z.+:]*\\)\\(-\\([0-9a-zA-Z.+]+\\)\\)*\\() +[^\n]*\\)")
-      ;; We have a hit.  Adjust match-data...
-      (goto-char (match-end 5))
-      (skip-chars-backward "0-9a-zA-Z.+")
-      (let ((deb-vsn-beg (point))
-            (ups-vsn-end (1- (point))))
-        (store-match-data
-         (list
-          (match-beginning 0)(match-end 0)
-          (match-beginning 1)(match-end 1)
-          (match-beginning 2)(match-end 2)
-          (match-beginning 3) ups-vsn-end
-          (match-beginning 4)(match-end 4)
-          deb-vsn-beg        (match-end 5)
-          (match-beginning 6)(match-end 6)))))
+       ((looking-at 
+         "\\(\\S-+\\) +(\\([0-9]:\\)?\\([0-9][0-9a-zA-Z.+:]*\\)\\(-\\([0-9a-zA-Z.+]+\\)\\)*\\() +[^\n]*\\)")
+        ;; We have a hit.  Adjust match-data...
+        (goto-char (match-end 5))
+        (skip-chars-backward "0-9a-zA-Z.+")
+        (let ((deb-vsn-beg (point))
+              (ups-vsn-end (1- (point))))
+          (store-match-data
+           (list
+            (match-beginning 0)(match-end 0)
+            (match-beginning 1)(match-end 1)
+            (match-beginning 2)(match-end 2)
+            (match-beginning 3) ups-vsn-end
+            (match-beginning 4)(match-end 4)
+            deb-vsn-beg        (match-end 5)
+            (match-beginning 6)(match-end 6)))))
+       (t
+        (setq findmatch nil)))
 
-     ;;No match... return nil and end here
-     (t
-      (return nil)))
             
 ;;; match 1: package name
 ;;; match 2: epoch, if it exists
@@ -789,116 +794,120 @@ release date."
 ;;; match 4: debian version number exists if matched
 ;;; match 5: debian version number
 ;;; match 6: rest of string
-      (let ((pkg-name (match-string-no-properties 1))
-            (epoch (or (match-string-no-properties 2) ""))
-            (upstream-vsn (match-string-no-properties 3))
-            (debian-vsn (match-string-no-properties 5)))
-;;debug (message "name: %s  epoch: %s  version: %s  debian: %s" pkg-name epoch upstream-vsn debian-vsn))))
-         
-        (cond
-	 ;; Debian vsn exists + Old upstream version matches current one.  
-	 ;; -> Increment Debian version...
-         ((and debian-vsn
-               (string-match
-                (regexp-quote (concat "/" pkg-name "-" upstream-vsn "/debian/changelog"))
-                buffer-file-name))
-          (concat epoch upstream-vsn "-" 
-		  (debian-changelog-increment-version debian-vsn)))
-
-	 ;; Same as above, but more general in case directory name doesn't 
-	 ;; match package name.  -> Increment Debian version...
-         ((and debian-vsn
-               (string-match 
-                (concat "-" (regexp-quote upstream-vsn) "/debian/changelog") 
-		buffer-file-name))
-          (concat epoch upstream-vsn "-"
-		  (debian-changelog-increment-version debian-vsn)))
-
-	 ;; Debian vsn exists but old upstream version doesn't match new one.
-	 ;; -> Use new upstream version with "-1" debian version.
+      (if (not findmatch)
+          nil
+        (let ((pkg-name (match-string-no-properties 1))
+              (epoch (or (match-string-no-properties 2) ""))
+              (upstream-vsn (match-string-no-properties 3))
+              (debian-vsn (match-string-no-properties 5)))
+          ;;debug (message "name: %s  epoch: %s  version: %s  debian: %s" pkg-name epoch upstream-vsn debian-vsn))))
+          
+          (cond
+           ;; Debian vsn exists + Old upstream version matches current one.  
+           ;; -> Increment Debian version...
+           ((and debian-vsn
+                 (string-match
+                  (regexp-quote (concat "/" pkg-name "-" upstream-vsn "/debian/changelog"))
+                  buffer-file-name))
+            (concat epoch upstream-vsn "-" 
+                    (debian-changelog-increment-version debian-vsn)))
+           
+           ;; Same as above, but more general in case directory name doesn't 
+           ;; match package name.  -> Increment Debian version...
+           ((and debian-vsn
+                 (string-match 
+                  (concat "-" (regexp-quote upstream-vsn) "/debian/changelog") 
+                  buffer-file-name))
+            (concat epoch upstream-vsn "-"
+                    (debian-changelog-increment-version debian-vsn)))
+           
+           ;; Debian vsn exists but old upstream version doesn't match new one.
+           ;; -> Use new upstream version with "-1" debian version.
 ;;;FIXME: I should perhaps check that the directory name version is higher
 ;;;than that currently in changelog.
-         ((and debian-vsn
-               (string-match (concat 
-                              "/" 
-                              (regexp-quote pkg-name)
-                              "-\\([0-9][0-9a-zA-Z.+-]+\\)/debian/changelog")
-                             buffer-file-name))
-          (setq debian-changelog-new-upstream-release-p t)
-          (concat epoch (match-string 1 buffer-file-name) "-1"))
-
-	 ;; Same as above, but more general in case directory name doesn't 
-	 ;; match package name.
-	 ;; -> Use new upstream version with "-1" debian version.
-         ((and debian-vsn
-               (string-match 
-                (concat "-\\([0-9][0-9a-zA-Z.+-]+\\)/debian/changelog") 
-		buffer-file-name))
-          (setq debian-changelog-new-upstream-release-p t)
-          (concat epoch (match-string 1 buffer-file-name) "-1"))
-
-	 ;; Debian vsn exists, but directory name has no version
-	 ;; -> increment Debian vsn (no better guess)
-         (debian-vsn
-          (concat epoch upstream-vsn "-"
-		  (debian-changelog-increment-version debian-vsn)))
-	  
+           ((and debian-vsn
+                 (string-match (concat 
+                                "/" 
+                                (regexp-quote pkg-name)
+                                "-\\([0-9][0-9a-zA-Z.+-]+\\)/debian/changelog")
+                               buffer-file-name))
+            (setq debian-changelog-new-upstream-release-p t)
+            (concat epoch (match-string 1 buffer-file-name) "-1"))
+           
+           ;; Same as above, but more general in case directory name doesn't 
+           ;; match package name.
+           ;; -> Use new upstream version with "-1" debian version.
+           ((and debian-vsn
+                 (string-match 
+                  (concat "-\\([0-9][0-9a-zA-Z.+-]+\\)/debian/changelog") 
+                  buffer-file-name))
+            (setq debian-changelog-new-upstream-release-p t)
+            (concat epoch (match-string 1 buffer-file-name) "-1"))
+           
+           ;; Debian vsn exists, but directory name has no version
+           ;; -> increment Debian vsn (no better guess)
+           (debian-vsn
+            (concat epoch upstream-vsn "-"
+                    (debian-changelog-increment-version debian-vsn)))
+           
          ;;; No Debian version number...
-
-	 ;; No debian version number and version number from changelog
-	 ;; already greater than from directory name.
-         ((and (not debian-vsn)
-	       (not (string-match
-                     (concat "/" (regexp-quote pkg-name) "-" 
-                             (regexp-quote upstream-vsn) "/debian/changelog")
-                     buffer-file-name))
-	       (string-match (concat "/" (regexp-quote pkg-name) 
-				     "-\\([0-9a-zA-Z.+]+\\)/debian/changelog")
-			     buffer-file-name)
-               (debian-changelog-greater-than
-                upstream-vsn (match-string 1 buffer-file-name)))
-          (concat epoch (debian-changelog-increment-version upstream-vsn)))
-
-	 ;; No debian version number (Debian native) and old upstream
-	 ;; version matches new one (e.g. 'dpk-source -x package' without then
-         ;; bumping up the version in the directory name.
-         ((and (not debian-vsn)
-	       (string-match (concat "/" (regexp-quote pkg-name) "-" 
-                                     (regexp-quote upstream-vsn) 
-                                     "/debian/changelog")
-                             buffer-file-name)
-          (concat epoch (debian-changelog-increment-version upstream-vsn))))
-
-	 ;; No debian version number and version number from changelog
-	 ;; less than from directory name.
-         ((and (not debian-vsn)
-	       (not (string-match
-                     (concat "/" (regexp-quote pkg-name) "-" 
-                             (regexp-quote upstream-vsn) "/debian/changelog")
-                     buffer-file-name))
-	       (string-match (concat "/" (regexp-quote pkg-name) 
-				     "-\\([0-9a-zA-Z.+]+\\)/debian/changelog")
-			     buffer-file-name)
-               (debian-changelog-greater-than
-                (match-string 1 buffer-file-name) upstream-vsn))
-          (concat epoch (match-string 1 buffer-file-name)))
-
-         ((string-match (concat "/" (regexp-quote pkg-name) 
+           
+           ;; No debian version number and version number from changelog
+           ;; already greater than from directory name.
+           ((and (not debian-vsn)
+                 (not (string-match
+                       (concat "/" (regexp-quote pkg-name) "-" 
+                               (regexp-quote upstream-vsn) "/debian/changelog")
+                       buffer-file-name))
+                 (string-match (concat "/" (regexp-quote pkg-name) 
+                                       "-\\([0-9a-zA-Z.+]+\\)/debian/changelog")
+                               buffer-file-name)
+                 (debian-changelog-greater-than
+                  upstream-vsn (match-string 1 buffer-file-name)))
+            (concat epoch (debian-changelog-increment-version upstream-vsn)))
+           
+           ;; No debian version number (Debian native) and old upstream
+           ;; version matches new one (e.g. 'dpk-source -x package' without
+           ;; then bumping up the version in the directory name.
+           ((and (not debian-vsn)
+                 (string-match (concat "/" (regexp-quote pkg-name) "-" 
+                                       (regexp-quote upstream-vsn) 
+                                       "/debian/changelog")
+                               buffer-file-name)
+                 (concat epoch
+                         (debian-changelog-increment-version upstream-vsn))))
+           
+           ;; No debian version number and version number from changelog
+           ;; less than from directory name.
+           ((and (not debian-vsn)
+                 (not (string-match
+                       (concat "/" (regexp-quote pkg-name) "-" 
+                               (regexp-quote upstream-vsn) "/debian/changelog")
+                       buffer-file-name))
+                 (string-match (concat 
+                                "/" (regexp-quote pkg-name) 
                                 "-\\([0-9a-zA-Z.+]+\\)/debian/changelog")
-                        buffer-file-name)
-          ;;Hmmm.. return version number from directory if we get this far
-          (concat epoch (match-string 1 buffer-file-name)))
-         ((string-match
-           (concat "-\\([0-9][0-9a-zA-Z.+]+\\)/debian/changelog")
-	   buffer-file-name)
-          ;;Hmmm.. return version number from directory if we get this far
-          (concat epoch (match-string 1 buffer-file-name)))
-	 
-	 ;; Directory name has no version -> increment what we have.
-         (t
-          (concat epoch 
-		  (debian-changelog-increment-version upstream-vsn)))))))
-
+                               buffer-file-name)
+                 (debian-changelog-greater-than
+                  (match-string 1 buffer-file-name) upstream-vsn))
+            (concat epoch (match-string 1 buffer-file-name)))
+           
+           ((string-match (concat "/" (regexp-quote pkg-name) 
+                                  "-\\([0-9a-zA-Z.+]+\\)/debian/changelog")
+                          buffer-file-name)
+            ;;Hmmm.. return version number from directory if we get this far
+            (concat epoch (match-string 1 buffer-file-name)))
+           ((string-match
+             (concat "-\\([0-9][0-9a-zA-Z.+]+\\)/debian/changelog")
+             buffer-file-name)
+            ;;Hmmm.. return version number from directory if we get this far
+            (concat epoch (match-string 1 buffer-file-name)))
+           
+           ;; Directory name has no version -> increment what we have.
+           (t
+            (concat epoch 
+                    (debian-changelog-increment-version upstream-vsn)))))))))
+    
 (defun debian-changelog-increment-version (version)
 ;; Peter S Galbraith, 09 Mar 2001
   "Increment the last numeric portion of a version number
