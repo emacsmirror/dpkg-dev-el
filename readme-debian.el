@@ -95,6 +95,9 @@ will be updated.
      nil ;; Local syntax table.
      ))
   ;; add timestamp update func to write-contents-hooks
+  (if (or (= emacs-major-version 20)
+          (string-match "XEmacs" emacs-version))
+      (make-local-hook 'write-contents-hooks))
   (add-hook 'write-contents-hooks 'readme-debian-update-timestamp
 	       nil t)
   (run-hooks 'readme-debian-mode-hook))
