@@ -154,6 +154,7 @@
 
 (defvar debian-control-mode-menu nil)
 
+;;;###autoload
 (define-derived-mode debian-control-mode fundamental-mode "Debian Control"
   "A major mode for editing Debian control files (i.e. debian/control)."
   (if (< emacs-major-version 21)
@@ -417,6 +418,9 @@ text file."
 			     (debian-control-mode-bug-package-names))
 		     nil t)))
   (browse-url (concat "http://bugs.debian.org/" package)))
+
+(add-to-list 'auto-mode-alist '("/debian/control\\'" . debian-control-mode))
+;;;###autoload(add-to-list 'auto-mode-alist '("/debian/control\\'" . debian-control-mode))
 
 (provide 'debian-control-mode)
 

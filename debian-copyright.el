@@ -56,6 +56,7 @@
        (modify-syntax-entry ?\\ ".   " debian-copyright-mode-syntax-table)
        (modify-syntax-entry ?' "w   " debian-copyright-mode-syntax-table))
 
+;;;###autoload
 (defun debian-copyright-mode ()
   "Mode to edit and read debian/copyright.
 \\{debian-copyright-mode-map}"
@@ -82,6 +83,12 @@
           ()		;syntax-alist
           ))
   (run-hooks 'debian-copyright-mode-hook))
+
+(add-to-list 'auto-mode-alist '("debian/.*copyright$" . debian-copyright-mode))
+(add-to-list 'auto-mode-alist
+             '("^/usr/share/doc/.*/copyright" . debian-copyright-mode))
+;;;###autoload(add-to-list 'auto-mode-alist '("debian/.*copyright$" . debian-copyright-mode))
+;;;###autoload(add-to-list 'auto-mode-alist '("^/usr/share/doc/.*/copyright" . debian-copyright-mode))
 
 (run-hooks 'debian-copyright-mode-load-hook)
 
