@@ -615,19 +615,20 @@ Upload to " val  " anyway?")))
 ;; interactive function to close bugs by number. (Peter Galbraith)
 ;;
 
-(defun debian-changelog-close-bug ()
+(defvar debian-changelog-close-bug-takes-arg t
+  "A compatibility flag for debian-bug.el")
+
+(defun debian-changelog-close-bug (bug-number)
   "Add a new change entry to close a bug number."
-  (interactive)
   (if (eq (debian-changelog-finalised-p) t)
       (error (substitute-command-keys "most recent version has been finalised - use \\[debian-changelog-unfinalise-last-version] or \\[debian-changelog-add-version]")))
-  (let ((bug-number (completing-read 
-                     "Bug number to close: " 
-                     debian-bug-open-alist nil nil)))
-    (if (not (string-match "^[0-9]+$" bug-number))
-        (error "The bug number should consists of only digits."))
-    (debian-changelog-add-entry)
-    (save-excursion (insert " (closes: #" bug-number ")"))
-    (message "Enter a brief description of what was done here.")))
+  (interactive (list (completing-read "Bug number to close: " 
+                                      debian-bug-open-alist nil nil)))
+  (if (not (string-match "^[0-9]+$" bug-number))
+      (error "The bug number should consists of only digits."))
+  (debian-changelog-add-entry)
+  (save-excursion (insert " (closes: #" bug-number ")"))
+  (message "Enter a brief description of what was done here."))
 
 ;;
 ;; interactive functions to set urgency and distribution
