@@ -226,6 +226,8 @@
    ["Add field at point" debian-control-mode-add-field t]
    "--"
    "Policy"
+    ["View upgrading-checklist" (debian-control-visit-policy 'checklist)
+     (file-exists-p "/usr/share/doc/debian-policy/upgrading-checklist.txt.gz")]
     ["View policy (text)" (debian-control-visit-policy 'text)
      (file-exists-p "/usr/share/doc/debian-policy/policy.txt.gz")]
     ["View policy (HTML)" (debian-control-visit-policy 'html) t]
@@ -355,16 +357,22 @@
 
 (defun debian-control-visit-policy (format)
   "Visit the Debian Policy manual in format FORMAT.
-Currently valid FORMATs are `html' and `text'."
+Currently valid FORMATs are `html', `text' and `checklist'.
+The last one is not strictly a format, but visits the upgrading-checklist.txt
+text file."
   (interactive
    (list (intern
-	  (completing-read "Policy format: " (mapcar #'(lambda (x) (cons x 0))
-						     '("html" "text"))
+	  (completing-read "Policy format: "
+                           (mapcar #'(lambda (x) (cons x 0))
+                                   '("html" "text" "checklist"))
 			   nil t))))
   (case format
     (text
      (with-auto-compression-mode
        (find-file "/usr/share/doc/debian-policy/policy.txt.gz")))
+    (checklist
+     (with-auto-compression-mode
+       (find-file "/usr/share/doc/debian-policy/upgrading-checklist.txt.gz")))
     (html
      (require 'browse-url)
      (browse-url
