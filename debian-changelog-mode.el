@@ -240,6 +240,8 @@
 ;;    See bug #164470 for relevance and usage of UNRELEASED distribution.
 ;; V1.67 14Apr2003 Peter S Galbraith <psg@debian.org>
 ;;  - Use debian-bug.el's debian-bug-open-alist (needs emacs-goodies-el 19.4)
+;; V1.68 21Apr2003 Peter S Galbraith <psg@debian.org>
+;;    Byte-compilation cleanup.
 ;; ----------------------------------------------------------------------------
 ;; TO DO List:
 ;;  - Menu to close bugs with each bug having a menu entry.
@@ -252,98 +254,73 @@
 ;;   Brian Warner <warner@lothar.com>
 ;;   Yann Dirson <dirson@debian.org>
 
-(require 'debian-bug)
+(defgroup debian-changelog nil "Debian changelog maintenance"
+  :group 'tools
+  :prefix "debian-changelog-")
 
-(cond
- ((not (fboundp 'defcustom))
-  (defvar debian-changelog-full-name (or (getenv "DEBFULLNAME")
-                                         (user-full-name))
-    "*Full name of user, for inclusion in Debian changelog headers.
-This defaults to the contents of environment variable DEBFULLNAME
-or else to the value returned by the `user-full-name' function.")
+(defgroup debian-changelog-faces nil
+  "Faces for fontifying text in debian-changelog."
+  :prefix "debian-changelog-"
+  :group 'debian-changelog)
 
-  (defvar debian-changelog-mailing-address 
-    (or (getenv "DEBEMAIL")
-	(getenv "EMAIL")
-	(and (boundp 'user-mail-address) user-mail-address)
-	(and (fboundp 'user-mail-address) (user-mail-address)))
-    "*Electronic mail address of user, for inclusion in Debian changelog headers.
-This defaults to the value of (in order of precedence):
- Contents of environment variable DEBEMAIL,
- Contents of environment variable EMAIL,
- Value of `user-mail-address' variable,
- Value returned by the `user-mail-address' function.")
-
-  (defvar debian-changelog-local-variables-maybe-remove t 
-    "*Ask to remove obsolete \"Local Variables:\" block from changelog.")
-
-  (defvar debian-changelog-highlight-mouse-t t
-    "*Use special overlay for bug numbers, defining mouse-3 to web interface.")
-
-  (defvar debian-changelog-use-imenu (fboundp 'imenu-add-to-menubar)
-    "*Use imenu package for debian-changelog-mode?
-If you do not wish this behaviour, reset it in your .emacs file like so:
-
-  (setq debian-changelog-use-imenu nil)")
-  ) 
- (t
-  (defgroup debian-changelog nil "Debian changelog maintenance"
-    :group 'tools
-    :prefix "debian-changelog-")
-
-  (defgroup debian-changelog-faces nil
-    "Faces for fontifying text in debian-changelog."
-    :prefix "debian-changelog-"
-    :group 'debian-changelog)
-
-  (defcustom debian-changelog-full-name (or (getenv "DEBFULLNAME")
-                                            (user-full-name))
-    "*Full name of user, for inclusion in Debian changelog headers.
+(defcustom debian-changelog-full-name (or (getenv "DEBFULLNAME")
+                                          (user-full-name))
+  "*Full name of user, for inclusion in Debian changelog headers.
 This defaults to the contents of environment variable DEBFULLNAME
 or else to the value returned by the `user-full-name' function."
-    :group 'debian-changelog
-    :type 'string)
+  :group 'debian-changelog
+  :type 'string)
 
-  (defcustom debian-changelog-mailing-address 
-    (or (getenv "DEBEMAIL")
-	(getenv "EMAIL")
-	(and (boundp 'user-mail-address) user-mail-address)
-	(and (fboundp 'user-mail-address) (user-mail-address)))
-    "*Electronic mail address of user, for inclusion in Debian changelog headers.
+(defcustom debian-changelog-mailing-address 
+  (or (getenv "DEBEMAIL")
+      (getenv "EMAIL")
+      (and (boundp 'user-mail-address) user-mail-address)
+      (and (fboundp 'user-mail-address) (user-mail-address)))
+  "*Electronic mail address of user, for inclusion in Debian changelog headers.
 This defaults to the value of (in order of precedence):
  Contents of environment variable DEBEMAIL,
  Contents of environment variable EMAIL,
  Value of `user-mail-address' variable,
  Value returned by the `user-mail-address' function."
-    :group 'debian-changelog
-    :type 'string)
+  :group 'debian-changelog
+  :type 'string)
 
-  (defcustom debian-changelog-local-variables-maybe-remove t
-    "*Ask to remove obsolete \"Local Variables:\" block from changelog
+(defcustom debian-changelog-local-variables-maybe-remove t
+  "*Ask to remove obsolete \"Local Variables:\" block from changelog
 under certain conditions."
-    :group 'debian-changelog
-    :type 'boolean)
+  :group 'debian-changelog
+  :type 'boolean)
 
-  (defcustom debian-changelog-highlight-mouse-t t
-    "*Use special overlay for bug numbers, defining mouse-3 to web interface."
-    :group 'debian-changelog
-    :type 'boolean)
+(defcustom debian-changelog-highlight-mouse-t t
+  "*Use special overlay for bug numbers, defining mouse-3 to web interface."
+  :group 'debian-changelog
+  :type 'boolean)
 
-  (defcustom debian-changelog-use-imenu (fboundp 'imenu-add-to-menubar) 
-    "*Use imenu package for debian-changelog-mode?
+(defcustom debian-changelog-use-imenu (fboundp 'imenu-add-to-menubar) 
+  "*Use imenu package for debian-changelog-mode?
 If you do not wish this behaviour, reset it in your .emacs file like so:
 
   (setq debian-changelog-use-imenu nil)"
-    :group 'debian-changelog
-    :type 'boolean)
-  ))
+  :group 'debian-changelog
+  :type 'boolean)
+
+(defvar debian-changelog-local-variables-maybe-remove-done nil
+  "Internal flag so we prompt only once.")
+
+(autoload 'debian-bug-web-bug "debian-bug")
+(autoload 'debian-bug-web-bugs "debian-bug")
+(autoload 'debian-bug-web-packages "debian-bug")
+(autoload 'debian-bug-web-package "debian-bug")
+(autoload 'debian-bug-bug-menu-init "debian-bug")
+(autoload 'debian-bug-web-this-bug-under-mouse "debian-bug")
+(defvar debian-bug-open-alist)
 
 (require 'add-log)
 (require 'easymenu)
 (eval-when-compile
   (require 'cl))
-(if (not (fboundp 'match-string-no-properties))
-    (load "poe" t t))                   ;XEmacs21.1 doesn't autoload this
+;(if (not (fboundp 'match-string-no-properties))
+    (autoload 'match-string-no-properties "poe");) ;XEmacs21.1 doesn't autoload
 
 ;;
 ;; Clean up old "Local Variables:" entries
@@ -446,6 +423,7 @@ If you do not wish this behaviour, reset it in your .emacs file like so:
   (debian-changelog-getheadervalue "\\;[^\n]* urgency=\\(\\sw+\\)"))
 (defun debian-changelog-getdistribution ()
   (debian-changelog-getheadervalue ") \\(.*\\)\\;"))
+(defvar last-nonmenu-event)
 (defun debian-changelog-setdistribution (val)
   (if (not (string-match "^.*security" val))    
       (debian-changelog-setheadervalue ") \\(.*\\)\\;" val)
@@ -650,18 +628,17 @@ Upload to " val  " anyway?")))
   (interactive "P")
   (if (eq (debian-changelog-finalised-p) t)
       (error (substitute-command-keys "most recent version has been finalised - use \\[debian-changelog-unfinalise-last-version] or \\[debian-changelog-add-version]")))
-  (let* ((curstr (debian-changelog-getdistribution))
-	 (str (completing-read 
-	       "Select distribution: "
-	       '(("unstable" 1)
-                 ("testing" 2)
-                 ("testing-security" 3)
-		 ("stable" 4) 
-		 ("stable-security" 5) 
-		 ("oldstable-security" 6) 
-		 ("experimental" 7)
-                 ("UNRELEASED" 8))
-	       nil t nil)))
+  (let ((str (completing-read 
+              "Select distribution: "
+              '(("unstable" 1)
+                ("testing" 2)
+                ("testing-security" 3)
+                ("stable" 4) 
+                ("stable-security" 5) 
+                ("oldstable-security" 6) 
+                ("experimental" 7)
+                ("UNRELEASED" 8))
+              nil t nil)))
     (if (not (equal str ""))
 	(debian-changelog-setdistribution str))))
 
@@ -670,11 +647,10 @@ Upload to " val  " anyway?")))
   (interactive "P")
   (if (eq (debian-changelog-finalised-p) t)
       (error (substitute-command-keys "most recent version has been finalised - use \\[debian-changelog-unfinalise-last-version] or \\[debian-changelog-add-version]")))
-  (let* ((curstr (debian-changelog-geturgency))
-	 (str (completing-read 
-	       "Select urgency: "
-	       '(("low" 1) ("medium" 2) ("high" 3) ("critical" 4))
-	       nil t nil)))
+  (let ((str (completing-read 
+              "Select urgency: "
+              '(("low" 1) ("medium" 2) ("high" 3) ("critical" 4))
+              nil t nil)))
     (if (not (equal str ""))
 	(debian-changelog-seturgency str))))
 
@@ -1012,6 +988,7 @@ address and release date) so that new entries can be made."
 ;; top level interactive function to activate mode
 ;;
 
+(defvar imenu-create-index-function)
 (defun debian-changelog-mode ()
   "Major mode for editing Debian-style change logs.
 Runs `debian-changelog-mode-hook' if it exists.
@@ -1278,6 +1255,9 @@ match 1 -> package name
 
 (defvar debian-changelog-is-XEmacs
   (not (null (save-match-data (string-match "XEmacs\\|Lucid" emacs-version)))))
+
+(defvar debian-changelog-mouse-keymap nil
+  "keymap for mouse commands")
 
 (defun debian-changelog-setup-highlight-mouse-keymap ()
   (setq debian-changelog-mouse-keymap
