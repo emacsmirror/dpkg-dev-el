@@ -5,7 +5,7 @@
 ;; Copyright (C) 1996 Ian Jackson
 ;; Copyright (C) 1997 Klee Dienes
 ;; Copyright (C) 1999 Chris Waters
-;; Copyright (C) 2000, 2001, 2002 Peter S Galbraith
+;; Copyright (C) 2000, 2001, 2002, 2003 Peter S Galbraith
 ;;
 ;; This file is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -238,6 +238,8 @@
 ;;  - Add UNRELEASED distribution, patch from Junichi Uekawa 
 ;;    <dancer@netfort.gr.jp> with additional menu entry (Closes: #166163).
 ;;    See bug #164470 for relevance and usage of UNRELEASED distribution.
+;; V1.67 14Apr2003 Peter S Galbraith <psg@debian.org>
+;;  - Use debian-bug.el's debian-bug-open-alist (needs emacs-goodies-el 19.4)
 ;; ----------------------------------------------------------------------------
 ;; TO DO List:
 ;;  - Menu to close bugs with each bug having a menu entry.
