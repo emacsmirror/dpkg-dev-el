@@ -205,8 +205,10 @@ in `debian-bts-control-modes-to-reuse'."
                                       debian-bts-control-alist nil nil)
                      current-prefix-arg))
   (cond
-   ((or arg (car (memq t (mapcar '(lambda (item) (eq item major-mode)) 
-                                 debian-bts-control-modes-to-reuse))))
+   ((or arg 
+        (and (car (memq t (mapcar '(lambda (item) (eq item major-mode)) 
+                                 debian-bts-control-modes-to-reuse)))
+             (not debian-bts-control-minor-mode)))
     (debian-bug--set-CC "control@bugs.debian.org" "cc:")
     (goto-char (mail-header-end))
     (forward-line 1)
