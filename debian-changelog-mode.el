@@ -242,6 +242,8 @@
 ;;  - Use debian-bug.el's debian-bug-open-alist (needs emacs-goodies-el 19.4)
 ;; V1.68 21Apr2003 Peter S Galbraith <psg@debian.org>
 ;;    Byte-compilation cleanup.
+;; V1.69 27Apr2003 Peter S Galbraith <psg@debian.org>
+;;    defcustom debian-changelog-mode-hook added.  (Closes: #190853)
 ;; ----------------------------------------------------------------------------
 ;; TO DO List:
 ;;  - Menu to close bugs with each bug having a menu entry.
@@ -303,6 +305,12 @@ If you do not wish this behaviour, reset it in your .emacs file like so:
   (setq debian-changelog-use-imenu nil)"
   :group 'debian-changelog
   :type 'boolean)
+
+(defcustom debian-changelog-mode-hook nil
+  "Normal hook run when entering Debian Changelog mode."
+  :group 'debian-changelog
+  :type 'hook
+  :options '(turn-on-auto-fill flyspell-mode))
 
 (defvar debian-changelog-local-variables-maybe-remove-done nil
   "Internal flag so we prompt only once.")
