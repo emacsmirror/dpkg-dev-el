@@ -620,10 +620,12 @@ Upload to " val  " anyway?")))
 
 (defun debian-changelog-close-bug (bug-number)
   "Add a new change entry to close a bug number."
-  (if (eq (debian-changelog-finalised-p) t)
-      (error (substitute-command-keys "most recent version has been finalised - use \\[debian-changelog-unfinalise-last-version] or \\[debian-changelog-add-version]")))
-  (interactive (list (completing-read "Bug number to close: " 
-                                      debian-bug-open-alist nil nil)))
+  (interactive
+    (progn
+      (if (eq (debian-changelog-finalised-p) t)
+          (error (substitute-command-keys "most recent version has been finalised - use \\[debian-changelog-unfinalise-last-version] or \\[debian-changelog-add-version]")))
+      (list (completing-read "Bug number to close: " 
+                             debian-bug-open-alist nil nil))))
   (if (not (string-match "^[0-9]+$" bug-number))
       (error "The bug number should consists of only digits."))
   (debian-changelog-add-entry)
