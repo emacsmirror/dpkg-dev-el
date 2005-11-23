@@ -139,7 +139,7 @@
   (setq debian-control-syntax-table (make-syntax-table))
   ;; Support # style comments
   (modify-syntax-entry ?#  "<"  debian-control-syntax-table)
-  (modify-syntax-entry ?\n "> "    debian-control-syntax-table))
+  (modify-syntax-entry ?\n "> " debian-control-syntax-table))
 
 ;; FIXME: As of policy 3.5.6.0, the allowed characters in a field name
 ;; are not specified.  So we just go with "word constituent" or '-'
@@ -219,12 +219,12 @@
 
       (make-local-variable 'font-lock-defaults)
       (setq font-lock-defaults
-            '(debian-control-font-lock-keywords)
-            nil           ;;; Keywords only? No, let it do syntax via table.
-            nil           ;;; case-fold?
-            nil           ;;; Local syntax table.
-            nil           ;;; Use `backward-paragraph' ? No
-            )
+            '(debian-control-font-lock-keywords
+              nil           ;;; Keywords only? No, let it do syntax via table.
+              nil           ;;; case-fold?
+              nil           ;;; Local syntax table.
+              nil           ;;; Use `backward-paragraph' ? No
+              ))
       (set (make-local-variable 'fill-paragraph-function)
 	   #'debian-control-mode-fill-paragraph)
       (make-local-variable 'after-change-functions)
