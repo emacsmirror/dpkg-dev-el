@@ -151,7 +151,8 @@
 
 (defvar debian-control-source-fields
   '("Section" "Priority" "Maintainer" "Build-Depends" "Build-Depends-Indep"
-    "Build-Conflicts" "Build-Conflicts-Indep" "Standards-Version" "Uploaders")
+    "Build-Conflicts" "Build-Conflicts-Indep" "Standards-Version" "Uploaders"
+    "Homepage")
   "Valid source package field names, collected from several policy sections.")
 
 (defvar debian-control-binary-fields
