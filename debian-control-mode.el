@@ -32,6 +32,10 @@
 
 ;;; Change Log:
 
+;; V1.1 (2007-10-18)  Cyril Brulebois <cyril.brulebois@enst-bretagne.fr>
+;; - Renamed "XS-Vcs-*" fields into "Vcs-*", officially supported since
+;;   dpkg/1.14.7.
+
 ;; V1.0 (2007-10-01)  Cyril Brulebois <cyril.brulebois@enst-bretagne.fr>
 ;; - Add "Homepage" field to source fields.
 ;; - Add "XS-Vcs-*" fields to source fields, patch contributed by
@@ -158,14 +162,14 @@
 ;;   http://svn.debian.org/wsvn/qa/trunk/pts/www/bin/common.py?op=file
 (defvar debian-control-vcs-names
   '("Arch" "Bzr" "Cvs" "Darcs" "Git" "Hg" "Mtn" "Svn")
-  "Valid VCS names for the XS-Vcs-* field.")
+  "Valid VCS names for the Vcs-* field.")
 
 (defvar debian-control-source-fields
   (append
   '("Section" "Priority" "Maintainer" "Build-Depends" "Build-Depends-Indep"
      "Build-Conflicts" "Build-Conflicts-Indep" "Standards-Version" "Uploaders"
-     "Homepage" "XS-Vcs-Browser")
-   (mapcar (lambda (elt) (concat "XS-Vcs-" elt))
+     "Homepage" "Vcs-Browser")
+   (mapcar (lambda (elt) (concat "Vcs-" elt))
            debian-control-vcs-names))
   "Valid source package field names, collected from several policy sections.")
 
