@@ -32,6 +32,9 @@
 
 ;;; Change Log:
 
+;; V1.2 (2008-01-17)  Cyril Brulebois <cyril.brulebois@enst-bretagne.fr>
+;; - Add "Dm-Upload-Allowed" field to source fields.
+
 ;; V1.1 (2007-10-18)  Cyril Brulebois <cyril.brulebois@enst-bretagne.fr>
 ;; - Renamed "XS-Vcs-*" fields into "Vcs-*", officially supported since
 ;;   dpkg/1.14.7.
@@ -168,7 +171,7 @@
   (append
   '("Section" "Priority" "Maintainer" "Build-Depends" "Build-Depends-Indep"
      "Build-Conflicts" "Build-Conflicts-Indep" "Standards-Version" "Uploaders"
-     "Homepage" "Vcs-Browser")
+     "Dm-Upload-Allowed" "Homepage" "Vcs-Browser")
    (mapcar (lambda (elt) (concat "Vcs-" elt))
            debian-control-vcs-names))
   "Valid source package field names, collected from several policy sections.")
