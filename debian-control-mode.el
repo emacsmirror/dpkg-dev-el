@@ -32,6 +32,9 @@
 
 ;;; Change Log:
 
+;; V1.2a (2009-02-23) Applied patch from Morten Kjeldgaard changing
+;;      Dm-Upload-Allowed to DM-Upload-Allowed (Closes: #508748)
+
 ;; V1.2 (2008-01-17)  Cyril Brulebois <cyril.brulebois@enst-bretagne.fr>
 ;; - Add "Dm-Upload-Allowed" field to source fields.
 
@@ -171,7 +174,7 @@
   (append
   '("Section" "Priority" "Maintainer" "Build-Depends" "Build-Depends-Indep"
      "Build-Conflicts" "Build-Conflicts-Indep" "Standards-Version" "Uploaders"
-     "Dm-Upload-Allowed" "Homepage" "Vcs-Browser")
+     "DM-Upload-Allowed" "Homepage" "Vcs-Browser")
    (mapcar (lambda (elt) (concat "Vcs-" elt))
            debian-control-vcs-names))
   "Valid source package field names, collected from several policy sections.")
