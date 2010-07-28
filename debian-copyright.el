@@ -21,8 +21,6 @@
 (require 'debian-changelog-mode)
 
 ;;; Code:
-(add-to-list 'auto-mode-alist '("debian/copyright$" . debian-copyright-mode))
-(add-to-list 'auto-mode-alist '("^/usr/share/doc/.*/copyright" . debian-copyright-mode))
 
 (defgroup debian-copyright nil "Debian copyright mode"
   :group 'tools
@@ -84,11 +82,13 @@
           ))
   (run-hooks 'debian-copyright-mode-hook))
 
-(add-to-list 'auto-mode-alist '("debian/.*copyright$" . debian-copyright-mode))
+
+;;;###autoload
 (add-to-list 'auto-mode-alist
-             '("^/usr/share/doc/.*/copyright" . debian-copyright-mode))
-;;;###autoload(add-to-list 'auto-mode-alist '("debian/.*copyright$" . debian-copyright-mode))
-;;;###autoload(add-to-list 'auto-mode-alist '("^/usr/share/doc/.*/copyright" . debian-copyright-mode))
+             '("debian/.*copyright\\'" . debian-copyright-mode))
+;;;###autoload
+(add-to-list 'auto-mode-alist
+             '("\\`/usr/share/doc/.*/copyright" . debian-copyright-mode))
 
 (run-hooks 'debian-copyright-mode-load-hook)
 
