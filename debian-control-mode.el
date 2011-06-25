@@ -32,6 +32,9 @@
 
 ;;; Change Log:
 
+;; V1.4 (2011-06-24) Added "XS-Python-Version" to debian-control-source-fields
+;;  (Closes #591697)
+
 ;; V1.3 (2010-05-07) Added "Breaks" to debian-control-binary-fields
 ;;  (Closes #580501)
 
@@ -177,7 +180,7 @@
   (append
   '("Section" "Priority" "Maintainer" "Build-Depends" "Build-Depends-Indep"
      "Build-Conflicts" "Build-Conflicts-Indep" "Standards-Version" "Uploaders"
-     "DM-Upload-Allowed" "Homepage" "Vcs-Browser")
+     "DM-Upload-Allowed" "Homepage" "Vcs-Browser" "XS-Python-Version")
    (mapcar (lambda (elt) (concat "Vcs-" elt))
            debian-control-vcs-names))
   "Valid source package field names, collected from several policy sections.")
