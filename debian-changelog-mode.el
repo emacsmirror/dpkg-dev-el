@@ -353,6 +353,8 @@
 ;; V1.97 06Nov2016 Pierre Carrier (on 2013-07-04)
 ;;  https://bugs.launchpad.net/ubuntu/+source/emacs-goodies-el/+bug/1197870
 ;;  Bug fix #803767 debian-changelog-mode: don't rely on external date
+;; V1.98 06Nov2016 Kumar Appaiah <a.kumar@alumni.iitm.ac.in>
+;;  highlight backports (Closes: #708317)
 
 ;;; Acknowledgements:  (These people have contributed)
 ;;   Roland Rosenfeld <roland@debian.org>
@@ -1444,6 +1446,7 @@ interface to set it, or simply set the variable
      (3 font-lock-string-face nil t)
      (4 debian-changelog-warning-face nil t))
    '(debian-changelog-fontify-stable . debian-changelog-warning-face)
+   '(debian-changelog-fontify-backports . debian-changelog-warning-face)
    '(debian-changelog-fontify-frozen . font-lock-type-face)
    '(debian-changelog-fontify-unstable . font-lock-string-face)
    '(debian-changelog-fontify-experimental . debian-changelog-warning-face)
@@ -1581,6 +1584,12 @@ match 1 -> package name
 
 (defun debian-changelog-fontify-unreleased (limit)
   (when (re-search-forward "^\\sw.* (.+).* \\(UNRELEASED\\)" limit t)
+    (store-match-data
+     (list (match-beginning 1)(match-end 1)))
+    t))
+
+(defun debian-changelog-fontify-backports (limit)
+  (when (re-search-forward "^\\sw.* (.+).* \\([a-z][a-z]*-backports\\)" limit t)
     (store-match-data
      (list (match-beginning 1)(match-end 1)))
     t))
