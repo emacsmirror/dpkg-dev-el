@@ -74,6 +74,11 @@
 ;;  - Emacs BTS moved to debbugs.gnu.org 
 ;; V1.15 22Feb2010 Peter S Galbraith <psg@debian.org>
 ;;  - add autoload cookie for `emacs-bts-control' (Closes: #565934)
+;; V1.16 05Nov2016 Peter S Galbraith <psg@debian.org>
+;;  Bug fix: "please add all BTS commands (e.g. affects and usertags)",
+;;    thanks to Luca Capello (Closes: #643888).
+;; - Add `affects', `forcemerge', `summary' and font-lock for `tag'.
+;; - Remove `close'
 ;;; Code:
 
 (eval-when-compile '(require 'cl))
@@ -139,6 +144,7 @@ the top of the message."
       :selected (debian-bug--is-CC debian-bug-From-address "cc:")]
      )
      "--"
+    ["Affects" (debian-bts-control "affects") t]
     ["Package" (debian-bts-control "package") t]
     ["Reassign" (debian-bts-control "reassign") t]
     ["Reopen" (debian-bts-control "reopen") t]
@@ -149,8 +155,10 @@ the top of the message."
     ["NotForwarded" (debian-bts-control "notforwarded") t]
     ["Retitle" (debian-bts-control "retitle") t]
     ["Severity" (debian-bts-control "severity") t]
+    ["Summary" (debian-bts-control "summary") t]
     ["Clone" (debian-bts-control "clone") t]
     ["Merge" (debian-bts-control "merge") t]
+    ["ForceMerge" (debian-bts-control "forcemerge") t]
     ["UnMerge" (debian-bts-control "unmerge") t]
     ["Tags" (debian-bts-control "tags") t]
     ["Close" (debian-bts-control "close") t]
@@ -177,6 +185,14 @@ the top of the message."
 (defvar debian-bts-control-font-lock-keywords
   '(("#.*$" .  font-lock-comment-face)
     ("^ *thank.*$" . font-lock-function-name-face)
+    ("^ *\\(summary\\) +\\(-?[0-9]+\\) *\\(.*\\)$"
+     (1 font-lock-function-name-face)
+     (2 font-lock-type-face)
+     (3 font-lock-string-face))
+    ("^ *\\(affects\\) +\\(-?[0-9]+\\) *\\(.*\\)$"
+     (1 font-lock-function-name-face)
+     (2 font-lock-type-face)
+     (3 font-lock-string-face))
     ("^ *\\(found\\) +\\(-?[0-9]+\\) *\\(.*\\)$"
      (1 font-lock-function-name-face)
      (2 font-lock-type-face)
@@ -260,22 +276,23 @@ the top of the message."
      (1 font-lock-function-name-face)
      (2 font-lock-type-face)
      (3 font-lock-keyword-face))
+    ("^ *\\(forcemerge\\) +\\(-?[0-9]+ +-?[0-9]+\\( +-?[0-9]+\\)*\\)$"
+     (1 font-lock-function-name-face)
+     (2 font-lock-type-face)
+     (3 font-lock-keyword-face))
     ("^ *\\(unmerge\\) +\\(-?[0-9]+\\)$"
      (1 font-lock-function-name-face)
      (2 font-lock-type-face))
-    ("^ *\\(tags\\) +\\(-?[0-9]+\\) +\\([-+=]? +\\)?\\(security\\)"
+    ("^ *\\(tags?\\) +\\(-?[0-9]+\\) +\\([-+=]? +\\)?\\(security\\)"
      (1 font-lock-function-name-face)
      (2 font-lock-type-face)
      (3 font-lock-keyword-face nil t)
      (4 font-lock-warning-face))
-    ("^ *\\(tags\\) +\\(-?[0-9]+\\) +\\([-+=]? +\\)?\\(patch\\|wontfix\\|moreinfo\\|unreproducible\\|help\\|pending\\|fixed-in-experimental\\|fixed-upstream\\|fixed\\|security\\|upstream\\|confirmed\\|d-i\\|ipv6\\|lfs\\|l10n\\|potato\\|woody\\|sarge-ignore\\|sarge\\|etch-ignore\\|etch\\|sid\\|experimental\\)"
+    ("^ *\\(tags?\\) +\\(-?[0-9]+\\) +\\([-+=]? +\\)?\\(patch\\|wontfix\\|moreinfo\\|unreproducible\\|help\\|pending\\|fixed-in-experimental\\|fixed-upstream\\|fixed\\|security\\|upstream\\|confirmed\\|d-i\\|ipv6\\|lfs\\|l10n\\|potato\\|woody\\|sarge-ignore\\|sarge\\|etch-ignore\\|etch\\|jessie\\|jessie-ignore\\|sid\\|experimental\\)"
      (1 font-lock-function-name-face)
      (2 font-lock-type-face)
      (3 font-lock-keyword-face nil t)
-     (4 font-lock-keyword-face))
-    ("^ *\\(close\\) +\\(-?[0-9]+\\)$"
-     (1 font-lock-warning-face)
-     (2 font-lock-type-face)))
+     (4 font-lock-keyword-face)))
   "Regexp keywords to fontify `debian-bts-control' reports.")
 
 (defun debian-bts-control-minor-mode (arg)
@@ -308,9 +325,9 @@ a negative prefix argument turns it off.
 (defvar debian-bts-control-alist
   '(("reassign") ("severity") ("reopen") ("submitter") ("forwarded")
     ("notforwarded") ("retitle") ("clone") ("merge") ("unmerge")
-    ("tags") ("close") ("package") ("owner") ("noowner") ("found")
+    ("tags") ("package") ("owner") ("noowner") ("found")
     ("notfound") ("fixed") ("notfixed") ("block") ("unblock") ("archive")
-    ("unarchive"))
+    ("unarchive") ("affects") ("forcemerge") ("summary"))
   "List of available commands at control@bugs.debian.org.")
 
 (defun debian-bts-bug-number-at-point ()
@@ -411,6 +428,35 @@ in `debian-bts-control-modes-to-reuse'."
                        (concat verbose "Package list to limit to: ")
                        (debian-bug-fill-packages-obarray) nil nil)))
         (insert (format "package %s\n" package))))
+     ((string-equal "affects" action)
+      (debian-bug-fill-packages-obarray)
+      (let* ((verbose (if debian-bts-control-verbose-prompts-flag
+                          "affects bugnumber [ + | - | = ] package [ package ... ]
+
+ Indicates that a bug affects another package. In the case where
+ bugnumber causes breakage in package even though the bug is
+ actually present in the package to which it is assigned, this
+ causes the bug to be listed by default in the bug list of
+ package. This should generally be used where the bug is severe
+ enough to cause multiple reports from users to be assigned to
+ the wrong package. = sets the affects to the list of packages
+ given, and is the default action if no packages are given; -
+ removes the given packages from the affects list; + adds the
+ given packages to the affects list, and is the default if
+ packages are given.
+
+"
+                        ""))
+             (bug-number (debian-bts-control-prompt
+                          (concat verbose "Bug number") 
+			  number-default))
+             (sign (completing-read
+                    (concat verbose "[ + | - | = ] ")
+                    '(("+") ("-") ("=")) nil nil))
+             (package (completing-read
+                       (concat verbose "Package affected: ")
+                        (debian-bug-fill-packages-obarray) nil nil)))
+        (insert (format "affects %s %s %s \n" bug-number sign package))))
      ((string-equal "reassign" action)
       (debian-bug-fill-packages-obarray)
       (let* ((verbose (if debian-bts-control-verbose-prompts-flag
@@ -560,6 +606,36 @@ in `debian-bts-control-modes-to-reuse'."
              (title (read-string
                      (concat verbose "New title: "))))
         (insert (format "retitle %s %s\n" bug-number title))))
+     ((string-equal "summary" action)
+      (let* ((verbose (if debian-bts-control-verbose-prompts-flag
+                          "summary bugnumber [message number | summary text]
+
+ Selects a message to use as a summary of a bug. The first
+ non-pseudoheader/non-control paragraph of that message is parsed
+ and set as the summary of the bug which is displayed on the top
+ of the bug report page. This is useful in cases where the
+ original report doesn't correctly describe the problem or the
+ bug has many messages which make it difficult to identify the
+ actual problem.
+
+ If message number is not given, clears the summary. message
+ number is the message number as listed in the bugreport cgi
+ script output; if a message number of 0 is given, the current
+ message is used (that is, the message which was sent to
+ control@bugs.debian.org which contains the summary control
+ command).
+
+ If message number is not numerical and not the empty string, it
+ is assumed to be the text to set the summary to.
+
+"
+                        ""))
+             (bug-number (debian-bts-control-prompt
+                          (concat verbose "Bug number")
+			  number-default))
+             (title (read-string
+                     (concat verbose "Summary: "))))
+        (insert (format "summary %s %s\n" bug-number title))))
      ((string-equal "severity" action)
       (let* ((verbose (if debian-bts-control-verbose-prompts-flag
                           "severity bugnumber severity
@@ -616,6 +692,24 @@ in `debian-bts-control-modes-to-reuse'."
                         ""))
              (bug-numbers (read-string (concat verbose "All bug numbers: "))))
         (insert (format "merge %s\n" bug-numbers))))
+     ((string-equal "forcemerge" action)
+      (let* ((verbose (if debian-bts-control-verbose-prompts-flag
+                          "forcemerge bugnumber bugnumber ...
+
+ Forcibly merges two or more bug reports. The settings of the
+ first bug listed which must be equal in a normal merge are
+ assigned to the bugs listed next. To avoid typos erroneously
+ merging bugs, bugs must be in the same package. See the text
+ above for a description of what merging means.
+
+ Note that this makes it possible to close bugs by merging; you
+ are responsible for notifying submitters with an appropriate
+ close message if you do this.
+
+"
+                        ""))
+             (bug-numbers (read-string (concat verbose "All bug numbers: "))))
+        (insert (format "forcemerge %s\n" bug-numbers))))
      ((string-equal "unmerge" action)
       (let* ((verbose (if debian-bts-control-verbose-prompts-flag
                           "unmerge bugnumber

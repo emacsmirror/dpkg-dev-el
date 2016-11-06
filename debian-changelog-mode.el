@@ -347,6 +347,9 @@
 ;;    Simplify auto-mode-alist (Closes: #587924)
 ;; V1.95 01Dec2013 Matt Kraai <kraai@debian.org>
 ;;    Change the default urgency to medium (Closes: #731105)
+;; V1.96 06Nov2016 Guido Günther <agx@sigxcpu.org>
+;;  Bug fix: "improve handling of {old-, }stable-proposed-updates", thanks
+;;    to Guido Gunther (Closes: #818010).
 ;;
 ;;; Acknowledgements:  (These people have contributed)
 ;;   Roland Rosenfeld <roland@debian.org>
@@ -394,7 +397,9 @@ This defaults to the value of (in order of precedence):
     "testing-security"
     "stable" 
     "stable-security" 
+    "stable-proposed-updates"
     "oldstable-security" 
+    "oldstable-proposed-updates"
     "experimental" 
     "UNRELEASED" )
   "*Allowed values for distribution."
@@ -701,7 +706,10 @@ Upload to " val  " anyway?")))
     ("--")
     ["stable" (debian-changelog-setdistribution "stable") t]
     ["stable-security" (debian-changelog-setdistribution "stable-security") t]
+    ["stable-proposed-updates" (debian-changelog-setdistribution "stable-proposed-updates") t]
+    ("--")
     ["oldstable-security" (debian-changelog-setdistribution "oldstable-security") t]
+    ["oldstable-proposed-updates" (debian-changelog-setdistribution "oldstable-proposed-updates") t]
     ("--")
     ["experimental" (debian-changelog-setdistribution "experimental") t]
     ["UNRELEASED" (debian-changelog-setdistribution "UNRELEASED") t])
@@ -752,7 +760,10 @@ Upload to " val  " anyway?")))
     ("--")
     ["stable" (debian-changelog-setdistribution "stable") t]
     ["stable-security" (debian-changelog-setdistribution "stable-security") t]
+    ["stable-proposed-updates" (debian-changelog-setdistribution "stable-proposed-updates") t]
+    ("--")
     ["oldstable-security" (debian-changelog-setdistribution "oldstable-security") t]
+    ["oldstable-proposed-updates" (debian-changelog-setdistribution "oldstable-proposed-updates") t]
     ("--")
     ["experimental" (debian-changelog-setdistribution "experimental") t]
     ["UNRELEASED" (debian-changelog-setdistribution "UNRELEASED") t])
@@ -1567,7 +1578,7 @@ match 1 -> package name
     t))
 
 (defun debian-changelog-fontify-stable (limit)
-  (when (re-search-forward "^\\sw.* (.+).* \\(\\(old\\)?stable\\(-security\\)?\\)" limit t)
+  (when (re-search-forward "^\\sw.* (.+).* \\(\\(old\\)?stable\\(-security\\|-proposed-updates\\)?\\)" limit t)
     (store-match-data
      (list (match-beginning 1)(match-end 1)))
     t))
