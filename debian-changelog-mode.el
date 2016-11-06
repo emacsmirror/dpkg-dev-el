@@ -350,7 +350,10 @@
 ;; V1.96 06Nov2016 Guido Günther <agx@sigxcpu.org>
 ;;  Bug fix: "improve handling of {old-, }stable-proposed-updates", thanks
 ;;    to Guido Gunther (Closes: #818010).
-;;
+;; V1.97 06Nov2016 Pierre Carrier (on 2013-07-04)
+;;  https://bugs.launchpad.net/ubuntu/+source/emacs-goodies-el/+bug/1197870
+;;  Bug fix #803767 debian-changelog-mode: don't rely on external date
+
 ;;; Acknowledgements:  (These people have contributed)
 ;;   Roland Rosenfeld <roland@debian.org>
 ;;   James LewisMoss <dres@ioa.com>
@@ -1208,33 +1211,8 @@ If file is empty, create initial entry."
 (defun debian-changelog-date-string ()
   "Return RFC-822 format date string.
 Use UTC if `debian-changelog-date-utc-flag' is non-nil."
-  (let* ((dp "date")
-	 (cp (point))
-	 (ret
-	  (let ((process-environment process-environment)
-		(tz (dolist (item process-environment)
-		      (when (and (stringp item)
-				 (string-match "^TZ=" item))
-			(return item)))))
-	    (when debian-changelog-date-utc-flag
-	      (setq process-environment
-		    (delete tz process-environment))
-	      (push "TZ=UTC" process-environment))
-	    (call-process "date" nil t nil "-R")))
-	 (np (point))
-	 (out nil))
-    (cond ((not (or (eq ret nil) (eq ret 0)))
-	   (setq out (buffer-substring-no-properties cp np))
-	   (delete-region cp np)
-	   (error (concat "error from " dp ": " out)))
-	  (t
-	   (backward-char)
-	   (or (looking-at "\n")
-	       (error (concat "error from " dp ": expected newline after date string")))
-	   (setq out (buffer-substring-no-properties cp (- np 1)))
-	   (delete-region cp np)
-	   out))))
-
+  (format-time-string "%a, %d %b %Y %T %z" nil
+                      debian-changelog-date-utc-flag))
 ;;
 ;; interactive functions to finalize entry
 ;;
