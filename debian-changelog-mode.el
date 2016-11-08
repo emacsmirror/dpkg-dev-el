@@ -353,6 +353,7 @@
 ;; V1.97 06Nov2016 Pierre Carrier (on 2013-07-04)
 ;;  https://bugs.launchpad.net/ubuntu/+source/emacs-goodies-el/+bug/1197870
 ;;  Bug fix #803767 debian-changelog-mode: don't rely on external date
+;;  See also https://github.com/pcarrier/debian-changelog-mode/commit/285d4cc938468fd3d7d74584da7981705727fbab
 ;; V1.98 06Nov2016 Kumar Appaiah <a.kumar@alumni.iitm.ac.in>
 ;;  highlight backports (Closes: #708317)
 
@@ -1213,8 +1214,9 @@ If file is empty, create initial entry."
 (defun debian-changelog-date-string ()
   "Return RFC-822 format date string.
 Use UTC if `debian-changelog-date-utc-flag' is non-nil."
-  (format-time-string "%a, %d %b %Y %T %z" nil
-                      debian-changelog-date-utc-flag))
+  (let ((system-time-locale "C"))
+    (format-time-string "%a, %d %b %Y %T %z" nil
+                        debian-changelog-date-utc-flag)))
 ;;
 ;; interactive functions to finalize entry
 ;;
