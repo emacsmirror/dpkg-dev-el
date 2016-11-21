@@ -7,7 +7,7 @@
 ;; Maintainer: Peter S Galbraith <psg@debian.org>
 ;; Created: 29 Nov 2001
 ;; Version: 1.5
-;; X-RCS: $Id$
+;; X-RCS: $Id: debian-control-mode.el,v 1.19 2013/10/15 17:22:44 psg Exp $
 ;; Keywords: convenience
 
 ;; This file is free software; you can redistribute it and/or modify

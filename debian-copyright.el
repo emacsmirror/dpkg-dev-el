@@ -37,7 +37,7 @@
   :type 'hook
   :options '(turn-on-auto-fill flyspell-mode))
 
-(defconst debian-copyright-mode-version "$Id$" "Version of debian copyright mode.")
+(defconst debian-copyright-mode-version "$Id: debian-copyright.el,v 1.5 2010-07-28 15:33:45 psg Exp $" "Version of debian copyright mode.")
 
 (defvar debian-copyright-mode-map nil
   "Keymap for debian/copyright mode.")
