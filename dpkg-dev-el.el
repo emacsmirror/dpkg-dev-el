@@ -15,8 +15,6 @@
   "Emacs helpers specific to Debian development."
   :group 'convenience)
 
-(require 'dpkg-dev-el-loaddefs)
-
 ;; debian-bts-control
 (defgroup debian-bts-control nil
   "Create messages for Debian BTS control interface"
