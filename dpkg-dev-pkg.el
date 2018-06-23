@@ -1,5 +1,5 @@
 (define-package
   "dpkg-dev"
-  "36.5"
+  "37.0"
   "Emacs modes for debian packaging"
-  '((debian "36.5")))
+  '((debian "37")))
