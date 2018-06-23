@@ -1,5 +1,5 @@
-dpkg-dev-el (36.5-1) unstable; urgency=medium
+dpkg-dev-el (37.0) experimental; urgency=medium
 
   * Split from emacs-goodies-el source (36.4), and dh-elpafied.
 
- -- David Bremner <bremner@debian.org>  Sat, 9 Jun 2018 12:13:02 -0300
+ -- David Bremner <bremner@debian.org>  Sat, 23 Jun 2018 19:58:04 -0300
