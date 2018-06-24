@@ -21,3 +21,10 @@ Description: Emacs helpers specific to Debian development
  debian-control-mode - a helper mode for debian/control files;
  debian-copyright - major mode for Debian package copyright files;
  readme-debian - major mode for editing README.Debian files.
+
+Package: dpkg-dev-el
+Architecture: all
+Depends: ${misc:Depends}, elpa-dpkg-dev-el
+Description: Transition package, dpkg-dev-el to elpa-dpkg-dev-el
+ The dpkg-dev-el emacs addon has been elpafied.  This dummy package
+ helps ease transition from dpkg-dev-el to elpa-dpkg-dev-el.
