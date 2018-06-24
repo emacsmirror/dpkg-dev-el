@@ -2,6 +2,7 @@ Source: dpkg-dev-el
 Section: lisp
 Priority: optional
 Maintainer: Debian Emacsen team <debian-emacsen@lists.debian.org>
+Uploaders: David Bremner <bremner@debian.org>
 Build-Depends: debhelper (>= 10),
  dh-elpa
 Standards-Version: 4.1.3
