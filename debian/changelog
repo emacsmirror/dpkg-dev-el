@@ -1,3 +1,9 @@
+dpkg-dev-el (37.1) experimental; urgency=medium
+
+  * update debian/copyright for split package
+
+ -- David Bremner <bremner@debian.org>  Fri, 29 Jun 2018 13:37:08 -0300
+
 dpkg-dev-el (37.0) experimental; urgency=medium
 
   * Adopting emacs-goodies-el to the emacsen-team, see

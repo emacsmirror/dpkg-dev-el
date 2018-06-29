@@ -16,27 +16,34 @@ Comment:
  This covers the debian/* files, and various other glue files written
  specificially for this package.
 
-Files: elisp/dpkg-dev-el/debian-bts-control.el
+Files: debian-bts-control.el
 Copyright: 2003 Peter S Galbraith
 License: GPL-2+
 
-Files: elisp/dpkg-dev-el/debian-changelog-mode.el
+Files: debian-changelog-mode.el
 Copyright: 1996 Ian Jackson, 1997 Klee Dienes, 1999 Chris Waters,
  2000 Peter S Galbraith
 License: GPL-2+
 
-Files: elisp/dpkg-dev-el/debian-control-mode.el
+Files: debian-control-mode.el
 Copyright: 2001 Free Software Foundation, Inc.
 License: GPL-2+
 Comment: Author: Colin Walters <walters@debian.org>
 
-Files: elisp/dpkg-dev-el/debian-copyright.el
+Files: debian-copyright.el
 Copyright: 2002, 2003 Junichi Uekawa <dancer@netfort.gr.jp>
 License: GPL-2+
 
-Files: elisp/dpkg-dev-el/readme-debian.el
+Files: readme-debian.el
 Copyright: 2002 Junichi Uekawa <dancer@netfort.gr.jp>
 License: GPL-2+
+
+Files: debian/*
+Copyright: 2018 David Bremner <bremner@debian.org>
+License: GPL-2+
+Comment:
+ Packaging was completely re-done with 37.0, taking only debian/copyright
+ and (part of) debian/control from emacs-goodies-el.
 
 License: GPL-2+
  This program is free software; you can redistribute it and/or
