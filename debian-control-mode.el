@@ -181,8 +181,9 @@
 (defvar debian-control-source-fields
   (append
   '("Section" "Priority" "Maintainer" "Build-Depends" "Build-Depends-Indep"
-     "Build-Conflicts" "Build-Conflicts-Indep" "Standards-Version" "Uploaders"
-     "DM-Upload-Allowed" "Homepage" "Vcs-Browser" "XS-Python-Version")
+     "Build-Depends-Arch" "Build-Conflicts" "Build-Conflicts-Indep"
+     "Build-Conflicts-Arch" "Standards-Version" "Uploaders" "Origin" "Bugs"
+     "Homepage" "Vcs-Browser" "Rules-Requires-Root" "XS-Python-Version")
    (mapcar (lambda (elt) (concat "Vcs-" elt))
            debian-control-vcs-names))
   "Valid source package field names, collected from several policy sections.")

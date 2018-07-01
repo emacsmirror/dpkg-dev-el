@@ -1,3 +1,10 @@
+dpkg-dev-el (37.2) experimental; urgency=medium
+
+  * Bug fix: "debian-control-source-fields is outdated", thanks to Sven
+    Joachim (Closes: #882775).
+
+ -- David Bremner <bremner@debian.org>  Sun, 01 Jul 2018 07:04:31 -0300
+
 dpkg-dev-el (37.1) experimental; urgency=medium
 
   * update debian/copyright for split package
