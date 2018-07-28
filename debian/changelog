@@ -1,3 +1,10 @@
+dpkg-dev-el (37.4) unstable; urgency=medium
+
+  * Upload to unstable (Closes: #904816). Thanks to Sven Joachim for
+    noticing.
+
+ -- David Bremner <bremner@debian.org>  Sun, 29 Jul 2018 06:12:32 +0800
+
 dpkg-dev-el (37.3) experimental; urgency=medium
 
   * Fix Vcs-*
