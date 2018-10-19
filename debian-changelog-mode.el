@@ -1361,7 +1361,7 @@ interface to set it, or simply set the variable
 ; (set (make-local-variable 'paragraph-start) "\\*")
 ; (set (make-local-variable 'paragraph-separate) "\\*\\|\\s-*$|\\S-")
   ;; PSG: The following appears to get fill-paragraph to finally work!
-  (set (make-local-variable 'paragraph-start) "\\*\\|\\s *$\\|\f\\|^\\<")
+  (set (make-local-variable 'paragraph-start) "\\*\\|\\s [*]$\\|\f\\|^\\<")
   (set (make-local-variable 'paragraph-separate) "\\s *$\\|\f\\|^\\<")
   ;; Let each version behave as one page.
   ;; Match null string on the heading line so that the heading line
