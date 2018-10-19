@@ -488,6 +488,7 @@ Pass ARGS to `replace-regexp-in-string' (GNU Emacs) or to
 (defvar debian-bug-open-alist)
 
 (require 'faces)
+(require 'custom)
 (require 'add-log)
 (require 'easymenu)
 (eval-when-compile
@@ -1404,9 +1405,11 @@ interface to set it, or simply set the variable
   "Face to use for important keywords.")
 
 (cond
- ((and (fboundp 'facep)
+ ((and (fboundp 'defface)
        (facep 'font-lock-warning-face))
-  (copy-face 'font-lock-warning-face 'debian-changelog-warning-face))
+  (defface debian-changelog-warning-face '((t :inherit font-lock-warning-face))
+    "Face for debian-changelog important strings."
+    :group 'debian-changelog-faces))
  ((fboundp 'defface)
   (defface debian-changelog-warning-face
     '((((class grayscale)(background light))(:foreground "DimGray" :bold t))
