@@ -487,7 +487,7 @@ Pass ARGS to `replace-regexp-in-string' (GNU Emacs) or to
 (autoload 'debian-bug-web-developer-page "debian-bug")
 (defvar debian-bug-open-alist)
 
-
+(require 'faces)
 (require 'add-log)
 (require 'easymenu)
 (eval-when-compile

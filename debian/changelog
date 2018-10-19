@@ -1,3 +1,11 @@
+dpkg-dev-el (37.5) unstable; urgency=medium
+
+  * debian-changelog-mode: (require 'faces).  Bug fix:
+    "debian-changelog-warning-face not defined in Emacs 23", thanks to
+    Trent W. Buck (Closes: #592195).
+
+ -- David Bremner <bremner@debian.org>  Thu, 18 Oct 2018 21:15:53 -0300
+
 dpkg-dev-el (37.4) unstable; urgency=medium
 
   * Upload to unstable (Closes: #904816). Thanks to Sven Joachim for
