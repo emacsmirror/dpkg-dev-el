@@ -1,8 +1,9 @@
-dpkg-dev-el (37.7) UNRELEASED; urgency=medium
+dpkg-dev-el (37.7) unstable; urgency=medium
 
-  * New upload, in progress
+  * fix comment-start-skip (Closes: #718539)
+  * use syntax-propertize-function for comments (Closes: 737673)
 
- -- David Bremner <bremner@debian.org>  Sat, 20 Oct 2018 18:09:48 -0300
+ -- David Bremner <bremner@debian.org>  Sat, 20 Oct 2018 20:39:34 -0300
 
 dpkg-dev-el (37.6) unstable; urgency=medium
 
