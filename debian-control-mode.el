@@ -233,45 +233,42 @@
 ;;;###autoload
 (define-derived-mode debian-control-mode fundamental-mode "Debian Control"
   "A major mode for editing Debian control files (i.e. debian/control)."
-  (if (< emacs-major-version 21)
-      (message "debian-control-mode only supports emacsen version >= 21; disabling features")
-    (progn
-      (set-syntax-table debian-control-syntax-table)
-      ;; Comments
-      (make-local-variable 'comment-start-skip)  ;Need this for font-lock...
-      (setq comment-start-skip "\\(^\\|\\s-\\);?#+ *") ;;From perl-mode
-      (make-local-variable 'comment-start)
-      (make-local-variable 'comment-end)
-      (setq comment-start "#"
-            comment-end "")
+  (set-syntax-table debian-control-syntax-table)
+  ;; Comments
+  (make-local-variable 'comment-start-skip)  ;Need this for font-lock...
+  (setq comment-start-skip "\\(^\\|\\s-\\);?#+ *") ;;From perl-mode
+  (make-local-variable 'comment-start)
+  (make-local-variable 'comment-end)
+  (setq comment-start "#"
+        comment-end "")
 
-      (make-local-variable 'font-lock-defaults)
-      (setq font-lock-defaults
-            '(debian-control-font-lock-keywords
-              nil           ;;; Keywords only? No, let it do syntax via table.
-              nil           ;;; case-fold?
-              nil           ;;; Local syntax table.
-              nil           ;;; Use `backward-paragraph' ? No
-              ))
-      (set (make-local-variable 'fill-paragraph-function)
-	   #'debian-control-mode-fill-paragraph)
-      (make-local-variable 'after-change-functions)
-      (push 'debian-control-mode-after-change-function after-change-functions)
-      (set (make-local-variable 'imenu-generic-expression)
-        '((nil "^\\(Package\\|Source\\):\\s-*\\([-a-zA-Z0-9+.]+?\\)\\s-*$" 2)))
+  (make-local-variable 'font-lock-defaults)
+  (setq font-lock-defaults
+        '(debian-control-font-lock-keywords
+          nil           ;;; Keywords only? No, let it do syntax via table.
+          nil           ;;; case-fold?
+          nil           ;;; Local syntax table.
+          nil           ;;; Use `backward-paragraph' ? No
+          ))
+  (set (make-local-variable 'fill-paragraph-function)
+       #'debian-control-mode-fill-paragraph)
+  (make-local-variable 'after-change-functions)
+  (push 'debian-control-mode-after-change-function after-change-functions)
+  (set (make-local-variable 'imenu-generic-expression)
+       '((nil "^\\(Package\\|Source\\):\\s-*\\([-a-zA-Z0-9+.]+?\\)\\s-*$" 2)))
 
-      (define-key debian-control-mode-map (kbd "C-c C-b") 'debian-control-view-package-bugs)
-      (define-key debian-control-mode-map (kbd "C-c C-p") 'debian-control-visit-policy)
-      (define-key debian-control-mode-map (kbd "C-c C-a") 'debian-control-mode-add-field)
-      (define-key debian-control-mode-package-name-keymap (if (featurep 'xemacs)
-							      [(control down-mouse-2)]
-							    [(C-mouse-2)])
-	'debian-control-mode-bugs-mouse-click)
-      (easy-menu-add debian-control-mode-menu)
-      (if (and (featurep 'goto-addr) goto-address-highlight-p)
-        (goto-address))
-      (let ((after-change-functions nil))
-	(debian-control-mode-after-change-function (point-min) (point-max) 0)))))
+  (define-key debian-control-mode-map (kbd "C-c C-b") 'debian-control-view-package-bugs)
+  (define-key debian-control-mode-map (kbd "C-c C-p") 'debian-control-visit-policy)
+  (define-key debian-control-mode-map (kbd "C-c C-a") 'debian-control-mode-add-field)
+  (define-key debian-control-mode-package-name-keymap (if (featurep 'xemacs)
+                                                          [(control down-mouse-2)]
+                                                        [(C-mouse-2)])
+    'debian-control-mode-bugs-mouse-click)
+  (easy-menu-add debian-control-mode-menu)
+  (if (and (featurep 'goto-addr) goto-address-highlight-p)
+      (goto-address))
+  (let ((after-change-functions nil))
+    (debian-control-mode-after-change-function (point-min) (point-max) 0)))
 
 (defun debian-control-mode-after-change-function (beg end len)
   (save-excursion
