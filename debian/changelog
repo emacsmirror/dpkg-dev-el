@@ -1,10 +1,10 @@
-dpkg-dev-el (37.6) UNRELEASED; urgency=medium
+dpkg-dev-el (37.6) unstable; urgency=medium
 
   * Load dpkg-dev-el.el at startup.
   * Bug fix: "auto-mode-alist README.source regexp", thanks to Kevin Ryde
     (Closes: #672195).
 
- -- David Bremner <bremner@debian.org>  Fri, 19 Oct 2018 22:19:08 -0300
+ -- David Bremner <bremner@debian.org>  Fri, 19 Oct 2018 22:44:15 -0300
 
 dpkg-dev-el (37.5) unstable; urgency=medium
 
