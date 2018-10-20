@@ -1,5 +1,6 @@
 dpkg-dev-el (37.6) UNRELEASED; urgency=medium
 
+  * Load dpkg-dev-el.el at startup.
   * Bug fix: "auto-mode-alist README.source regexp", thanks to Kevin Ryde
     (Closes: #672195).
 
