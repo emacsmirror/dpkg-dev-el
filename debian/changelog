@@ -1,3 +1,10 @@
+dpkg-dev-el (37.6) UNRELEASED; urgency=medium
+
+  * Bug fix: "auto-mode-alist README.source regexp", thanks to Kevin Ryde
+    (Closes: #672195).
+
+ -- David Bremner <bremner@debian.org>  Fri, 19 Oct 2018 22:19:08 -0300
+
 dpkg-dev-el (37.5) unstable; urgency=medium
 
   * debian-changelog-mode: (require 'faces).  Bug fix:

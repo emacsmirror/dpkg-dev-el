@@ -62,7 +62,7 @@
 (add-to-list 'auto-mode-alist
              '("/debian/[^/]*emacsen-startup\\'" . emacs-lisp-mode))
 ;; Closes #490292 
-(add-to-list 'auto-mode-alist '("README.source" . readme-debian-mode))
+(add-to-list 'auto-mode-alist '("/README\\.source\\'" . readme-debian-mode))
 
 (when (member 'utf-8 (coding-system-list))
   ;; default to utf-8 for debian changelog files
