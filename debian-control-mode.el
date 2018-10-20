@@ -236,7 +236,7 @@
   (set-syntax-table debian-control-syntax-table)
   ;; Comments
   (make-local-variable 'comment-start-skip)  ;Need this for font-lock...
-  (setq comment-start-skip "\\(^\\|\\s-\\);?#+ *") ;;From perl-mode
+  (setq comment-start-skip "^#+\s-*")
   (make-local-variable 'comment-start)
   (make-local-variable 'comment-end)
   (setq comment-start "#"
