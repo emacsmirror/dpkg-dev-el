@@ -160,8 +160,6 @@
 (if debian-control-syntax-table
     ()
   (setq debian-control-syntax-table (make-syntax-table))
-  ;; Support # style comments
-  (modify-syntax-entry ?#  "<"  debian-control-syntax-table)
   (modify-syntax-entry ?\n "> " debian-control-syntax-table))
 
 ;; FIXME: As of policy 3.5.6.0, the allowed characters in a field name
@@ -241,6 +239,10 @@
   (make-local-variable 'comment-end)
   (setq comment-start "#"
         comment-end "")
+
+  ;; Support # style comments
+  (setq-local syntax-propertize-function
+              (syntax-propertize-rules ("^\\(#\\)" (1 "<"))))
 
   (make-local-variable 'font-lock-defaults)
   (setq font-lock-defaults
