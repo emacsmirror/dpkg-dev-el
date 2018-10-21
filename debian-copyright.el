@@ -17,6 +17,13 @@
 ;; If not, write to the Free Software Foundation, 675 Mass Ave,
 ;; Cambridge, MA 02139, USA.
 
+;;; Commentary:
+;; debian-copyright-mode will automatically activate when editing files
+;; named debian/*copyright or /usr/share/doc/*/copyright.  This mode
+;; can be customised from the group tools -> debian-copyright, or
+;; directly from the debian-copyright group.
+
+;;; Code:
 
 (require 'debian-changelog-mode)
 
