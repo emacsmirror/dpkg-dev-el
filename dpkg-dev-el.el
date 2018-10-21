@@ -1,5 +1,9 @@
 ;;; dpkg-dev-el.el --- startup file for the debian-el package
 
+;; Copyright: 2003-2014 Peter S Galbraith
+
+;; Author: Peter S Galbraith <psg@debian.org>
+;; Created: 2003-11-03
 
 ;;; Commentary:
 ;; This file sets up customisation groups, adds appropriate modes to
