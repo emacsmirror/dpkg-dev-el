@@ -6,7 +6,9 @@ dpkg-dev-el (37.7) UNRELEASED; urgency=medium
     - Add Commentary section to readme-debian.el.
     - Fix Commentary section in dpkg-dev-el.el.
     - Add Copyright, Author, and Created headers to dpkg-dev-el.el.
-    - debian/copyright: add entry for dpkg-dev-el.el.
+  * debian/copyright:
+    - Add entry for dpkg-dev-el.el.
+    - Use secure copyright-format URL.
 
  -- Nicholas D Steeves <nsteeves@gmail.com>  Sun, 21 Oct 2018 19:00:11 -0400
 
