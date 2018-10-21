@@ -1,3 +1,15 @@
+dpkg-dev-el (37.7) UNRELEASED; urgency=medium
+
+  * Remove trailing whitespace and inconsistent use of newlines.
+  * Update metadata headers needed for ELPA packages (Closes: #911062).
+    - Add Commentary and Code sections to debian-copyright.el.
+    - Add Commentary section to readme-debian.el.
+    - Fix Commentary section in dpkg-dev-el.el.
+    - Add Copyright, Author, and Created headers to dpkg-dev-el.el.
+    - debian/copyright: add entry for dpkg-dev-el.el.
+
+ -- Nicholas D Steeves <nsteeves@gmail.com>  Sun, 21 Oct 2018 19:00:11 -0400
+
 dpkg-dev-el (37.6) unstable; urgency=medium
 
   * Load dpkg-dev-el.el at startup.
