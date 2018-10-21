@@ -30,7 +30,7 @@
   "*Hooks that are run when `debian-copyright-mode' is loaded."
   :group 'debian-copyright
   :type 'hook)
-  
+
 (defcustom debian-copyright-mode-hook nil
   "Normal hook run when entering Debian Copyright mode."
   :group 'debian-copyright

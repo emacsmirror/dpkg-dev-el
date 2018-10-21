@@ -19,7 +19,7 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with your Debian installation, in /usr/share/common-licenses/GPL
 ;; If not, write to the Free Software Foundation, 51 Franklin Street,
-;; Suite 500 Boston, MA 02110-1335, USA 
+;; Suite 500 Boston, MA 02110-1335, USA
 
 ;;; Commentary:
 ;;
@@ -316,7 +316,7 @@
 ;;  - Add co-maintenance support to `debian-changelog-unfinalise-last-version'
 ;; V1.84 14May2007 Peter S Galbraith <psg@debian.org>
 ;;  - Use "date -R" instead of deprecated "822-date"
-;;    (Closes: #423142, #423155, #423828) 
+;;    (Closes: #423142, #423155, #423828)
 ;;  - Tighter regexp for finalisation string
 ;; V1.85 25Jul2007 Peter S Galbraith <psg@debian.org>
 ;;  - Adapt patch from Luca Capello <luca@pca.it> for bug #431091
@@ -401,12 +401,12 @@ This defaults to the value of (in order of precedence):
   '("unstable"
     "testing"
     "testing-security"
-    "stable" 
-    "stable-security" 
+    "stable"
+    "stable-security"
     "stable-proposed-updates"
-    "oldstable-security" 
+    "oldstable-security"
     "oldstable-proposed-updates"
-    "experimental" 
+    "experimental"
     "UNRELEASED" )
   "*Allowed values for distribution."
   :group 'debian-changelog
@@ -447,7 +447,7 @@ the bug number."
 
 (defcustom debian-changelog-add-version-hook
   (list 'debian-changelog-add-new-upstream-release)
-  "Hooks run just before inserting the signature separator \"--\" in a 
+  "Hooks run just before inserting the signature separator \"--\" in a
 new version in debian/changelog."
   :group 'debian-changelog
   :type 'hook)
@@ -682,7 +682,6 @@ Upload to " val  " anyway?")))
     'outline-next-visible-heading)
   (define-key debian-changelog-mode-map "\C-c\C-p"
     'outline-previous-visible-heading))
- 
 
 ;;
 ;; menu definition (Chris Waters)
@@ -1276,7 +1275,7 @@ the form [ NAME ]."
   (insert "\n  [ " name " ]")
   (when (string= "--" separator)
     (insert "\n")))
-  
+
 (defun debian-changelog-comaintainer ()
   "If the last maintainer is different from the current one, create a
 co-maintained changelog entry."
