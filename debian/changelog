@@ -9,6 +9,8 @@ dpkg-dev-el (37.7) UNRELEASED; urgency=medium
   * debian/copyright:
     - Add entry for dpkg-dev-el.el.
     - Use secure copyright-format URL.
+  * dpkg-dev-el.el: Change description to name dpkg-dev-el rather than
+    debian-el, which is now anachronistic.
 
  -- Nicholas D Steeves <nsteeves@gmail.com>  Sun, 21 Oct 2018 19:00:11 -0400
 
