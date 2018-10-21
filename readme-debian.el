@@ -17,7 +17,15 @@
 ;; If not, write to the Free Software Foundation, 675 Mass Ave,
 ;; Cambridge, MA 02139, USA.
 
+;;; Commentary:
+;; debian-changelog-mode will automatically activate when editing
+;; files named debian/*README.*Debian or
+;; /usr/share/doc/*/README*Debian*.  This mode can be customised from
+;; the group tools -> readme-debian, or directly from the
+;; readme-debian group.
+
 ;;; Code:
+
 (require 'debian-changelog-mode)
 (defgroup readme-debian nil "Readme Debian (mode)"
   :group 'tools
