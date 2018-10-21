@@ -34,6 +34,10 @@ Files: debian-copyright.el
 Copyright: 2002, 2003 Junichi Uekawa <dancer@netfort.gr.jp>
 License: GPL-2+
 
+Files: dpkg-dev-el.el
+Copyright: 2003-2014 Peter S Galbraith <psg@debian.org>
+License: GPL-2+
+
 Files: readme-debian.el
 Copyright: 2002 Junichi Uekawa <dancer@netfort.gr.jp>
 License: GPL-2+
