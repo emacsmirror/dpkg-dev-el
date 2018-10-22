@@ -6,6 +6,9 @@ dpkg-dev-el (37.7) UNRELEASED; urgency=medium
     - Add Commentary section to readme-debian.el.
     - Fix Commentary section in dpkg-dev-el.el.
     - Add Copyright, Author, and Created headers to dpkg-dev-el.el.
+    - Make GPL-2+ licensing explicit in dpkg-dev-el.el by adding a GPL-2+
+      licensing header.  Previously this could only be determined by
+      examining debian/copyright.
   * debian/copyright:
     - Add entry for dpkg-dev-el.el.
     - Use secure copyright-format URL.
