@@ -1,5 +1,6 @@
-dpkg-dev-el (37.8) UNRELEASED; urgency=medium
+dpkg-dev-el (37.8) unstable; urgency=medium
 
+  [ Nicholas D Steeves ]
   * Remove trailing whitespace and inconsistent use of newlines.
   * Update metadata headers needed for ELPA packages (Closes: #911062).
     - Add Commentary and Code sections to debian-copyright.el.
@@ -15,7 +16,10 @@ dpkg-dev-el (37.8) UNRELEASED; urgency=medium
   * dpkg-dev-el.el: Change description to name dpkg-dev-el rather than
     debian-el, which is now anachronistic.
 
- -- Nicholas D Steeves <nsteeves@gmail.com>  Sun, 21 Oct 2018 19:00:11 -0400
+  [ David Bremner ]
+  * rebuild with dh_elpa 1.16
+
+ -- David Bremner <bremner@debian.org>  Sat, 24 Aug 2019 20:15:16 -0300
 
 dpkg-dev-el (37.7) unstable; urgency=medium
 
