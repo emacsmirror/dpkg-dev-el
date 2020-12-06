@@ -1,3 +1,9 @@
+dpkg-dev-el (37.9) unstable; urgency=medium
+
+  * Rebuild with current dh-elpa (no changes)
+
+ -- David Bremner <bremner@debian.org>  Sun, 06 Dec 2020 08:14:57 -0400
+
 dpkg-dev-el (37.8) unstable; urgency=medium
 
   [ Nicholas D Steeves ]
