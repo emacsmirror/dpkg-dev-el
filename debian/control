@@ -13,8 +13,7 @@ Package: elpa-dpkg-dev-el
 Architecture: all
 Depends: ${elpa:Depends}, ${misc:Depends}
 Recommends: emacs (>= 46.0)
-Enhances: emacs,
- emacs25
+Enhances: emacs
 Description: Emacs helpers specific to Debian development
  This package contains:
  .
