@@ -81,7 +81,7 @@
 ;; - Remove `close'
 ;;; Code:
 
-(eval-when-compile '(require 'cl))
+(eval-when-compile '(require 'cl-lib))
 (require 'debian-bug)
 (autoload 'word-at-point "thingatpt")
 
@@ -367,7 +367,7 @@ in `debian-bts-control-modes-to-reuse'."
   (let ((number-default (debian-bts-bug-number-at-point)))
     (cond
      ((or arg
-          (and (car (memq t (mapcar '(lambda (item) (eq item major-mode))
+          (and (car (memq t (mapcar #'(lambda (item) (eq item major-mode))
                                     debian-bts-control-modes-to-reuse)))
                (not debian-bts-control-minor-mode)))
       (debian-bug--set-CC debian-bts-emailaddress

@@ -1,8 +1,12 @@
 dpkg-dev-el (37.10) UNRELEASED; urgency=medium
 
+  [ Nicholas D Steeves ]
   * Drop emacs25 from Enhances (package does not exist in bullseye).
 
- -- Nicholas D Steeves <sten@debian.org>  Wed, 28 Jul 2021 19:28:30 -0400
+  [ Amin Bandali ]
+  * Fix a few warnings.
+
+ -- Amin Bandali <bandali@gnu.org>  Mon, 20 Feb 2023 11:34:06 -0500
 
 dpkg-dev-el (37.9) unstable; urgency=medium
 

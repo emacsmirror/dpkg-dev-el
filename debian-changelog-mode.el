@@ -492,7 +492,7 @@ Pass ARGS to `replace-regexp-in-string' (GNU Emacs) or to
 (require 'add-log)
 (require 'easymenu)
 (eval-when-compile
-  (require 'cl))
+  (require 'cl-lib))
 
 ;; XEmacs21.1 compatibility -- from XEmacs's apel/poe.el
 (unless (fboundp 'match-string-no-properties)
@@ -1692,7 +1692,7 @@ Also set keymap."
 ;;; imenu stuff - Peter Galbraith, May 2001
 
 (eval-when-compile
-  (require 'cl)
+  (require 'cl-lib)
   (if (fboundp 'imenu)                    ;Make sure auto-load is loaded
       (require 'imenu)))
 
@@ -1749,11 +1749,9 @@ Also set keymap."
               )
           (setq debian-changelog-imenu-counter -99)
           (goto-char (point-max))
-          (imenu-progress-message prev-pos 0 t)
 ;;;          (message "Scanning changelog history...")
           (setq debian-changelog-imenu-doing-closebug nil)
           (while (debian-changelog-imenu-prev-index-position-function)
-            (imenu-progress-message prev-pos nil t)
             (let ((marker (make-marker)))
               (set-marker marker (point))
               (cond
@@ -1763,7 +1761,6 @@ Also set keymap."
                ((match-beginning 4)     ;version number
                 (push (cons (match-string-no-properties 4) marker)
                       index-alist)))))
-          (imenu-progress-message prev-pos 100 t)
 ;;;       (message "Scanning changelog history... done.")
           (cond
            (index-bug-alist

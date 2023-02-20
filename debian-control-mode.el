@@ -124,7 +124,7 @@
 (require 'easymenu)
 (require 'font-lock)
 (eval-when-compile
-  (require 'cl))
+  (require 'cl-lib))
 
 ;; XEmacs compatibility
 (eval-and-compile
@@ -382,7 +382,7 @@
       binary-p
       (completing-read (format "Add %s package field: " (if binary-p "binary" "source"))
                        (mapcar #'(lambda (x) (cons x nil)) fields)))))
-  (require 'cl)
+  (require 'cl-lib)
   (let ((fields (if binary
 		    debian-control-binary-fields
 		  debian-control-source-fields))
@@ -457,7 +457,7 @@ text file."
                            (mapcar #'(lambda (x) (cons x 0))
                                    '("html" "text" "checklist"))
 			   nil t))))
-  (case format
+  (cl-case format
     (text
      (debian-control-find-file "/usr/share/doc/debian-policy/policy.txt.gz"))
     (checklist
