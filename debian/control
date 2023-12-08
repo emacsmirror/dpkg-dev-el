@@ -12,7 +12,7 @@ Vcs-Git: https://salsa.debian.org/emacsen-team/dpkg-dev-el.git
 Package: elpa-dpkg-dev-el
 Architecture: all
 Depends: ${elpa:Depends}, ${misc:Depends}
-Recommends: emacs (>= 46.0)
+Recommends: emacs
 Enhances: emacs
 Description: Emacs helpers specific to Debian development
  This package contains:
