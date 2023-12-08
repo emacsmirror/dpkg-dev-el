@@ -189,7 +189,7 @@
 (defvar debian-control-binary-fields
   '("Section" "Priority" "Architecture" "Depends" "Conflicts" "Pre-Depends"
     "Essential" "Provides" "Recommends" "Suggests" "Replaces" "Enhances"
-    "Description" "Breaks")
+    "Description" "Breaks" "Package")
   "Valid binary package field names, collected from several policy sections.")
 
 (defvar debian-control-source-fields-regexp
