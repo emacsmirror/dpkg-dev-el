@@ -245,7 +245,7 @@
 ;; V1.62 20Aug2002 Peter S Galbraith <psg@debian.org>
 ;; V1.63 05Sep2002 Peter S Galbraith <psg@debian.org>
 ;;    Fontify bugs on multiple-line closes: statements.  Patch from
-;;    Frédéric Bothamy.  (Closes: #159041)
+;;    FrÃ©dÃ©ric Bothamy.  (Closes: #159041)
 ;; V1.64 05Sep2002 Peter S Galbraith <psg@debian.org>
 ;;    debian-changelog-suggest-version fix (Closes: #159643)
 ;; V1.65 05Sep2002 Peter S Galbraith <psg@debian.org>
@@ -347,7 +347,7 @@
 ;;    Simplify auto-mode-alist (Closes: #587924)
 ;; V1.95 01Dec2013 Matt Kraai <kraai@debian.org>
 ;;    Change the default urgency to medium (Closes: #731105)
-;; V1.96 06Nov2016 Guido Günther <agx@sigxcpu.org>
+;; V1.96 06Nov2016 Guido GÃ¼nther <agx@sigxcpu.org>
 ;;  Bug fix: "improve handling of {old-, }stable-proposed-updates", thanks
 ;;    to Guido Gunther (Closes: #818010).
 ;; V1.97 06Nov2016 Pierre Carrier (on 2013-07-04)
