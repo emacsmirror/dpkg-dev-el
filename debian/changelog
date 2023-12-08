@@ -6,7 +6,16 @@ dpkg-dev-el (37.10) UNRELEASED; urgency=medium
   [ Amin Bandali ]
   * Fix a few warnings.
 
- -- Amin Bandali <bandali@gnu.org>  Mon, 20 Feb 2023 11:34:06 -0500
+  [ Xiyue Deng ]
+  * Convert debian-changelog-mode file encoding to UTF-8
+  * Drop emacs version from recommends
+  * Update Standards-Version to 4.6.2, no changes needed
+  * Migrate to debhelper-compat version 13
+  * Mark Rules-Requires-Root as no in d/control
+  * Use dh_elpa to generate autoloads and pkg el files
+  * Add "Package" to debian-control-binary-fields
+
+ -- Xiyue Deng <manphiz@gmail.com>  Thu, 07 Dec 2023 21:24:24 -0800
 
 dpkg-dev-el (37.9) unstable; urgency=medium
 
