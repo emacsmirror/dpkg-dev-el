@@ -1271,7 +1271,7 @@ a list in the form (NAME EMAIL)."
 the form [ NAME ]."
   (goto-char (point-min))
   (re-search-forward (concat "\n " separator))
-  (previous-line 1)
+  (forward-line -1)
   (insert "\n  [ " name " ]")
   (when (string= "--" separator)
     (insert "\n")))

@@ -69,7 +69,7 @@
   (kill-all-local-variables)
   (setq major-mode 'debian-copyright-mode)
   (setq mode-name "debian/copyright")
-  (mapcar 'make-local-variable '(font-lock-defaults write-file-hooks))
+  (mapc 'make-local-variable '(font-lock-defaults write-file-hooks))
   (use-local-map debian-copyright-mode-map)
   (set-syntax-table debian-copyright-mode-syntax-table)
   (if (or (not (featurep 'goto-addr))

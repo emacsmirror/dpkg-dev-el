@@ -14,6 +14,7 @@ dpkg-dev-el (37.10) UNRELEASED; urgency=medium
   * Mark Rules-Requires-Root as no in d/control
   * Use dh_elpa to generate autoloads and pkg el files
   * Add "Package" to debian-control-binary-fields
+  * Fix a few more warnings
 
  -- Xiyue Deng <manphiz@gmail.com>  Thu, 07 Dec 2023 21:24:24 -0800
 
