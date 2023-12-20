@@ -17,6 +17,7 @@ dpkg-dev-el (37.10) UNRELEASED; urgency=medium
   * Use dh_elpa to generate autoloads and pkg el files
   * Add "Package" to debian-control-binary-fields
   * Fix a few more warnings
+  * Add Upstream-Contact to d/copyright
 
  -- Xiyue Deng <manphiz@gmail.com>  Thu, 07 Dec 2023 21:24:24 -0800
 
