@@ -1,4 +1,4 @@
-dpkg-dev-el (37.10) UNRELEASED; urgency=medium
+dpkg-dev-el (37.10) unstable; urgency=medium
 
   * Team upload
 
@@ -19,7 +19,7 @@ dpkg-dev-el (37.10) UNRELEASED; urgency=medium
   * Fix a few more warnings
   * Add Upstream-Contact to d/copyright
 
- -- Xiyue Deng <manphiz@gmail.com>  Thu, 07 Dec 2023 21:24:24 -0800
+ -- Arto Jantunen <viiru@debian.org>  Sat, 27 Jan 2024 14:47:15 +0200
 
 dpkg-dev-el (37.9) unstable; urgency=medium
 
