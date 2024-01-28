@@ -1,7 +1,8 @@
 dpkg-dev-el (37.11) UNRELEASED; urgency=medium
 
   * Team upload.
-  * d/control: add elpa-debian-el to Build-Depends (Closes: #1061650).
+  * d/control: add elpa-debian-el to the dependencies of elpa-dpkg-dev-el
+    (Closes: #1061650).
 
  -- Xiyue Deng <manphiz@gmail.com>  Sat, 27 Jan 2024 19:41:06 -0800
 
