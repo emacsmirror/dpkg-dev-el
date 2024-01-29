@@ -3,6 +3,8 @@ dpkg-dev-el (37.11) UNRELEASED; urgency=medium
   * Team upload.
   * d/control: add elpa-debian-el to the dependencies of elpa-dpkg-dev-el
     (Closes: #1061650).
+  * Add a dummy ERT test to force byte-compiling all addons to help catch
+    issues.
 
  -- Xiyue Deng <manphiz@gmail.com>  Sat, 27 Jan 2024 19:41:06 -0800
 
