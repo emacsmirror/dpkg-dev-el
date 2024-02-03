@@ -1,12 +1,14 @@
-dpkg-dev-el (37.11) UNRELEASED; urgency=medium
+dpkg-dev-el (37.11) unstable; urgency=medium
 
   * Team upload.
+
+  [ Xiyue Deng ]
   * d/control: add elpa-debian-el to Build-Depends and the dependencies of
     elpa-dpkg-dev-el (Closes: #1061650).
   * Add a dummy ERT test to force byte-compiling all addons to help catch
     issues.
 
- -- Xiyue Deng <manphiz@gmail.com>  Sat, 27 Jan 2024 19:41:06 -0800
+ -- Arto Jantunen <viiru@debian.org>  Sat, 03 Feb 2024 10:28:42 +0200
 
 dpkg-dev-el (37.10) unstable; urgency=medium
 
