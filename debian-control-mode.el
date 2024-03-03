@@ -178,18 +178,57 @@
 
 (defvar debian-control-source-fields
   (append
-  '("Section" "Priority" "Maintainer" "Build-Depends" "Build-Depends-Indep"
-     "Build-Depends-Arch" "Build-Conflicts" "Build-Conflicts-Indep"
-     "Build-Conflicts-Arch" "Standards-Version" "Uploaders" "Origin" "Bugs"
-     "Homepage" "Vcs-Browser" "Rules-Requires-Root" "XS-Python-Version")
+  '("Bugs"
+  "Build-Conflicts"
+  "Build-Conflicts-Arch"
+  "Build-Conflicts-Indep"
+  "Build-Depends"
+  "Build-Depends-Arch"
+  "Build-Depends-Indep"
+  "DM-Upload-Allowed"
+  "Homepage"
+  "Maintainer"
+  "Origin"
+  "Priority"
+  "Rules-Requires-Root"
+  "Section"
+  "Source"
+  "Standards-Version"
+  "Testsuite"
+  "Uploaders"
+  "X-Python3-Version"
+  "X-Python-Version"
+  "XS-Autobuild")
    (mapcar (lambda (elt) (concat "Vcs-" elt))
            debian-control-vcs-names))
   "Valid source package field names, collected from several policy sections.")
 
 (defvar debian-control-binary-fields
-  '("Section" "Priority" "Architecture" "Depends" "Conflicts" "Pre-Depends"
-    "Essential" "Provides" "Recommends" "Suggests" "Replaces" "Enhances"
-    "Description" "Breaks" "Package")
+  '(  "Architecture"
+      "Breaks"
+      "Build-Profiles"
+      "Conflicts"
+      "Depends"
+      "Description"
+      "Enhances"
+      "Essential"
+      "Homepage"
+      "Multi-Arch"
+      "Package"
+      "Package-Type"
+      "Pre-Depends"
+      "Priority"
+      "Protected"
+      "Provides"
+      "Recommends"
+      "Replaces"
+      "Section"
+      "Suggests"
+      "XB-Cnf-Visible-Pkgname"
+      "XB-Important"
+      "X-DH-Build-For-Type"
+      "X-DhRuby-Root"
+      "X-Time64-Compat")
   "Valid binary package field names, collected from several policy sections.")
 
 (defvar debian-control-source-fields-regexp
