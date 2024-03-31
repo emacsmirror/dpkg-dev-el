@@ -540,11 +540,11 @@ STRING should be given if the last search was by `string-match' on STRING."
       nil
     (setq debian-changelog-local-variables-maybe-remove-done t)
     (if (debian-changelog-local-variables-exists-p)
-	(save-excursion
-	  (goto-char (point-max)) ; local vars are always at end
-	  (if (yes-or-no-p
-	       "Remove obsolete \"local variables:\" from changelog? ")
-	      (debian-changelog-local-variables-remove))))))
+        (save-excursion
+          (goto-char (point-max)) ; local vars are always at end
+          (if (yes-or-no-p
+               "Remove obsolete \"local variables:\" from changelog? ")
+              (debian-changelog-local-variables-remove))))))
 
 (defun debian-changelog-local-variables-exists-p ()
   "Return t if package has a \"Local Variables:\" block."
@@ -562,12 +562,12 @@ STRING should be given if the last search was by `string-match' on STRING."
       (goto-char (point-max))
       ;; Remove add-log-mailing-address: line if it exists
       (if (and (re-search-backward "^local variables:" nil t)
-	       (re-search-forward "add-log-mailing-address: .+\n" nil t))
+               (re-search-forward "add-log-mailing-address: .+\n" nil t))
           (delete-region (match-beginning 0)(match-end 0)))
       (goto-char (point-max))
       ;; Remove "mode: debian-changelog" line if it exists
       (if (and (re-search-backward "^local variables:" nil t)
-	       (re-search-forward "mode: debian-changelog.*\n" nil t))
+               (re-search-forward "mode: debian-changelog.*\n" nil t))
           (delete-region (match-beginning 0)(match-end 0)))
       (goto-char (point-max))
       ;; Remove empty variable block if it exists
@@ -588,11 +588,11 @@ STRING should be given if the last search was by `string-match' on STRING."
     (save-excursion
       (goto-char (point-min))
       (if (re-search-forward re lineend t)
-	  (let ((a (match-beginning 1))
-		(b (match-end 1)))
-	    (goto-char a)
-	    (delete-region a b)
-	    (insert str))))))
+          (let ((a (match-beginning 1))
+                (b (match-end 1)))
+            (goto-char a)
+            (delete-region a b)
+            (insert str))))))
 
 (defun debian-changelog-getheadervalue (re)
   (let ((lineend (save-excursion (end-of-line) (point))))
@@ -661,27 +661,27 @@ Upload to " val  " anyway?")))
     nil
   (setq debian-changelog-mode-map (make-sparse-keymap))
   (define-key debian-changelog-mode-map "\C-c\C-a"
-    'debian-changelog-add-entry)
+              'debian-changelog-add-entry)
   (define-key debian-changelog-mode-map "\C-c\C-o"
-    'debian-changelog-build-open-bug-list)
+              'debian-changelog-build-open-bug-list)
   (define-key debian-changelog-mode-map "\C-c\C-b"
-    'debian-changelog-close-bug)
+              'debian-changelog-close-bug)
   (define-key debian-changelog-mode-map "\C-c\C-f"
-    'debian-changelog-finalise-last-version)
+              'debian-changelog-finalise-last-version)
   (define-key debian-changelog-mode-map "\C-c\C-c"
-    'debian-changelog-finalise-and-save)
+              'debian-changelog-finalise-and-save)
   (define-key debian-changelog-mode-map "\C-c\C-v"
-    'debian-changelog-add-version)
+              'debian-changelog-add-version)
   (define-key debian-changelog-mode-map "\C-c\C-d"
-    'debian-changelog-distribution)
+              'debian-changelog-distribution)
   (define-key debian-changelog-mode-map "\C-c\C-u"
-    'debian-changelog-urgency)
+              'debian-changelog-urgency)
   (define-key debian-changelog-mode-map "\C-c\C-e"
-    'debian-changelog-unfinalise-last-version)
+              'debian-changelog-unfinalise-last-version)
   (define-key debian-changelog-mode-map "\C-c\C-n"
-    'outline-next-visible-heading)
+              'outline-next-visible-heading)
   (define-key debian-changelog-mode-map "\C-c\C-p"
-    'outline-previous-visible-heading))
+              'outline-previous-visible-heading))
 
 ;;
 ;; menu definition (Chris Waters)
@@ -694,113 +694,113 @@ Upload to " val  " anyway?")))
 
 (cond
  (debian-changelog-is-XEmacs
-(easy-menu-define
- debian-changelog-menu debian-changelog-mode-map "Debian Changelog Mode Menu"
- '("Changelog"
-   ["New Version" debian-changelog-add-version (debian-changelog-finalised-p)]
-   ["Add Entry" debian-changelog-add-entry
-    (not (debian-changelog-finalised-p))]
-   ["Build Open Bug List" debian-changelog-build-open-bug-list]
-   ["Close Bug" debian-changelog-close-bug
-    (not (debian-changelog-finalised-p))]
-   "--"
-   ("Set Distribution"
-    ["unstable" (debian-changelog-setdistribution "unstable") t]
-    ("--")
-    ["testing" (debian-changelog-setdistribution "testing") t]
-    ["testing-security" (debian-changelog-setdistribution "testing-security") t]
-    ("--")
-    ["stable" (debian-changelog-setdistribution "stable") t]
-    ["stable-security" (debian-changelog-setdistribution "stable-security") t]
-    ["stable-proposed-updates" (debian-changelog-setdistribution "stable-proposed-updates") t]
-    ("--")
-    ["oldstable-security" (debian-changelog-setdistribution "oldstable-security") t]
-    ["oldstable-proposed-updates" (debian-changelog-setdistribution "oldstable-proposed-updates") t]
-    ("--")
-    ["experimental" (debian-changelog-setdistribution "experimental") t]
-    ["UNRELEASED" (debian-changelog-setdistribution "UNRELEASED") t])
-   ("Set Urgency"
-    ["low" (debian-changelog-seturgency "low") t]
-    ["medium" (debian-changelog-seturgency "medium") t]
-    ["high" (debian-changelog-seturgency "high") t]
-    ["critical" (debian-changelog-seturgency "critical") t])
-   "--"
-   ["Unfinalise" debian-changelog-unfinalise-last-version
-    (debian-changelog-finalised-p)]
-   ["Finalise" debian-changelog-finalise-last-version
-    (not (debian-changelog-finalised-p))]
-   ["Finalise+Save" debian-changelog-finalise-and-save
-    (not (debian-changelog-finalised-p))]
-   "--"
-   "Web View"
-   ["Best Practices" (browse-url "http://www.debian.org/doc/developers-reference/best-pkging-practices.html#bpp-debian-changelog") t]
-   ["Bugs for This Package" (debian-bug-web-bugs) t]
-   ["Archived Bugs for This Package" (debian-bug-web-bugs t) t]
-   ["Bug Number..." (debian-bug-web-bug) t]
-   ["Package Info" (debian-bug-web-packages) t]
-;; ("Package web pages..."
-;;  ["stable" (debian-bug-web-package "stable") t]
-;;  ["testing" (debian-bug-web-package "testing") t]
-;;  ["unstable" (debian-bug-web-package "unstable") t])
-   ["Developer Page for This Package" (debian-bug-web-developer-page) t]
-   ["Developer Page for This Maintainer" (debian-changelog-web-developer-page)
-    t]
-   "--"
-   ["Customize" (customize-group "debian-changelog") (fboundp 'customize-group)])))
+  (easy-menu-define
+    debian-changelog-menu debian-changelog-mode-map "Debian Changelog Mode Menu"
+    '("Changelog"
+      ["New Version" debian-changelog-add-version (debian-changelog-finalised-p)]
+      ["Add Entry" debian-changelog-add-entry
+       (not (debian-changelog-finalised-p))]
+      ["Build Open Bug List" debian-changelog-build-open-bug-list]
+      ["Close Bug" debian-changelog-close-bug
+       (not (debian-changelog-finalised-p))]
+      "--"
+      ("Set Distribution"
+       ["unstable" (debian-changelog-setdistribution "unstable") t]
+       ("--")
+       ["testing" (debian-changelog-setdistribution "testing") t]
+       ["testing-security" (debian-changelog-setdistribution "testing-security") t]
+       ("--")
+       ["stable" (debian-changelog-setdistribution "stable") t]
+       ["stable-security" (debian-changelog-setdistribution "stable-security") t]
+       ["stable-proposed-updates" (debian-changelog-setdistribution "stable-proposed-updates") t]
+       ("--")
+       ["oldstable-security" (debian-changelog-setdistribution "oldstable-security") t]
+       ["oldstable-proposed-updates" (debian-changelog-setdistribution "oldstable-proposed-updates") t]
+       ("--")
+       ["experimental" (debian-changelog-setdistribution "experimental") t]
+       ["UNRELEASED" (debian-changelog-setdistribution "UNRELEASED") t])
+      ("Set Urgency"
+       ["low" (debian-changelog-seturgency "low") t]
+       ["medium" (debian-changelog-seturgency "medium") t]
+       ["high" (debian-changelog-seturgency "high") t]
+       ["critical" (debian-changelog-seturgency "critical") t])
+      "--"
+      ["Unfinalise" debian-changelog-unfinalise-last-version
+       (debian-changelog-finalised-p)]
+      ["Finalise" debian-changelog-finalise-last-version
+       (not (debian-changelog-finalised-p))]
+      ["Finalise+Save" debian-changelog-finalise-and-save
+       (not (debian-changelog-finalised-p))]
+      "--"
+      "Web View"
+      ["Best Practices" (browse-url "http://www.debian.org/doc/developers-reference/best-pkging-practices.html#bpp-debian-changelog") t]
+      ["Bugs for This Package" (debian-bug-web-bugs) t]
+      ["Archived Bugs for This Package" (debian-bug-web-bugs t) t]
+      ["Bug Number..." (debian-bug-web-bug) t]
+      ["Package Info" (debian-bug-web-packages) t]
+      ;; ("Package web pages..."
+      ;;  ["stable" (debian-bug-web-package "stable") t]
+      ;;  ["testing" (debian-bug-web-package "testing") t]
+      ;;  ["unstable" (debian-bug-web-package "unstable") t])
+      ["Developer Page for This Package" (debian-bug-web-developer-page) t]
+      ["Developer Page for This Maintainer" (debian-changelog-web-developer-page)
+       t]
+      "--"
+      ["Customize" (customize-group "debian-changelog") (fboundp 'customize-group)])))
  (t
-(easy-menu-define
- debian-changelog-menu debian-changelog-mode-map "Debian Changelog Mode Menu"
- '("Changelog"
-   ["New Version" debian-changelog-add-version (debian-changelog-finalised-p)]
-   ["Add Entry" debian-changelog-add-entry
-    (not (debian-changelog-finalised-p))]
-   ["Build Open Bug List" debian-changelog-build-open-bug-list]
-   ["Close Bug" debian-changelog-close-bug
-    (not (debian-changelog-finalised-p))]
-   "--"
-   ("Set Distribution"     :active (not (debian-changelog-finalised-p))
-    ["unstable" (debian-changelog-setdistribution "unstable") t]
-    ("--")
-    ["testing" (debian-changelog-setdistribution "testing") t]
-    ["testing-security" (debian-changelog-setdistribution "testing-security") t]
-    ("--")
-    ["stable" (debian-changelog-setdistribution "stable") t]
-    ["stable-security" (debian-changelog-setdistribution "stable-security") t]
-    ["stable-proposed-updates" (debian-changelog-setdistribution "stable-proposed-updates") t]
-    ("--")
-    ["oldstable-security" (debian-changelog-setdistribution "oldstable-security") t]
-    ["oldstable-proposed-updates" (debian-changelog-setdistribution "oldstable-proposed-updates") t]
-    ("--")
-    ["experimental" (debian-changelog-setdistribution "experimental") t]
-    ["UNRELEASED" (debian-changelog-setdistribution "UNRELEASED") t])
-   ("Set Urgency"     :active (not (debian-changelog-finalised-p))
-    ["low" (debian-changelog-seturgency "low") t]
-    ["medium" (debian-changelog-seturgency "medium") t]
-    ["high" (debian-changelog-seturgency "high") t]
-    ["critical" (debian-changelog-seturgency "critical") t])
-   "--"
-   ["Unfinalise" debian-changelog-unfinalise-last-version
-    (debian-changelog-finalised-p)]
-   ["Finalise" debian-changelog-finalise-last-version
-    (not (debian-changelog-finalised-p))]
-   ["Finalise+Save" debian-changelog-finalise-and-save
-    (not (debian-changelog-finalised-p))]
-   "--"
-   "Web View"
-   ["Best Practices" (browse-url "http://www.debian.org/doc/developers-reference/ch-best-pkging-practices.en.html#s-bpp-debian-changelog") t]
-   ["Bugs for This Package" (debian-bug-web-bugs) t]
-   ["Archived Bugs for This Package" (debian-bug-web-bugs t) t]
-   ["Bug Number..." (debian-bug-web-bug) t]
-   ["Package Info" (debian-bug-web-packages) t]
-   ("Package web pages..."
-    ["stable" (debian-bug-web-package "stable") t]
-    ["testing" (debian-bug-web-package "testing") t]
-    ["unstable" (debian-bug-web-package "unstable") t])
-   ["Developer Page for This Package" (debian-bug-web-developer-page) t]
-   ["Developer Page for This Maintainer" (debian-changelog-web-developer-page)
-    t]
-   "--"
-   ["Customize" (customize-group "debian-changelog") (fboundp 'customize-group)]))))
+  (easy-menu-define
+    debian-changelog-menu debian-changelog-mode-map "Debian Changelog Mode Menu"
+    '("Changelog"
+      ["New Version" debian-changelog-add-version (debian-changelog-finalised-p)]
+      ["Add Entry" debian-changelog-add-entry
+       (not (debian-changelog-finalised-p))]
+      ["Build Open Bug List" debian-changelog-build-open-bug-list]
+      ["Close Bug" debian-changelog-close-bug
+       (not (debian-changelog-finalised-p))]
+      "--"
+      ("Set Distribution"     :active (not (debian-changelog-finalised-p))
+       ["unstable" (debian-changelog-setdistribution "unstable") t]
+       ("--")
+       ["testing" (debian-changelog-setdistribution "testing") t]
+       ["testing-security" (debian-changelog-setdistribution "testing-security") t]
+       ("--")
+       ["stable" (debian-changelog-setdistribution "stable") t]
+       ["stable-security" (debian-changelog-setdistribution "stable-security") t]
+       ["stable-proposed-updates" (debian-changelog-setdistribution "stable-proposed-updates") t]
+       ("--")
+       ["oldstable-security" (debian-changelog-setdistribution "oldstable-security") t]
+       ["oldstable-proposed-updates" (debian-changelog-setdistribution "oldstable-proposed-updates") t]
+       ("--")
+       ["experimental" (debian-changelog-setdistribution "experimental") t]
+       ["UNRELEASED" (debian-changelog-setdistribution "UNRELEASED") t])
+      ("Set Urgency"     :active (not (debian-changelog-finalised-p))
+       ["low" (debian-changelog-seturgency "low") t]
+       ["medium" (debian-changelog-seturgency "medium") t]
+       ["high" (debian-changelog-seturgency "high") t]
+       ["critical" (debian-changelog-seturgency "critical") t])
+      "--"
+      ["Unfinalise" debian-changelog-unfinalise-last-version
+       (debian-changelog-finalised-p)]
+      ["Finalise" debian-changelog-finalise-last-version
+       (not (debian-changelog-finalised-p))]
+      ["Finalise+Save" debian-changelog-finalise-and-save
+       (not (debian-changelog-finalised-p))]
+      "--"
+      "Web View"
+      ["Best Practices" (browse-url "http://www.debian.org/doc/developers-reference/ch-best-pkging-practices.en.html#s-bpp-debian-changelog") t]
+      ["Bugs for This Package" (debian-bug-web-bugs) t]
+      ["Archived Bugs for This Package" (debian-bug-web-bugs t) t]
+      ["Bug Number..." (debian-bug-web-bug) t]
+      ["Package Info" (debian-bug-web-packages) t]
+      ("Package web pages..."
+       ["stable" (debian-bug-web-package "stable") t]
+       ["testing" (debian-bug-web-package "testing") t]
+       ["unstable" (debian-bug-web-package "unstable") t])
+      ["Developer Page for This Package" (debian-bug-web-developer-page) t]
+      ["Developer Page for This Maintainer" (debian-changelog-web-developer-page)
+       t]
+      "--"
+      ["Customize" (customize-group "debian-changelog") (fboundp 'customize-group)]))))
 
 ;;
 ;; interactive function to add a new line to the changelog
@@ -882,11 +882,11 @@ for the debian/changelog file to add the entry to."
 (defun debian-changelog-close-bug (bug-number)
   "Add a new change entry to close a BUG-NUMBER."
   (interactive
-    (progn
-      (if (eq (debian-changelog-finalised-p) t)
-          (error (substitute-command-keys "most recent version has been finalised - use \\[debian-changelog-unfinalise-last-version] or \\[debian-changelog-add-version]")))
-      (list (completing-read "Bug number to close: "
-                             debian-bug-open-alist nil nil))))
+   (progn
+     (if (eq (debian-changelog-finalised-p) t)
+         (error (substitute-command-keys "most recent version has been finalised - use \\[debian-changelog-unfinalise-last-version] or \\[debian-changelog-add-version]")))
+     (list (completing-read "Bug number to close: "
+                            debian-bug-open-alist nil nil))))
   (if (not (string-match "^[0-9]+$" bug-number))
       (error "The bug number should consists of only digits"))
   (debian-changelog-add-entry)
@@ -898,7 +898,7 @@ for the debian/changelog file to add the entry to."
    (t
     (save-excursion
       (insert " " (debian-changelog--rris
-		   "%s" bug-number debian-changelog-close-bug-statement)))
+                   "%s" bug-number debian-changelog-close-bug-statement)))
     (message "Enter a brief description of what was done here."))))
 
 ;;
@@ -912,10 +912,10 @@ for the debian/changelog file to add the entry to."
       (error (substitute-command-keys "most recent version has been finalised - use \\[debian-changelog-unfinalise-last-version] or \\[debian-changelog-add-version]")))
   (let ((str (completing-read
               "Select distribution: "
-	      debian-changelog-allowed-distributions
+              debian-changelog-allowed-distributions
               nil t nil)))
     (if (not (equal str ""))
-	(debian-changelog-setdistribution str))))
+        (debian-changelog-setdistribution str))))
 
 (defun debian-changelog-urgency ()
   "Delete the current urgency and prompt for a new one."
@@ -927,7 +927,7 @@ for the debian/changelog file to add the entry to."
               '(("low" 1) ("medium" 2) ("high" 3) ("critical" 4))
               nil t nil)))
     (if (not (equal str ""))
-	(debian-changelog-seturgency str))))
+        (debian-changelog-seturgency str))))
 
 ;;
 ;; internal function: test if changelog has been finalized or not
@@ -942,9 +942,9 @@ for the debian/changelog file to add the entry to."
   (save-excursion
     (goto-char (point-min))
     (or (re-search-forward "\n\\S-" (point-max) t)
-	(goto-char (point-max)))
+        (goto-char (point-max)))
     (if (re-search-backward "\n --" (point-min) t)
-	(forward-char 4)
+        (forward-char 4)
       ;;(beginning-of-line)
       ;;(insert " --\n\n")
       ;;(backward-char 2)
@@ -966,9 +966,9 @@ for the debian/changelog file to add the entry to."
 
 (defun debian-changelog-add-new-upstream-release ()
   "Normal hook for adding \"new upstream release\" entry to changelog."
-    (when debian-changelog-new-upstream-release-p
-      (insert "New upstream release")
-      (setq debian-changelog-new-upstream-release-p nil)))
+  (when debian-changelog-new-upstream-release-p
+    (insert "New upstream release")
+    (setq debian-changelog-new-upstream-release-p nil)))
 
 (defun debian-changelog-add-version ()
   "Add a new version section to a debian-style changelog file.
@@ -990,14 +990,14 @@ If file is empty, create initial entry."
     (save-excursion (insert "\n\n --\n\n"))))
 
 (defun debian-changelog-experimental-p ()
-;; Peter S Galbraith, 04 May 2001
+  ;; Peter S Galbraith, 04 May 2001
   "Return t if last upload is to experimental."
   (save-excursion
     (goto-char (point-min))
     (looking-at "\\sw.* (.+).* \\(experimental\\)")))
 
 (defun debian-changelog-suggest-package-name ()
-;; Peter S Galbraith, 23 Feb 2001
+  ;; Peter S Galbraith, 23 Feb 2001
   "Return package name from first line of the changelog, or nil."
   (save-excursion
     (goto-char (point-min))
@@ -1021,7 +1021,7 @@ If file is empty, create initial entry."
         (kill-buffer tmp-buffer)))))
 
 (defun debian-changelog-suggest-version ()
-;; Peter S Galbraith, 23 Feb 2001
+  ;; Peter S Galbraith, 23 Feb 2001
   "Return a suggested new version number to use for this changelog, or nil."
   (save-excursion
     (goto-char (point-min))
@@ -1033,10 +1033,10 @@ If file is empty, create initial entry."
 ;;; I'm also assuming it begins with a digit, which is not enforced
          "\\(\\S-+\\) +(\\([0-9]:\\)?\\([0-9][0-9a-zA-Z.+:~]*\\)\\(-\\([0-9a-zA-Z.+~]+\\)\\)?\\() +[^\n]*\\)"))
 
-     ;; No match...
-     ;; Check again for multiple hyphens, and adjust match-data if found
-     ;; to leave only the bit past the last hyphen as the debian version
-     ;; number.
+       ;; No match...
+       ;; Check again for multiple hyphens, and adjust match-data if found
+       ;; to leave only the bit past the last hyphen as the debian version
+       ;; number.
        ((looking-at
          "\\(\\S-+\\) +(\\([0-9]:\\)?\\([0-9][0-9a-zA-Z.+:~]*\\)\\(-\\([0-9a-zA-Z.+~]+\\)\\)*\\() +[^\n]*\\)")
         ;; We have a hit.  Adjust match-data...
@@ -1178,7 +1178,7 @@ If file is empty, create initial entry."
                     (debian-changelog-increment-version upstream-vsn)))))))))
 
 (defun debian-changelog-increment-version (version)
-;; Peter S Galbraith, 09 Mar 2001
+  ;; Peter S Galbraith, 09 Mar 2001
   "Increment the last numeric portion of a VERSION number.
 1        -> 2
 0potato1 -> 0potato2
@@ -1186,13 +1186,13 @@ If file is empty, create initial entry."
   (cond
    ((string-match "[1-9][0-9]*$" version)
     (let ((first-part (substring version 0 (match-beginning 0)))
-	  (snd-part (match-string 0 version)))
+          (snd-part (match-string 0 version)))
       (concat
        first-part (number-to-string (+ 1 (string-to-number snd-part))))))
    ((string-match "[0-9]*$" version)
     ;; 3.5.4.0 -> 3.5.4.1
     (let ((first-part (substring version 0 (match-beginning 0)))
-	  (snd-part (match-string 0 version)))
+          (snd-part (match-string 0 version)))
       (concat
        first-part (number-to-string (+ 1 (string-to-number snd-part))))))
    (t
@@ -1238,7 +1238,7 @@ Use UTC if `debian-changelog-date-utc-flag' is non-nil."
     (delete-region (match-beginning 1) (match-end 1))
     (insert " " debian-changelog-full-name
             " <" debian-changelog-mailing-address ">  "
-	    (debian-changelog-date-string))))
+            (debian-changelog-date-string))))
 
 (defun debian-changelog-last-maintainer ()
   "Return maintainer name and e-mail of the last changelog entry as
@@ -1246,11 +1246,11 @@ a list in the form (NAME EMAIL)."
   (save-excursion
     (goto-char (point-min))
     (let ((string
-	   (if (re-search-forward "^ -- \\(.*\\)>" nil t)
-	       (if (fboundp 'match-string-no-properties)
-		   (match-string-no-properties 1)
-		 (match-string 1))
-	     (error "Maintainer name and email not found."))))
+           (if (re-search-forward "^ -- \\(.*\\)>" nil t)
+               (if (fboundp 'match-string-no-properties)
+                   (match-string-no-properties 1)
+                 (match-string 1))
+             (error "Maintainer name and email not found."))))
       (split-string string " <"))))
 
 (defun debian-changelog-web-developer-page ()
@@ -1282,26 +1282,26 @@ co-maintained changelog entry."
   (let ((name (car (debian-changelog-last-maintainer))))
     (unless (string= name debian-changelog-full-name)
       (let ((maintainers-found)
-	    (debian-changelog-last-entry-end
-	     (progn (goto-char (point-min))
-		    (re-search-forward "\n --"))))
-	(mapc (lambda (x)
-		(goto-char (point-min))
-		(when (search-forward x debian-changelog-last-entry-end t)
-		  (add-to-list 'maintainers-found x)))
-	      (list name debian-changelog-full-name))
-	;; set the co-maintenance if any
-	(if maintainers-found
-	    ;; co-maintenance, debian-changelog-full-name is not present
-	    (if (and (member name maintainers-found)
-		     (not (member debian-changelog-full-name
-				  maintainers-found)))
-		(debian-changelog-comaintainer-insert
-		 debian-changelog-full-name "--"))
-	  ;; no co-maintenance
-	  (mapc (lambda (x)
-		  (debian-changelog-comaintainer-insert (car x) (cadr x)))
-		`((,name " *") (,debian-changelog-full-name "--"))))))))
+            (debian-changelog-last-entry-end
+             (progn (goto-char (point-min))
+                    (re-search-forward "\n --"))))
+        (mapc (lambda (x)
+                (goto-char (point-min))
+                (when (search-forward x debian-changelog-last-entry-end t)
+                  (add-to-list 'maintainers-found x)))
+              (list name debian-changelog-full-name))
+        ;; set the co-maintenance if any
+        (if maintainers-found
+            ;; co-maintenance, debian-changelog-full-name is not present
+            (if (and (member name maintainers-found)
+                     (not (member debian-changelog-full-name
+                                  maintainers-found)))
+                (debian-changelog-comaintainer-insert
+                 debian-changelog-full-name "--"))
+          ;; no co-maintenance
+          (mapc (lambda (x)
+                  (debian-changelog-comaintainer-insert (car x) (cadr x)))
+                `((,name " *") (,debian-changelog-full-name "--"))))))))
 
 ;;
 ;; interactive function to unfinalise changelog (so modifications can be made)
@@ -1346,10 +1346,10 @@ interface to set it, or simply set the variable
   (interactive)
   (kill-all-local-variables)
   (setq major-mode 'debian-changelog-mode
-	mode-name "Debian changelog"
+        mode-name "Debian changelog"
         left-margin 2
-	fill-prefix "  "
-	fill-column 74)
+        fill-prefix "  "
+        fill-column 74)
   ;;(hack-local-variables)
   ;;  Can't hack-local-varibles because a "mode: " creates an infinite loop.
   ;;  It doesn't matter anyway.  The Local Variable block is parsed after
@@ -1357,8 +1357,8 @@ interface to set it, or simply set the variable
   ;;  done.
   (use-local-map debian-changelog-mode-map)
   ;; Let each entry behave as one paragraph:
-; (set (make-local-variable 'paragraph-start) "\\*")
-; (set (make-local-variable 'paragraph-separate) "\\*\\|\\s-*$|\\S-")
+  ;; (set (make-local-variable 'paragraph-start) "\\*")
+  ;; (set (make-local-variable 'paragraph-separate) "\\*\\|\\s-*$|\\S-")
   ;; PSG: The following appears to get fill-paragraph to finally work!
   (set (make-local-variable 'paragraph-start) "\\*\\|\\s [*]$\\|\f\\|^\\<")
   (set (make-local-variable 'paragraph-separate) "\\s *$\\|\f\\|^\\<")
@@ -1373,7 +1373,7 @@ interface to set it, or simply set the variable
           debian-changelog-font-lock-keywords-1
           debian-changelog-font-lock-keywords-2) t t))
   (set (make-local-variable
-	'debian-changelog-local-variables-maybe-remove-done) nil)
+        'debian-changelog-local-variables-maybe-remove-done) nil)
   (set (make-local-variable 'indent-line-function) 'indent-relative-maybe)
   (set (make-local-variable 'outline-regexp) "^[a-z]")
   (setq local-abbrev-table text-mode-abbrev-table)
@@ -1388,7 +1388,7 @@ interface to set it, or simply set the variable
             (fboundp 'tmm-menubar))
         (progn
           (imenu-add-to-menubar "History")
-          ;(imenu-update-menubar)
+          ;; (imenu-update-menubar)
           ))))
   (cond
    (debian-changelog-highlight-mouse-t
@@ -1443,7 +1443,7 @@ interface to set it, or simply set the variable
 
 (defvar debian-changelog-font-lock-keywords-1
   (list
-    ;; package name line: pkg (1.0-1) unstable; urgency=medium
+   ;; package name line: pkg (1.0-1) unstable; urgency=medium
    '(debian-changelog-fontify-version
      (1 font-lock-function-name-face)
      (2 font-lock-type-face nil t)
@@ -1497,17 +1497,17 @@ match 1 -> package name
 ;;; contain a hyphen if a debian version number also exists, making two hyphens
 ;;; I'm assuming it begins with a digit, which is not enforced
          "^\\(\\S-+\\) (\\([0-9]:\\)?\\([0-9][0-9a-zA-Z.+:~]*\\)\\(-\\([0-9a-zA-Z.+~]+\\)\\)*)" nil t)
-;;                                                                                           ^
-;; Note the asterix above, allowing more than one hyphen in the version
-;; number, but wrongly assuming that all of it is the Debian version
-;; instead of only the bit past the last hyphen.  I might get NMUs wrongly
-;; for version numbers with multiple hyphens.
+;;;                                                                                         ^
+;;; Note the asterix above, allowing more than one hyphen in the version
+;;; number, but wrongly assuming that all of it is the Debian version
+;;; instead of only the bit past the last hyphen.  I might get NMUs wrongly
+;;; for version numbers with multiple hyphens.
 
-;; match 1: package name
-;; match 2: epoch, if it exists
-;; match 3: upstream version number
-;; match 4: debian version number exists if matched
-;; match 5: debian version number
+    ;; match 1: package name
+    ;; match 2: epoch, if it exists
+    ;; match 3: upstream version number
+    ;; match 4: debian version number exists if matched
+    ;; match 5: debian version number
     (cond
      ((not (match-string 4))
       ;; No Debian version number -> Debian native package
@@ -1616,18 +1616,18 @@ match 1 -> package name
    ;;; FIXME: Check out (mouse-major-mode-menu) to see how it grabs the local
    ;;;        menus to display.
         (let ((m (copy-keymap (current-local-map))))
-;;          (cond
-;;           ((and debian-changelog-use-imenu
-;;                 (or window-system (fboundp 'tmm-menubar)))
-;;            (imenu-add-to-menubar "History")))
+          ;; (cond
+          ;;  ((and debian-changelog-use-imenu
+          ;;        (or window-system (fboundp 'tmm-menubar)))
+          ;;   (imenu-add-to-menubar "History")))
           (cond
            (debian-changelog-is-XEmacs
             (set-keymap-name m 'debian-changelog-mouse-keymap)
             (define-key m [button3]
-              'debian-bug-web-this-bug-under-mouse))
+                        'debian-bug-web-this-bug-under-mouse))
            (t
             (define-key m [down-mouse-3]
-              'debian-bug-web-this-bug-under-mouse)))
+                        'debian-bug-web-this-bug-under-mouse)))
           m)))
 
 (defvar debian-changelog-ext-list nil
@@ -1644,15 +1644,15 @@ Also set keymap."
           (inhibit-read-only t)
           (modified (buffer-modified-p))) ;put-text-property changing this?
       ;; Remove the mouse face properties first.
-      (setq debian-changelog-ext-list nil)		;Reconstructed below...
+      (setq debian-changelog-ext-list nil)              ;Reconstructed below...
       (if (string-match "XEmacs\\|Lucid" emacs-version)
           (while local-extent-list
-	    (setq extent (car local-extent-list))
- 	    (if (or (extent-detached-p extent)
- 		    (and (<= (point-min)(extent-start-position extent))
- 			 (>= (point-max)(extent-end-position extent))))
-		(delete-extent extent)
-	      (setq debian-changelog-ext-list
+            (setq extent (car local-extent-list))
+            (if (or (extent-detached-p extent)
+                    (and (<= (point-min)(extent-start-position extent))
+                         (>= (point-max)(extent-end-position extent))))
+                (delete-extent extent)
+              (setq debian-changelog-ext-list
                     (cons extent debian-changelog-ext-list)))
             (setq local-extent-list (cdr local-extent-list)))
         ;; Remove properties for regular emacs
@@ -1678,8 +1678,8 @@ Also set keymap."
                 (cons extent debian-changelog-ext-list))
           (set-extent-property extent 'highlight t)
           (set-extent-property extent 'start-open t)
-;	  (set-extent-property extent 'balloon-help 'debian-changelog-label-help)
-;	  (set-extent-property extent 'help-echo 'debian-changelog-label-help-echo)
+          ;; (set-extent-property extent 'balloon-help 'debian-changelog-label-help)
+          ;; (set-extent-property extent 'help-echo 'debian-changelog-label-help-echo)
           (set-extent-property extent 'keymap debian-changelog-mouse-keymap))
          (t
           (let ((before-change-functions) (after-change-functions))
@@ -1739,40 +1739,40 @@ Also set keymap."
   "Debian-changelog-mode internal variable for imenu support.")
 
 (defun imenu--create-debian-changelog-index ()
-    (save-match-data
-      (save-excursion
-        (let ((index-alist '())
-              (index-bug-alist '())
-              (index-bugsorted-alist '())
-              (prev-pos 0)
-              (imenu-scanning-message "Scanning changelog for History (%3d%%)")
-              )
-          (setq debian-changelog-imenu-counter -99)
-          (goto-char (point-max))
+  (save-match-data
+    (save-excursion
+      (let ((index-alist '())
+            (index-bug-alist '())
+            (index-bugsorted-alist '())
+            (prev-pos 0)
+            (imenu-scanning-message "Scanning changelog for History (%3d%%)")
+            )
+        (setq debian-changelog-imenu-counter -99)
+        (goto-char (point-max))
 ;;;          (message "Scanning changelog history...")
-          (setq debian-changelog-imenu-doing-closebug nil)
-          (while (debian-changelog-imenu-prev-index-position-function)
-            (let ((marker (make-marker)))
-              (set-marker marker (point))
-              (cond
-               ((match-beginning 2)     ;bug number
-                (push (cons (match-string-no-properties 2) marker)
-                      index-bug-alist))
-               ((match-beginning 4)     ;version number
-                (push (cons (match-string-no-properties 4) marker)
-                      index-alist)))))
+        (setq debian-changelog-imenu-doing-closebug nil)
+        (while (debian-changelog-imenu-prev-index-position-function)
+          (let ((marker (make-marker)))
+            (set-marker marker (point))
+            (cond
+             ((match-beginning 2)     ;bug number
+              (push (cons (match-string-no-properties 2) marker)
+                    index-bug-alist))
+             ((match-beginning 4)     ;version number
+              (push (cons (match-string-no-properties 4) marker)
+                    index-alist)))))
 ;;;       (message "Scanning changelog history... done.")
-          (cond
-           (index-bug-alist
-            (push (cons "Closed Bugs (chrono)"
-                        index-bug-alist)
-                  index-alist)
-            (setq index-bugsorted-alist (copy-alist index-bug-alist))
-            (push (cons "Closed Bugs (sorted)"
-                        (sort index-bugsorted-alist
-                              'debian-changelog-imenu-sort))
-                  index-alist)))
-          index-alist))))
+        (cond
+         (index-bug-alist
+          (push (cons "Closed Bugs (chrono)"
+                      index-bug-alist)
+                index-alist)
+          (setq index-bugsorted-alist (copy-alist index-bug-alist))
+          (push (cons "Closed Bugs (sorted)"
+                      (sort index-bugsorted-alist
+                            'debian-changelog-imenu-sort))
+                index-alist)))
+        index-alist))))
 
 (defun debian-changelog-imenu-sort (el1 el2)
   "Predicate to compare labels in lists."
@@ -1799,7 +1799,7 @@ Also set keymap."
    . debian-changelog-mode))
 
 (add-to-list 'auto-mode-alist '("changelog.Debian" . debian-changelog-mode))
-  ;; For debchange
+;; For debchange
 (add-to-list 'auto-mode-alist '("changelog.dch" . debian-changelog-mode))
 
 ;;;###autoload(add-to-list 'auto-mode-alist '("/debian/*NEWS" . debian-changelog-mode))

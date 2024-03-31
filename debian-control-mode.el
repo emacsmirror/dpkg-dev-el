@@ -131,13 +131,13 @@
   (unless (fboundp 'line-beginning-position)
     (defun line-beginning-position ()
       (save-excursion
-	(beginning-of-line)
-	(point))))
+        (beginning-of-line)
+        (point))))
   (unless (fboundp 'line-end-position)
     (defun line-end-position ()
       (save-excursion
-	(end-of-line)
-	(point))))
+        (end-of-line)
+        (point))))
   (unless (fboundp 'match-string-no-properties)
     (defalias 'match-string-no-properties 'match-string)))
 
@@ -178,57 +178,57 @@
 
 (defvar debian-control-source-fields
   (append
-  '("Bugs"
-  "Build-Conflicts"
-  "Build-Conflicts-Arch"
-  "Build-Conflicts-Indep"
-  "Build-Depends"
-  "Build-Depends-Arch"
-  "Build-Depends-Indep"
-  "DM-Upload-Allowed"
-  "Homepage"
-  "Maintainer"
-  "Origin"
-  "Priority"
-  "Rules-Requires-Root"
-  "Section"
-  "Source"
-  "Standards-Version"
-  "Testsuite"
-  "Uploaders"
-  "X-Python3-Version"
-  "X-Python-Version"
-  "XS-Autobuild")
+   '("Bugs"
+     "Build-Conflicts"
+     "Build-Conflicts-Arch"
+     "Build-Conflicts-Indep"
+     "Build-Depends"
+     "Build-Depends-Arch"
+     "Build-Depends-Indep"
+     "DM-Upload-Allowed"
+     "Homepage"
+     "Maintainer"
+     "Origin"
+     "Priority"
+     "Rules-Requires-Root"
+     "Section"
+     "Source"
+     "Standards-Version"
+     "Testsuite"
+     "Uploaders"
+     "X-Python3-Version"
+     "X-Python-Version"
+     "XS-Autobuild")
    (mapcar (lambda (elt) (concat "Vcs-" elt))
            debian-control-vcs-names))
   "Valid source package field names, collected from several policy sections.")
 
 (defvar debian-control-binary-fields
-  '(  "Architecture"
-      "Breaks"
-      "Build-Profiles"
-      "Conflicts"
-      "Depends"
-      "Description"
-      "Enhances"
-      "Essential"
-      "Homepage"
-      "Multi-Arch"
-      "Package"
-      "Package-Type"
-      "Pre-Depends"
-      "Priority"
-      "Protected"
-      "Provides"
-      "Recommends"
-      "Replaces"
-      "Section"
-      "Suggests"
-      "XB-Cnf-Visible-Pkgname"
-      "XB-Important"
-      "X-DH-Build-For-Type"
-      "X-DhRuby-Root"
-      "X-Time64-Compat")
+  '("Architecture"
+    "Breaks"
+    "Build-Profiles"
+    "Conflicts"
+    "Depends"
+    "Description"
+    "Enhances"
+    "Essential"
+    "Homepage"
+    "Multi-Arch"
+    "Package"
+    "Package-Type"
+    "Pre-Depends"
+    "Priority"
+    "Protected"
+    "Provides"
+    "Recommends"
+    "Replaces"
+    "Section"
+    "Suggests"
+    "XB-Cnf-Visible-Pkgname"
+    "XB-Important"
+    "X-DH-Build-For-Type"
+    "X-DhRuby-Root"
+    "X-Time64-Compat")
   "Valid binary package field names, collected from several policy sections.")
 
 (defvar debian-control-source-fields-regexp
@@ -249,14 +249,14 @@
 
 (defvar debian-control-font-lock-keywords
   `((,(concat "^\\(Source:\\)\\s-*"
-	      debian-control-package-name-regexp
-	      "\\s-*$")
+              debian-control-package-name-regexp
+              "\\s-*$")
      (1 font-lock-keyword-face)
      ,(list 2
-	    (if (featurep 'xemacs)
-		'(symbol-value debian-control-source-package-face)
-	      '(list 'face debian-control-source-package-face))
-	   nil nil))
+            (if (featurep 'xemacs)
+                '(symbol-value debian-control-source-package-face)
+              '(list 'face debian-control-source-package-face))
+            nil nil))
     ("^\\(Multi-Arch:\\)\\s-*\\(same\\|foreign\\|allowed\\)"
      (1 font-lock-function-name-face)
      (2 font-lock-keyword-face))
@@ -304,7 +304,7 @@
   (define-key debian-control-mode-package-name-keymap (if (featurep 'xemacs)
                                                           [(control down-mouse-2)]
                                                         [(C-mouse-2)])
-    'debian-control-mode-bugs-mouse-click)
+              'debian-control-mode-bugs-mouse-click)
   (easy-menu-add debian-control-mode-menu)
   (if (and (featurep 'goto-addr) goto-address-highlight-p)
       (goto-address))
@@ -314,108 +314,108 @@
 (defun debian-control-mode-after-change-function (beg end len)
   (save-excursion
     (let ((modified (buffer-modified-p))
-	  (buffer-read-only nil)
+          (buffer-read-only nil)
           (data (match-data)))
       (unwind-protect
-	  (progn
-	    (goto-char beg)
-	    (beginning-of-line)
-	    (while (< (point) end)
-	      (cond ((looking-at (concat "^\\(Source:\\)\\s-*"
-					 debian-control-package-name-regexp
-					 "\\s-*$"))
-		     (add-text-properties
-		      (match-beginning 2) (match-end 2)
-		      `(mouse-face
-			highlight
-			debian-control-mode-package ,(match-string 2)
-			help-echo "C-mouse-2: View bugs for this source package"
-			keymap ,debian-control-mode-package-name-keymap)))
-		    ((looking-at (concat "^\\(Package:\\)\\s-*"
-					 debian-control-package-name-regexp
-					 "\\s-*$"))
-		     (add-text-properties
-		      (match-beginning 2) (match-end 2)
-		      `(mouse-face
-			highlight
-			debian-control-mode-package ,(match-string 2)
-			help-echo "C-mouse-2: View bugs for this binary package"
-			keymap ,debian-control-mode-package-name-keymap)))
-		    (t nil))
-	      (forward-line 1)))
-	 (set-match-data data)
-         (set-buffer-modified-p modified)))))
+          (progn
+            (goto-char beg)
+            (beginning-of-line)
+            (while (< (point) end)
+              (cond ((looking-at (concat "^\\(Source:\\)\\s-*"
+                                         debian-control-package-name-regexp
+                                         "\\s-*$"))
+                     (add-text-properties
+                      (match-beginning 2) (match-end 2)
+                      `(mouse-face
+                        highlight
+                        debian-control-mode-package ,(match-string 2)
+                        help-echo "C-mouse-2: View bugs for this source package"
+                        keymap ,debian-control-mode-package-name-keymap)))
+                    ((looking-at (concat "^\\(Package:\\)\\s-*"
+                                         debian-control-package-name-regexp
+                                         "\\s-*$"))
+                     (add-text-properties
+                      (match-beginning 2) (match-end 2)
+                      `(mouse-face
+                        highlight
+                        debian-control-mode-package ,(match-string 2)
+                        help-echo "C-mouse-2: View bugs for this binary package"
+                        keymap ,debian-control-mode-package-name-keymap)))
+                    (t nil))
+              (forward-line 1)))
+        (set-match-data data)
+        (set-buffer-modified-p modified)))))
 
 (easy-menu-define
- debian-control-mode-menu debian-control-mode-map "Debian Control Mode Menu"
- '("Control"
-   ["Add field at point" debian-control-mode-add-field t]
-   "--"
-   "Policy"
+  debian-control-mode-menu debian-control-mode-map "Debian Control Mode Menu"
+  '("Control"
+    ["Add field at point" debian-control-mode-add-field t]
+    "--"
+    "Policy"
     ["View upgrading-checklist" (debian-control-visit-policy 'checklist)
      (file-exists-p "/usr/share/doc/debian-policy/upgrading-checklist.txt.gz")]
     ["View policy (text)" (debian-control-visit-policy 'text)
      (file-exists-p "/usr/share/doc/debian-policy/policy.txt.gz")]
     ["View policy (HTML)" (debian-control-visit-policy 'html) t]
-   "--"
-   "Access www.debian.org"
-   ["Bugs for package" debian-control-view-package-bugs t]
-   ["Specific bug number" (debian-changelog-web-bug) nil]
-;;   ["Package list (all archives)" (debian-changelog-web-packages) t]
-;;  ("Package web pages..."
-;;   ["stable" (debian-changelog-web-package "stable") t]
-;;   ["testing" (debian-changelog-web-package "testing") t]
-;;   ["unstable" (debian-changelog-web-package "unstable") t])
-   "--"
-   ["Customize" (customize-group "debian-control") t]))
+    "--"
+    "Access www.debian.org"
+    ["Bugs for package" debian-control-view-package-bugs t]
+    ["Specific bug number" (debian-changelog-web-bug) nil]
+    ;;   ["Package list (all archives)" (debian-changelog-web-packages) t]
+    ;;  ("Package web pages..."
+    ;;   ["stable" (debian-changelog-web-package "stable") t]
+    ;;   ["testing" (debian-changelog-web-package "testing") t]
+    ;;   ["unstable" (debian-changelog-web-package "unstable") t])
+    "--"
+    ["Customize" (customize-group "debian-control") t]))
 
 (defun debian-control-mode-fill-paragraph (&rest args)
   (let (beg end)
     (save-excursion
       ;; Are we looking at a field?
       (if (save-excursion
-	    (beginning-of-line)
-	    (looking-at debian-control-field-regexp))
-	  (setq beg (match-end 0)
-		end (line-end-position))
-	;; Otherwise, we're looking at a description; handle filling
-	;; areas separated with "."  specially
-    (setq beg (save-excursion
-                 (beginning-of-line)
-                 (while (not (or (bobp)
-                                 (looking-at "^\\sw-*$")
-                                 (looking-at "^ \\.")
-                                 (looking-at debian-control-field-regexp)))
-                   (forward-line -1))
-                 (unless (eobp)
-                   (forward-line 1))
-                 (point))
-          end (save-excursion
-                 (beginning-of-line)
-                 (while (not (or (eobp)
-                                 (looking-at "^\\sw-*$")
-                                 (looking-at debian-control-field-regexp)
-                                 (looking-at "^ \\.")))
-                   (forward-line 1))
-                 (unless (bobp)
-                   (forward-line -1)
-		   (end-of-line))
-                 (point))))
+            (beginning-of-line)
+            (looking-at debian-control-field-regexp))
+          (setq beg (match-end 0)
+                end (line-end-position))
+        ;; Otherwise, we're looking at a description; handle filling
+        ;; areas separated with "."  specially
+        (setq beg (save-excursion
+                    (beginning-of-line)
+                    (while (not (or (bobp)
+                                    (looking-at "^\\sw-*$")
+                                    (looking-at "^ \\.")
+                                    (looking-at debian-control-field-regexp)))
+                      (forward-line -1))
+                    (unless (eobp)
+                      (forward-line 1))
+                    (point))
+              end (save-excursion
+                    (beginning-of-line)
+                    (while (not (or (eobp)
+                                    (looking-at "^\\sw-*$")
+                                    (looking-at debian-control-field-regexp)
+                                    (looking-at "^ \\.")))
+                      (forward-line 1))
+                    (unless (bobp)
+                      (forward-line -1)
+                      (end-of-line))
+                    (point))))
       (let ((fill-prefix " "))
-	(apply #'fill-region beg end args)))))
+        (apply #'fill-region beg end args)))))
 
 (defun debian-control-mode-add-field (binary field)
   "Add a field FIELD to the current package; BINARY means a binary package."
   (interactive
    (let* ((binary-p (if (or (save-excursion
-			      (beginning-of-line)
-			      (looking-at "^\\(Package\\|Source\\)"))
-			    (re-search-backward "^\\(Package\\|Source\\)" nil t))
-			(not (not (string-match "Package" (match-string 0))))
-		      (error "Couldn't find Package or Source field")))
-	  (fields (if binary-p
-		      debian-control-binary-fields
-		    debian-control-source-fields))
+                              (beginning-of-line)
+                              (looking-at "^\\(Package\\|Source\\)"))
+                            (re-search-backward "^\\(Package\\|Source\\)" nil t))
+                        (not (not (string-match "Package" (match-string 0))))
+                      (error "Couldn't find Package or Source field")))
+          (fields (if binary-p
+                      debian-control-binary-fields
+                    debian-control-source-fields))
           (completion-ignore-case t))
      (list
       binary-p
@@ -423,67 +423,67 @@
                        (mapcar #'(lambda (x) (cons x nil)) fields)))))
   (require 'cl-lib)
   (let ((fields (if binary
-		    debian-control-binary-fields
-		  debian-control-source-fields))
-	(beg (save-excursion
-	       (beginning-of-line)
-	       (while (not (or (bobp)
-			       (looking-at "^\\s-*$")))
-		 (forward-line -1))
-	       (forward-line 1)
-	       (point)))
-	(end (save-excursion
-	       (beginning-of-line)
-	       (while (not (or (eobp)
-			       (looking-at "^\\s-*$")))
-		 (forward-line 1))
-	       (point))))
+                    debian-control-binary-fields
+                  debian-control-source-fields))
+        (beg (save-excursion
+               (beginning-of-line)
+               (while (not (or (bobp)
+                               (looking-at "^\\s-*$")))
+                 (forward-line -1))
+               (forward-line 1)
+               (point)))
+        (end (save-excursion
+               (beginning-of-line)
+               (while (not (or (eobp)
+                               (looking-at "^\\s-*$")))
+                 (forward-line 1))
+               (point))))
     (save-restriction
       (narrow-to-region beg end)
       (let ((curfields (let ((result nil))
-			 (goto-char (point-min))
-			 (while (not (eobp))
-			   (when (looking-at debian-control-field-regexp)
-			     (push (cons (subseq
-					  ;; Text properties are evil
-					  (match-string-no-properties 1)
-					  0
-					  ;; Strip off the ':'
-					  (- (match-end 1)
-					     (match-beginning 1)
-					     1))
-					 (match-beginning 0))
-				   result))
-			   (forward-line 1))
-			 result))
-	    (x nil))
-	;; If the field is already present, just jump to it
-	(if (setq x (assoc field curfields))
-	    (goto-char (cdr x))
-	  (let* ((pos (or (position field fields :test #'string-equal)
+                         (goto-char (point-min))
+                         (while (not (eobp))
+                           (when (looking-at debian-control-field-regexp)
+                             (push (cons (subseq
+                                          ;; Text properties are evil
+                                          (match-string-no-properties 1)
+                                          0
+                                          ;; Strip off the ':'
+                                          (- (match-end 1)
+                                             (match-beginning 1)
+                                             1))
+                                         (match-beginning 0))
+                                   result))
+                           (forward-line 1))
+                         result))
+            (x nil))
+        ;; If the field is already present, just jump to it
+        (if (setq x (assoc field curfields))
+            (goto-char (cdr x))
+          (let* ((pos (or (position field fields :test #'string-equal)
                           -1))
-		 (prevfields (reverse (subseq fields 0 pos)))
-		 (nextfields (subseq fields (1+ pos))))
-	    (if (not (wholenump pos))
+                 (prevfields (reverse (subseq fields 0 pos)))
+                 (nextfields (subseq fields (1+ pos))))
+            (if (not (wholenump pos))
                 (goto-char (cdar curfields))
-	      (when prevfields
+              (when prevfields
                 (while (and (car prevfields)
                             (not (assoc (car prevfields) curfields)))
                   (pop prevfields))
                 (goto-char (cdr (assoc (car prevfields) curfields)))
                 (setq prevfields nil nextfields nil))
-	      (when nextfields
+              (when nextfields
                 (while (and (car nextfields)
                             (not (assoc (car nextfields) curfields)))
                   (pop nextfields))
                 (goto-char (cdr (assoc (car nextfields) curfields)))
                 (setq prevfields nil nextfields nil)))
-	    ;; Hack: we don't want to add fields after Description
-	    (beginning-of-line)
-	    (when (looking-at "^Description")
-	      (forward-line -1))
-	    (end-of-line)
-	    (insert "\n" (upcase-initials field) ": ")))))))
+            ;; Hack: we don't want to add fields after Description
+            (beginning-of-line)
+            (when (looking-at "^Description")
+              (forward-line -1))
+            (end-of-line)
+            (insert "\n" (upcase-initials field) ": ")))))))
 
 (defun debian-control-visit-policy (format)
   "Visit the Debian Policy manual in format FORMAT.
@@ -492,10 +492,10 @@ The last one is not strictly a format, but visits the upgrading-checklist.txt
 text file."
   (interactive
    (list (intern
-	  (completing-read "Policy format: "
+          (completing-read "Policy format: "
                            (mapcar #'(lambda (x) (cons x 0))
                                    '("html" "text" "checklist"))
-			   nil t))))
+                           nil t))))
   (cl-case format
     (text
      (debian-control-find-file "/usr/share/doc/debian-policy/policy.txt.gz"))
@@ -506,10 +506,10 @@ text file."
      (require 'browse-url)
      (browse-url
       (if (file-exists-p "/usr/share/doc/debian-policy/policy.html/index.html")
-	  "file:///usr/share/doc/debian-policy/policy.html/index.html"
-	(prog1
-	    "http://www.debian.org/doc/debian-policy"
-	  (message "Note: package `debian-policy' not installed, using web version")))))
+          "file:///usr/share/doc/debian-policy/policy.html/index.html"
+        (prog1
+            "http://www.debian.org/doc/debian-policy"
+          (message "Note: package `debian-policy' not installed, using web version")))))
     (t
      (error "Unknown format %s for policy" format))))
 
@@ -537,13 +537,13 @@ text file."
     (save-excursion
       (goto-char (point-min))
       (while (not (eobp))
-	(when (looking-at "^\\(Package\\|Source\\):\\s-*\\([-a-zA-Z0-9+.]+?\\)\\s-*$")
-	  (push (concat
-		 (if (save-match-data (string-match "Source" (match-string 1)))
-		     "src:"
-		   "")
-		 (match-string-no-properties 2)) result))
-	(forward-line 1)))
+        (when (looking-at "^\\(Package\\|Source\\):\\s-*\\([-a-zA-Z0-9+.]+?\\)\\s-*$")
+          (push (concat
+                 (if (save-match-data (string-match "Source" (match-string 1)))
+                     "src:"
+                   "")
+                 (match-string-no-properties 2)) result))
+        (forward-line 1)))
     result))
 
 (defun debian-control-view-package-bugs (package)
@@ -551,9 +551,9 @@ text file."
   (interactive
    (list
     (completing-read "View bugs for package: "
-		     (mapcar #'(lambda (x) (cons x 0))
-			     (debian-control-mode-bug-package-names))
-		     nil t)))
+                     (mapcar #'(lambda (x) (cons x 0))
+                             (debian-control-mode-bug-package-names))
+                     nil t)))
   (browse-url (concat "http://bugs.debian.org/" package)))
 
 (add-to-list 'auto-mode-alist '("/debian/control\\'" . debian-control-mode))

@@ -55,11 +55,11 @@
   "Regexps to highlight in font-lock.")
 
 (if debian-copyright-mode-syntax-table
-         ()              ; Do not change the table if it is already set up.
-       (setq debian-copyright-mode-syntax-table (make-syntax-table))
-       (modify-syntax-entry ?\" ".   " debian-copyright-mode-syntax-table)
-       (modify-syntax-entry ?\\ ".   " debian-copyright-mode-syntax-table)
-       (modify-syntax-entry ?' "w   " debian-copyright-mode-syntax-table))
+    ()              ; Do not change the table if it is already set up.
+  (setq debian-copyright-mode-syntax-table (make-syntax-table))
+  (modify-syntax-entry ?\" ".   " debian-copyright-mode-syntax-table)
+  (modify-syntax-entry ?\\ ".   " debian-copyright-mode-syntax-table)
+  (modify-syntax-entry ?' "w   " debian-copyright-mode-syntax-table))
 
 ;;;###autoload
 (defun debian-copyright-mode ()
@@ -83,9 +83,9 @@
     (goto-address))
   (setq font-lock-defaults
         '(debian-copyright-font-lock-keywords
-          nil		;keywords-only
-          nil		;case-fold
-          ()		;syntax-alist
+          nil  ;keywords-only
+          nil  ;case-fold
+          ()   ;syntax-alist
           ))
   (run-hooks 'debian-copyright-mode-hook))
 
