@@ -1326,6 +1326,22 @@ can be made."
 ;; top level interactive function to activate mode
 ;;
 
+(defun debian-changelog-forward-paragraph (&optional arg)
+  "Forward paragraph with special fill-prefix handling.
+This function tries to work around an inconvenience that
+forward-paragraph will additionally move forward fill-prefix when
+matched, which breaks the intended paragraph-{start,separate}
+detection.  So instead, we disable fill-prefix, do a normal
+forward-paragraph which properly detects the fill region, and
+restore its value so that fill-prefix is honored when doing the
+actual filling."
+  (let* ((ofill-prefix fill-prefix)
+         ret)
+    (setq-local fill-prefix "")
+    (setq ret (forward-paragraph arg))
+    (setq-local fill-prefix ofill-prefix)
+    ret))
+
 (defvar imenu-create-index-function)
 ;;;###autoload
 (defun debian-changelog-mode ()
@@ -1357,10 +1373,9 @@ interface to set it, or simply set the variable
   ;;  done.
   (use-local-map debian-changelog-mode-map)
   ;; Let each entry behave as one paragraph:
-  ;; (set (make-local-variable 'paragraph-start) "\\*")
-  ;; (set (make-local-variable 'paragraph-separate) "\\*\\|\\s-*$|\\S-")
-  ;; PSG: The following appears to get fill-paragraph to finally work!
-  (set (make-local-variable 'paragraph-start) "\\*\\|\\s [*]$\\|\f\\|^\\<")
+  (set (make-local-variable 'fill-forward-paragraph-function)
+       #'debian-changelog-forward-paragraph)
+  (set (make-local-variable 'paragraph-start) "\\s *\\*\\|\\s *$\\|\f\\|^\\<")
   (set (make-local-variable 'paragraph-separate) "\\s *$\\|\f\\|^\\<")
   ;; Let each version behave as one page.
   ;; Match null string on the heading line so that the heading line
