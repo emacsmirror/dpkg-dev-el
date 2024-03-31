@@ -54,12 +54,86 @@
 (defvar debian-copyright-font-lock-keywords nil
   "Regexps to highlight in font-lock.")
 
+(defvar debian-copyright--field-names
+  '("Comment"
+    "Copyright"
+    "Disclaimer"
+    "Files"
+    "Format"
+    "License"
+    "Source"
+    "Upstream-Contact"
+    "Upstream-Name")
+  "Supported field names in Debian copyright files.")
+
+(defvar debian-copyright--supported-url-protocol-prefixes
+  '("file:///"
+    "ftp://"
+    "git://"
+    "http://"
+    "https://"
+    "ssh://"
+    "mailto:")
+  "Supported common protocol prefix in URLs.
+It should be immediately followed by a non-slash character.")
+
+(defvar debian-copyright--supported-licenses
+  '("Apache-2\\.0"
+    "Artistic"
+    "BSD"
+    "CC0-1\\.0"
+    "GFDL"
+    "GFDL-1\\.2"
+    "GFDL-1\\.3"
+    "GPL"
+    "GPL-1"
+    "GPL-2"
+    "GPL-3"
+    "LGPL"
+    "LGPL-2"
+    "LGPL-2\\.1"
+    "LGPL-3"
+    "MPL-1\\.1"
+    "MPL-2\\.0")
+  "Supported licenses based on /usr/share/common-licenses.")
+
 (if debian-copyright-mode-syntax-table
     ()              ; Do not change the table if it is already set up.
   (setq debian-copyright-mode-syntax-table (make-syntax-table))
   (modify-syntax-entry ?\" ".   " debian-copyright-mode-syntax-table)
   (modify-syntax-entry ?\\ ".   " debian-copyright-mode-syntax-table)
   (modify-syntax-entry ?' "w   " debian-copyright-mode-syntax-table))
+
+(defun debian-copyright--font-lock-add-field-keywords (field-names)
+  "Add font lock for field in FIELD-NAMES."
+  (dolist (field-name field-names)
+    (add-to-list 'debian-copyright-font-lock-keywords
+                 `(,(concat "^" field-name ":") . font-lock-keyword-face))))
+
+(defun debian-copyright--font-lock-add-email ()
+  "Add font lock for email addresses.
+This is not a fully compliant email detecting regexp.  It
+additionally detects the extra `<' and `>' around the address.  I
+hope this works well enough until the day we have to follow
+https://stackoverflow.com/a/201378."
+  (add-to-list 'debian-copyright-font-lock-keywords
+               '("<?[[:alnum:]._~-]+@[[:alnum:]._~-]+\\.[[:alnum:]._~-]+>?" .
+                 font-lock-variable-name-face)))
+
+(defun debian-copyright--font-lock-add-urls (protocol-prefixes)
+  "Add font lock for a URL with PROTOCOL-PREFIXES."
+  (dolist (protocol-prefix protocol-prefixes)
+    (add-to-list 'debian-copyright-font-lock-keywords
+                 `(,(concat protocol-prefix "[^/ \\t]\\S-*") .
+                   font-lock-function-name-face))))
+
+(defun debian-copyright--font-lock-add-licenses (supported-licenses)
+  "Add font lock for SUPPORTED-LICENSES."
+  (dolist (supported-license supported-licenses)
+    (add-to-list 'debian-copyright-font-lock-keywords
+                 `(,(concat "^\\License:.*\\_<\\(" supported-license
+                            "\\+?\\)\\_>")
+                   (1 font-lock-type-face)))))
 
 ;;;###autoload
 (defun debian-copyright-mode ()
@@ -72,14 +146,15 @@
   (mapc 'make-local-variable '(font-lock-defaults write-file-hooks))
   (use-local-map debian-copyright-mode-map)
   (set-syntax-table debian-copyright-mode-syntax-table)
+  ;; Add font locks
+  (debian-copyright--font-lock-add-field-keywords debian-copyright--field-names)
+  (debian-copyright--font-lock-add-email)
+  (debian-copyright--font-lock-add-licenses debian-copyright--supported-licenses)
+  (defvar goto-address-highlight-p)  ;; To suppress comp warnings.
   (if (or (not (featurep 'goto-addr))
           (not goto-address-highlight-p))
-      (setq debian-copyright-font-lock-keywords
-            '(("http:.*$" . font-lock-function-name-face)
-              ("ftp:.*$" . font-lock-function-name-face)
-              ("^Copyright:$" . font-lock-keyword-face)))
-    (setq debian-copyright-font-lock-keywords
-          '(("^Copyright:$" . font-lock-keyword-face)))
+      (debian-copyright--font-lock-add-urls
+       debian-copyright--supported-url-protocol-prefixes)
     (goto-address))
   (setq font-lock-defaults
         '(debian-copyright-font-lock-keywords
