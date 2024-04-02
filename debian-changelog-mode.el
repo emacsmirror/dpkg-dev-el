@@ -365,6 +365,7 @@
 ;;   Yann Dirson <dirson@debian.org>
 
 ;;; Code:
+(require 'debian-bug)  ;; for debian-bug-build-bug-menu
 
 (defgroup debian-changelog nil "Debian changelog maintenance"
   :group 'tools
@@ -1394,7 +1395,6 @@ interface to set it, or simply set the variable
   (setq local-abbrev-table text-mode-abbrev-table)
   (set-syntax-table text-mode-syntax-table)
   (debian-bug-bug-menu-init debian-changelog-mode-map)
-  (easy-menu-add debian-changelog-menu)
   (cond
    (debian-changelog-use-imenu
     (require 'imenu)
@@ -1433,8 +1433,8 @@ interface to set it, or simply set the variable
       (t (:bold t)))
     "Face for debian-changelog important strings."
     :group 'debian-changelog-faces))
- (t
-  ;;; XEmacs19:
+ ((featurep 'xemacs)
+  ;;; XEmacs:
   (make-face 'debian-changelog-warning-face
              "Face to use for important keywords.in debian-changelog-mode")
   (make-face-bold 'debian-changelog-warning-face)
