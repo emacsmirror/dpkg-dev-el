@@ -16,6 +16,7 @@ dpkg-dev-el (37.12) UNRELEASED; urgency=medium
     - Guard XEmacs functions
     - Require debian-bug for function usage
     - There are still some warnings due to compatibility with XEmacs
+      which are being tracked in Bug#1068370.
   * Initial support for autopkgtest control files (Closes: #1067590)
     - Add initial highlighting for field names, dependency extensions,
       and restrictions
