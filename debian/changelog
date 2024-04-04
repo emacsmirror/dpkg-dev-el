@@ -17,12 +17,20 @@ dpkg-dev-el (37.12) UNRELEASED; urgency=medium
     - Require debian-bug for function usage
     - There are still some warnings due to compatibility with XEmacs
       which are being tracked in Bug#1068370.
+    - Replace obsolete `max-specpdl-size' with `max-lisp-eval-depth'
+    - Drop calls to no-op function `easy-menu-add'
+    - Use defvar for variables without a require
+    - Replace `position' with `seq-position'
+    - Replace `subseq' with `seq-subseq'
+    - Fix long docstring
+    - Use `goto-char' instead of `goto-line'
   * Initial support for autopkgtest control files (Closes: #1067590)
     - Add initial highlighting for field names, dependency extensions,
       and restrictions
   * Bump version to prepare for release
+  * Add myself to uploaders
 
- -- Xiyue Deng <manphiz@gmail.com>  Thu, 04 Apr 2024 00:50:30 -0700
+ -- Xiyue Deng <manphiz@gmail.com>  Thu, 04 Apr 2024 15:49:10 -0700
 
 dpkg-dev-el (37.11) unstable; urgency=medium
 
