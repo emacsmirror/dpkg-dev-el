@@ -1,3 +1,28 @@
+dpkg-dev-el (37.12) UNRELEASED; urgency=medium
+
+  [ Niels Thykier ]
+  * Update list of known d/control fields for debian-control-mode
+
+  [ Xiyue Deng ]
+  * Untabify and reindent source code in Emacs 29 for consistency
+  * Fix fill-paragraph in debian-changelog-mode (Closes: #620185)
+  * Improve highlighting in debian-copyright (Closes: #557594, #1067589)
+    - Add highlighting for more field names
+    - Properly highlight common URLs
+    - Add highlighting for emails
+    - Add highlighting for common licenses as defined in base-files
+  * Fix comp warnings (Closes: #1026450, #1028470)
+    - Drop calls to obsolete easy-menu-add
+    - Guard XEmacs functions
+    - Require debian-bug for function usage
+    - There are still some warnings due to compatibility with XEmacs
+  * Initial support for autopkgtest control files (Closes: #1067590)
+    - Add initial highlighting for field names, dependency extensions,
+      and restrictions
+  * Bump version to prepare for release
+
+ -- Xiyue Deng <manphiz@gmail.com>  Thu, 04 Apr 2024 00:50:30 -0700
+
 dpkg-dev-el (37.11) unstable; urgency=medium
 
   * Team upload.
