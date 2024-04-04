@@ -124,7 +124,7 @@ https://stackoverflow.com/a/201378."
   "Add font lock for a URL with PROTOCOL-PREFIXES."
   (dolist (protocol-prefix protocol-prefixes)
     (add-to-list 'debian-copyright-font-lock-keywords
-                 `(,(concat protocol-prefix "[^/ \\t]\\S-*") .
+                 `(,(concat protocol-prefix "[^/ \t]\\S-*") .
                    font-lock-function-name-face))))
 
 (defun debian-copyright--font-lock-add-licenses (supported-licenses)
