@@ -29,7 +29,7 @@
 
 ;;; Code:
 
-(defgroup debian-autopkgtest-control nil "Debian copyright mode"
+(defgroup debian-autopkgtest-control nil "Debian autopkgtest control mode"
   :group 'tools
   :prefix "debian-autopkgtest-control-")
 
