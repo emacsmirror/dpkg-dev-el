@@ -117,8 +117,8 @@ additionally detects the extra `<' and `>' around the address.  I
 hope this works well enough until the day we have to follow
 https://stackoverflow.com/a/201378."
   (add-to-list 'debian-copyright-font-lock-keywords
-               '("<?[[:alnum:]._~-]+@[[:alnum:]._~-]+\\.[[:alnum:]._~-]+>?" .
-                 font-lock-variable-name-face)))
+               '("<?\\([[:alnum:]._~-]+@[[:alnum:]._~-]+\\.[[:alnum:]._~-]+\\)>?"
+                 (1 font-lock-variable-name-face))))
 
 (defun debian-copyright--font-lock-add-urls (protocol-prefixes)
   "Add font lock for a URL with PROTOCOL-PREFIXES."
