@@ -234,7 +234,7 @@
 (defvar debian-control-source-fields-regexp
   (concat
    "^\\("
-   (let ((max-specpdl-size 1000))
+   (let ((max-lisp-eval-depth 1000))
      (regexp-opt debian-control-source-fields t))
    "\\):")
   "font-lock regexp matching known fields in the source section.")
@@ -242,7 +242,7 @@
 (defvar debian-control-binary-fields-regexp
   (concat
    "^\\("
-   (let ((max-specpdl-size 1000))
+   (let ((max-lisp-eval-depth 1000))
      (regexp-opt debian-control-binary-fields t))
    "\\):")
   "font-lock regexp matching known fields in the binary section.")
@@ -305,7 +305,7 @@
                                                           [(control down-mouse-2)]
                                                         [(C-mouse-2)])
               'debian-control-mode-bugs-mouse-click)
-  (easy-menu-add debian-control-mode-menu)
+  (defvar goto-address-highlight-p)  ;; To suppress comp warnings.
   (if (and (featurep 'goto-addr) goto-address-highlight-p)
       (goto-address))
   (let ((after-change-functions nil))
@@ -444,7 +444,7 @@
                          (goto-char (point-min))
                          (while (not (eobp))
                            (when (looking-at debian-control-field-regexp)
-                             (push (cons (subseq
+                             (push (cons (seq-subseq
                                           ;; Text properties are evil
                                           (match-string-no-properties 1)
                                           0
@@ -460,10 +460,10 @@
         ;; If the field is already present, just jump to it
         (if (setq x (assoc field curfields))
             (goto-char (cdr x))
-          (let* ((pos (or (position field fields :test #'string-equal)
+          (let* ((pos (or (seq-position field fields #'string-equal)
                           -1))
-                 (prevfields (reverse (subseq fields 0 pos)))
-                 (nextfields (subseq fields (1+ pos))))
+                 (prevfields (reverse (seq-subseq fields 0 pos)))
+                 (nextfields (seq-subseq fields (1+ pos))))
             (if (not (wholenump pos))
                 (goto-char (cdar curfields))
               (when prevfields

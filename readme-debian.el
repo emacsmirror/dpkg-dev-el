@@ -62,9 +62,10 @@
       (format-time-string "%a, %e %b %Y %T %z" (current-time)))))
 
 (defun readme-debian-update-timestamp ()
-  "Function to update timestamp in README.Debian files, automatically invoked when saving file."
+  "Function to update timestamp in README.Debian files.
+Automatically invoked when saving file."
   (save-excursion
-    (goto-line 1)
+    (goto-char (point-min))
     (if (re-search-forward "^ -- " nil t)
         (delete-region (progn (beginning-of-line) (point)) (progn (end-of-line) (point)))
       (goto-char (point-max))
