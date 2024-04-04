@@ -1,4 +1,4 @@
-dpkg-dev-el (37.12) UNRELEASED; urgency=medium
+dpkg-dev-el (37.12) unstable; urgency=medium
 
   [ Niels Thykier ]
   * Update list of known d/control fields for debian-control-mode
