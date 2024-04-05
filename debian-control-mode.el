@@ -170,8 +170,8 @@
 
 (defvar debian-control-mode-package-name-keymap (make-sparse-keymap))
 
-;; An uptodate list can be found at:
-;;   http://svn.debian.org/wsvn/qa/trunk/pts/www/bin/common.py?op=file
+;; An up-to-date list can be found at:
+;; https://www.debian.org/doc/debian-policy/ch-controlfields.html#s-f-vcs-fields
 (defvar debian-control-vcs-names
   '("Arch" "Bzr" "Browser" "Cvs" "Darcs" "Git" "Hg" "Mtn" "Svn")
   "Valid VCS names for the Vcs-* field.")
