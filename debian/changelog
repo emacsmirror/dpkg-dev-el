@@ -30,8 +30,10 @@ dpkg-dev-el (37.12) UNRELEASED; urgency=medium
   * Bump version to prepare for release
   * Add myself to uploaders
   * Add copyright info for debian-autopkgtest-control-mode.el
+  * Add Vcs-Browser to valid VCS name fields
+  * Update the link of valid VCS name fields to point to Debian policy
 
- -- Xiyue Deng <manphiz@gmail.com>  Thu, 04 Apr 2024 18:02:15 -0700
+ -- Xiyue Deng <manphiz@gmail.com>  Fri, 05 Apr 2024 13:03:04 -0700
 
 dpkg-dev-el (37.11) unstable; urgency=medium
 
