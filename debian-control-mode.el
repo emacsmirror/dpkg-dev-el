@@ -173,7 +173,7 @@
 ;; An uptodate list can be found at:
 ;;   http://svn.debian.org/wsvn/qa/trunk/pts/www/bin/common.py?op=file
 (defvar debian-control-vcs-names
-  '("Arch" "Bzr" "Cvs" "Darcs" "Git" "Hg" "Mtn" "Svn")
+  '("Arch" "Bzr" "Browser" "Cvs" "Darcs" "Git" "Hg" "Mtn" "Svn")
   "Valid VCS names for the Vcs-* field.")
 
 (defvar debian-control-source-fields
