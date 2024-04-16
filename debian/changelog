@@ -1,3 +1,42 @@
+dpkg-dev-el (37.12) unstable; urgency=medium
+
+  [ Niels Thykier ]
+  * Update list of known d/control fields for debian-control-mode
+
+  [ Xiyue Deng ]
+  * Untabify and reindent source code in Emacs 29 for consistency
+  * Fix fill-paragraph in debian-changelog-mode (Closes: #620185)
+  * Improve highlighting in debian-copyright (Closes: #557594, #1067589)
+    - Add highlighting for more field names
+    - Properly highlight common URLs
+    - Add highlighting for emails
+    - Add highlighting for common licenses as defined in base-files
+  * Fix comp warnings (Closes: #1026450, #1028470)
+    - Drop calls to obsolete easy-menu-add
+    - Guard XEmacs functions
+    - Require debian-bug for function usage
+    - There are still some warnings due to compatibility with XEmacs
+      which are being tracked in Bug#1068370.
+    - Replace obsolete `max-specpdl-size' with `max-lisp-eval-depth'
+    - Drop calls to no-op function `easy-menu-add'
+    - Use defvar for variables without a require
+    - Replace `position' with `seq-position'
+    - Replace `subseq' with `seq-subseq'
+    - Fix long docstring
+    - Use `goto-char' instead of `goto-line'
+  * Initial support for autopkgtest control files (Closes: #1067590)
+    - Add initial highlighting for field names, dependency extensions,
+      and restrictions
+  * Bump version to prepare for release
+  * Add myself to uploaders
+  * Add copyright info for debian-autopkgtest-control-mode.el
+  * Add Vcs-Browser to valid VCS name fields
+  * Update the link of valid VCS name fields to point to Debian policy
+  * Update Standards-Version to 4.7.0; no change needed
+  * Update package description with new mode in d/control
+
+ -- Xiyue Deng <manphiz@gmail.com>  Mon, 15 Apr 2024 21:02:25 -0700
+
 dpkg-dev-el (37.11) unstable; urgency=medium
 
   * Team upload.

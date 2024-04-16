@@ -43,6 +43,10 @@ Files: readme-debian.el
 Copyright: 2002 Junichi Uekawa <dancer@netfort.gr.jp>
 License: GPL-2+
 
+Files: debian-autopkgtest-control-mode.el
+Copyright: 2024 Xiyue Deng <manphiz@gmail.com>
+License: GPL-2+
+
 Files: debian/*
 Copyright: 2018 David Bremner <bremner@debian.org>
 License: GPL-2+

@@ -55,29 +55,30 @@
   ;; it doesn't, so we're shelling out to invoke date -R to obtain
   ;; Debian-policy-compliant date string.
   (let* ((date-program "date -R")
-	 (system-time-locale "C"))
+         (system-time-locale "C"))
     (if (featurep 'xemacs)
-	(replace-in-string (exec-to-string date-program) "\n" "")
+        (replace-in-string (exec-to-string date-program) "\n" "")
       ;; if it's not xemacs, just use format-time-string
       (format-time-string "%a, %e %b %Y %T %z" (current-time)))))
 
 (defun readme-debian-update-timestamp ()
-  "Function to update timestamp in README.Debian files, automatically invoked when saving file."
+  "Function to update timestamp in README.Debian files.
+Automatically invoked when saving file."
   (save-excursion
-    (goto-line 1)
+    (goto-char (point-min))
     (if (re-search-forward "^ -- " nil t)
         (delete-region (progn (beginning-of-line) (point)) (progn (end-of-line) (point)))
       (goto-char (point-max))
       (if (bolp)
-	  (insert "\n")
-	(insert "\n\n")))
+          (insert "\n")
+        (insert "\n\n")))
     (insert (concat
-	     " -- "
-	     debian-changelog-full-name
-	     " <" debian-changelog-mailing-address ">, "
+             " -- "
+             debian-changelog-full-name
+             " <" debian-changelog-mailing-address ">, "
              (readme-debian-date-string)))
     (if (and (= (point)(point-max)) (not (bolp)))
-	(insert "\n"))))
+        (insert "\n"))))
 
 (defvar readme-debian-mode-map nil "Keymap for README.Debian mode.")
 (if readme-debian-mode-map
@@ -107,17 +108,17 @@ will be updated.
   (use-local-map readme-debian-mode-map)
   (set-syntax-table readme-debian-mode-syntax-table)
   (setq font-lock-defaults
-   '(readme-debian-font-lock-keywords
-     nil ;; keywords-only? No, let it do syntax via table.
-     nil ;; case-fold?
-     nil ;; Local syntax table.
-     ))
+        '(readme-debian-font-lock-keywords
+          nil ;; keywords-only? No, let it do syntax via table.
+          nil ;; case-fold?
+          nil ;; Local syntax table.
+          ))
   ;; add timestamp update func to write-contents-hooks
   (if (or (= emacs-major-version 20)
           (string-match "XEmacs" emacs-version))
       (make-local-hook 'write-contents-hooks))
   (add-hook 'write-contents-hooks 'readme-debian-update-timestamp
-	       nil t)
+            nil t)
   (run-hooks 'readme-debian-mode-hook))
 
 (add-to-list 'auto-mode-alist

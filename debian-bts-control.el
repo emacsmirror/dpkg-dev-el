@@ -143,7 +143,7 @@ the top of the message."
       :style toggle :active debian-bug-From-address
       :selected (debian-bug--is-CC debian-bug-From-address "cc:")]
      )
-     "--"
+    "--"
     ["Affects" (debian-bts-control "affects") t]
     ["Package" (debian-bts-control "package") t]
     ["Reassign" (debian-bts-control "reassign") t]
@@ -162,7 +162,7 @@ the top of the message."
     ["UnMerge" (debian-bts-control "unmerge") t]
     ["Tags" (debian-bts-control "tags") t]
     ["Close" (debian-bts-control "close") t]
-     "--"
+    "--"
     ("Web View"
      ["Bugs for a Package..." (debian-bug-web-bugs) t]
      ["Bug Number..." (debian-bug-web-bug) t]
@@ -174,7 +174,7 @@ the top of the message."
      ["Severities" (debian-bug-help-severity) t]
      ["Tags" (debian-bug-help-tags) t]
      ["Pseudo-Packages" (debian-bug-help-pseudo-packages) t]
-;;   ["Addresses" (debian-bug-help-email) t]
+     ;; ["Addresses" (debian-bug-help-email) t]
      ["control commands" (debian-bts-help-control) t]
      )
     ))
@@ -334,8 +334,8 @@ a negative prefix argument turns it off.
   "Read #NNNNNN from current point."
   (let ((item (word-at-point)))
     (if (and item
-	     (string-match "^[0-9]+[0-9]$" item))
-	item)))
+             (string-match "^[0-9]+[0-9]$" item))
+        item)))
 
 (defun debian-bts-control-prompt (prompt &optional number)
   "Prompt for bug number using sensible default if found."
@@ -343,9 +343,9 @@ a negative prefix argument turns it off.
     (unless default-number
       (save-excursion
         (goto-char (point-min))
-	(if (re-search-forward (concat "\\([0-9]+\\)@" debian-bts-emaildomain)
+        (if (re-search-forward (concat "\\([0-9]+\\)@" debian-bts-emaildomain)
                                (mail-header-end) t)
-	    (setq default-number (match-string-no-properties 1)))))
+            (setq default-number (match-string-no-properties 1)))))
     (if default-number
         (read-string (format "%s [%s]: " prompt default-number)
                      nil nil default-number)
@@ -371,8 +371,8 @@ in `debian-bts-control-modes-to-reuse'."
                                     debian-bts-control-modes-to-reuse)))
                (not debian-bts-control-minor-mode)))
       (debian-bug--set-CC debian-bts-emailaddress
-			  (concat
-			   (symbol-name debian-bts-control-cc-or-bcc) ":"))
+                          (concat
+                           (symbol-name debian-bts-control-cc-or-bcc) ":"))
       (goto-char (point-min))
       (if (re-search-forward (concat "\\([0-9]+\\)@" debian-bts-emaildomain)
                              (mail-header-end) t)
@@ -449,13 +449,13 @@ in `debian-bts-control-modes-to-reuse'."
                         ""))
              (bug-number (debian-bts-control-prompt
                           (concat verbose "Bug number") 
-			  number-default))
+                          number-default))
              (sign (completing-read
                     (concat verbose "[ + | - | = ] ")
                     '(("+") ("-") ("=")) nil nil))
              (package (completing-read
                        (concat verbose "Package affected: ")
-                        (debian-bug-fill-packages-obarray) nil nil)))
+                       (debian-bug-fill-packages-obarray) nil nil)))
         (insert (format "affects %s %s %s \n" bug-number sign package))))
      ((string-equal "reassign" action)
       (debian-bug-fill-packages-obarray)
@@ -471,7 +471,7 @@ in `debian-bts-control-modes-to-reuse'."
                         "Package to reassign to: "))
              (bug-number (debian-bts-control-prompt
                           (concat verbose "Bug number") 
-			  number-default))
+                          number-default))
              (package (completing-read
                        (concat verbose "Package to reassign to: ")
                        (debian-bug-fill-packages-obarray) nil nil)))
@@ -498,9 +498,9 @@ in `debian-bts-control-modes-to-reuse'."
                         ""))
              (bug-number (debian-bts-control-prompt
                           (concat verbose "Bug number")
-			  number-default))
+                          number-default))
              (originator (read-string
-                        (concat verbose "Originator-address (optional): "))))
+                          (concat verbose "Originator-address (optional): "))))
         (insert (format "reopen %s %s\n" bug-number originator))))
      ((string-equal "submitter" action)
       (let* ((verbose (if debian-bts-control-verbose-prompts-flag
@@ -518,7 +518,7 @@ in `debian-bts-control-modes-to-reuse'."
                         ""))
              (bug-number (debian-bts-control-prompt
                           (concat verbose "Bug number")
-			  number-default))
+                          number-default))
              (originator (read-string
                           (concat verbose "Originator-address (optional): "))))
         (insert (format "submitter %s %s\n" bug-number originator))))
@@ -538,7 +538,7 @@ in `debian-bts-control-modes-to-reuse'."
                         ""))
              (bug-number (debian-bts-control-prompt
                           (concat verbose "Bug number")
-			  number-default))
+                          number-default))
              (address (read-string
                        (concat verbose "address (optional): "))))
         (insert (format "owner %s %s\n" bug-number address))))
@@ -554,7 +554,7 @@ in `debian-bts-control-modes-to-reuse'."
                         ""))
              (bug-number (debian-bts-control-prompt
                           (concat verbose "Bug number")
-			  number-default)))
+                          number-default)))
         (insert (format "noowner %s\n" bug-number))))
      ((string-equal "forwarded" action)
       (let* ((verbose (if debian-bts-control-verbose-prompts-flag
@@ -569,7 +569,7 @@ in `debian-bts-control-modes-to-reuse'."
                         ""))
              (bug-number (debian-bts-control-prompt
                           (concat verbose "Bug number")
-			  number-default))
+                          number-default))
              (address (read-string
                        (concat verbose "Forwarded-address: "))))
         (insert (format "forwarded %s %s\n" bug-number address))))
@@ -585,7 +585,7 @@ in `debian-bts-control-modes-to-reuse'."
                         ""))
              (bug-number (debian-bts-control-prompt
                           (concat verbose "Bug number")
-			  number-default)))
+                          number-default)))
         (insert (format "notforwarded %s\n" bug-number))))
      ((string-equal "retitle" action)
       (let* ((verbose (if debian-bts-control-verbose-prompts-flag
@@ -602,7 +602,7 @@ in `debian-bts-control-modes-to-reuse'."
                         ""))
              (bug-number (debian-bts-control-prompt
                           (concat verbose "Bug number")
-			  number-default))
+                          number-default))
              (title (read-string
                      (concat verbose "New title: "))))
         (insert (format "retitle %s %s\n" bug-number title))))
@@ -632,7 +632,7 @@ in `debian-bts-control-modes-to-reuse'."
                         ""))
              (bug-number (debian-bts-control-prompt
                           (concat verbose "Bug number")
-			  number-default))
+                          number-default))
              (title (read-string
                      (concat verbose "Summary: "))))
         (insert (format "summary %s %s\n" bug-number title))))
@@ -652,7 +652,7 @@ in `debian-bts-control-modes-to-reuse'."
                         ""))
              (bug-number (debian-bts-control-prompt
                           (concat verbose "Bug number")
-			  number-default))
+                          number-default))
              (severity (completing-read "Severity: " debian-bug-severity-alist
                                         nil t)))
         (insert (format "severity %s %s\n" bug-number severity))))
@@ -675,7 +675,7 @@ in `debian-bts-control-modes-to-reuse'."
                         ""))
              (bug-number (debian-bts-control-prompt
                           (concat verbose "Bug number")
-			  number-default))
+                          number-default))
              (ids (read-string (concat verbose "New IDs (e.g. -1 -2): "))))
         (insert (format "clone %s %s\n" bug-number ids))))
      ((string-equal "merge" action)
@@ -723,7 +723,7 @@ in `debian-bts-control-modes-to-reuse'."
                         ""))
              (bug-number (debian-bts-control-prompt
                           (concat verbose "Bug number")
-			  number-default)))
+                          number-default)))
         (insert (format "unmerge %s\n" bug-number))))
      ((string-equal "tags" action)
       (let* ((verbose (if debian-bts-control-verbose-prompts-flag
@@ -745,7 +745,7 @@ in `debian-bts-control-modes-to-reuse'."
                         ""))
              (bug-number (debian-bts-control-prompt
                           (concat verbose "Bug number")
-			  number-default))
+                          number-default))
              (add (completing-read "+, -, = (default +): "
                                    '(("+") ("-") ("=")) nil t nil nil "+"))
              (tag (completing-read "Tag: " debian-bug-alltags-alist nil t)))
@@ -770,7 +770,7 @@ in `debian-bts-control-modes-to-reuse'."
                             ""))
                  (bug-number (debian-bts-control-prompt
                               (concat verbose "Bug number")
-			      number-default)))
+                              number-default)))
             (insert (format "close %s\n" bug-number)))))
      ((string-equal "found" action)
       (let* ((verbose (if debian-bts-control-verbose-prompts-flag
@@ -797,7 +797,7 @@ in `debian-bts-control-modes-to-reuse'."
                         ""))
              (bug-number (debian-bts-control-prompt
                           (concat verbose "Bug number")
-			  number-default))
+                          number-default))
              (version (read-string (concat verbose "Version (if any): "))))
         (insert (format "found %s %s\n" bug-number version))))
      ((string-equal "notfound" action)
@@ -816,7 +816,7 @@ in `debian-bts-control-modes-to-reuse'."
                         ""))
              (bug-number (debian-bts-control-prompt
                           (concat verbose "Bug number")
-			  number-default))
+                          number-default))
              (version (read-string (concat verbose "Version: "))))
         (insert (format "notfound %s %s\n" bug-number version))))
      ((string-equal "fixed" action)
@@ -835,7 +835,7 @@ in `debian-bts-control-modes-to-reuse'."
                         ""))
              (bug-number (debian-bts-control-prompt
                           (concat verbose "Bug number")
-			  number-default))
+                          number-default))
              (version (read-string (concat verbose "Version: "))))
         (insert (format "fixed %s %s\n" bug-number version))))
      ((string-equal "notfixed" action)
@@ -853,7 +853,7 @@ in `debian-bts-control-modes-to-reuse'."
                         ""))
              (bug-number (debian-bts-control-prompt
                           (concat verbose "Bug number")
-			  number-default))
+                          number-default))
              (version (read-string (concat verbose "Version: "))))
         (insert (format "notfixed %s %s\n" bug-number version))))
      ((string-equal "block" action)
@@ -867,7 +867,7 @@ in `debian-bts-control-modes-to-reuse'."
                         ""))
              (bug-number (debian-bts-control-prompt
                           (concat verbose "Bug number")
-			  number-default))
+                          number-default))
              (by-bug (read-string (concat verbose "by bug number(s): "))))
         (insert (format "block %s by %s\n" bug-number by-bug))))
      ((string-equal "unblock" action)
@@ -879,7 +879,7 @@ in `debian-bts-control-modes-to-reuse'."
                         ""))
              (bug-number (debian-bts-control-prompt
                           (concat verbose "Bug number")
-			  number-default))
+                          number-default))
              (by-bug (read-string (concat verbose "by bug number(s): "))))
         (insert (format "unblock %s by %s\n" bug-number by-bug))))
      ((string-equal "archive" action)
@@ -894,7 +894,7 @@ in `debian-bts-control-modes-to-reuse'."
                         ""))
              (bug-number (debian-bts-control-prompt
                           (concat verbose "Bug number")
-			  number-default)))
+                          number-default)))
         (insert (format "archive %s\n" bug-number))))
      ((string-equal "unarchive" action)
       (let* ((verbose (if debian-bts-control-verbose-prompts-flag
@@ -910,7 +910,7 @@ in `debian-bts-control-modes-to-reuse'."
                         ""))
              (bug-number (debian-bts-control-prompt
                           (concat verbose "Bug number")
-			  number-default)))
+                          number-default)))
         (insert (format "unarchive %s\n" bug-number))))
      )))
 
@@ -1222,8 +1222,8 @@ in `debian-bts-control-modes-to-reuse'."
                                       debian-bts-control-alist nil nil)
                      current-prefix-arg))
   (let ((debian-bts-emailaddress "control@debbugs.gnu.org")
-         (debian-bts-emaildomain "debbugs.gnu.org")
-         (debian-bts-control-for-emacs t))
+        (debian-bts-emaildomain "debbugs.gnu.org")
+        (debian-bts-control-for-emacs t))
     (debian-bts-control action arg)))
 
 (provide 'debian-bts-control)
