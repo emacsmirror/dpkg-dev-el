@@ -32,8 +32,10 @@ dpkg-dev-el (37.12) UNRELEASED; urgency=medium
   * Add copyright info for debian-autopkgtest-control-mode.el
   * Add Vcs-Browser to valid VCS name fields
   * Update the link of valid VCS name fields to point to Debian policy
+  * Update Standards-Version to 4.7.0; no change needed
+  * Update package description with new mode in d/control
 
- -- Xiyue Deng <manphiz@gmail.com>  Fri, 05 Apr 2024 13:03:04 -0700
+ -- Xiyue Deng <manphiz@gmail.com>  Mon, 15 Apr 2024 21:02:25 -0700
 
 dpkg-dev-el (37.11) unstable; urgency=medium
 
