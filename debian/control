@@ -21,11 +21,13 @@ Enhances: emacs
 Description: Emacs helpers specific to Debian development
  This package contains:
  .
- debian-bts-control - builds control@bugs.debian.org email messages;
- debian-changelog-mode - a helper mode for Debian changelogs;
- debian-control-mode - a helper mode for debian/control files;
- debian-copyright - major mode for Debian package copyright files;
- readme-debian - major mode for editing README.Debian files.
+  * debian-autopkgtest-control-mode - a helper mode for
+    debian/tests/control files;
+  * debian-bts-control - builds control@bugs.debian.org email messages;
+  * debian-changelog-mode - a helper mode for Debian changelogs;
+  * debian-control-mode - a helper mode for debian/control files;
+  * debian-copyright - major mode for Debian package copyright files;
+  * readme-debian - major mode for editing README.Debian files.
 
 Package: dpkg-dev-el
 Architecture: all
