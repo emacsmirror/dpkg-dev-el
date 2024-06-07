@@ -3,7 +3,7 @@
 ;; Copyright: 2003-2014 Peter S Galbraith
 
 ;; Author: Peter S Galbraith <psg@debian.org>
-;; Version: 37.12
+;; Version: 37.13-git
 ;; Created: 2003-11-03
 
 ;; This file is not part of GNU Emacs.
