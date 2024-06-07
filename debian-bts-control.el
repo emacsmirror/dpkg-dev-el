@@ -236,10 +236,11 @@ the top of the message."
     ("^ *\\(noowner\\) +\\(-?[0-9]+\\)"
      (1 font-lock-function-name-face)
      (2 font-lock-type-face))
-    ("^ *\\(reassign\\) +\\(-?[0-9]+\\) +\\([a-z0-9\\.\\-]+\\)$"
+    ("^ *\\(reassign\\) +\\(-?[0-9]+\\) +\\([a-z0-9\\.\\-]+\\)\\(?: +\\(.+\\)\\)$"
      (1 font-lock-function-name-face)
      (2 font-lock-type-face)
-     (3 font-lock-keyword-face nil t))
+     (3 font-lock-keyword-face nil t)
+     (4 font-lock-string-face nil t))
     ("^ *\\(reopen\\) +\\(-?[0-9]+\\) +\\(\\(!\\|=\\)\\|\\(.+\\)\\)$"
      (1 font-lock-function-name-face)
      (2 font-lock-type-face)
@@ -460,22 +461,28 @@ in `debian-bts-control-modes-to-reuse'."
      ((string-equal "reassign" action)
       (debian-bug-fill-packages-obarray)
       (let* ((verbose (if debian-bts-control-verbose-prompts-flag
-                          "reassign bugnumber package
+                          "reassign bugnumber package [ version ]
 
- Records that bug #BUGNUMBER is a bug in PACKAGE. This can be used to
- set the package if the user forgot the pseudo-header, or to change an
- earlier assignment. No notifications are sent to anyone (other than the
+ Records that bug #BUGNUMBER is a bug in PACKAGE with
+ VERSION (optionally).  This can be used to set the package if
+ the user forgot the pseudo-header, or to change an earlier
+ assignment.  No notifications are sent to anyone (other than the
  usual information in the processing transcript).
 
 "
                         "Package to reassign to: "))
              (bug-number (debian-bts-control-prompt
-                          (concat verbose "Bug number") 
+                          (concat verbose "Bug number")
                           number-default))
              (package (completing-read
                        (concat verbose "Package to reassign to: ")
-                       (debian-bug-fill-packages-obarray) nil nil)))
-        (insert (format "reassign %s %s\n" bug-number package))))
+                       (debian-bug-fill-packages-obarray) nil nil))
+             (version (debian-bts-control-prompt
+                       (concat verbose "Package version (optional)"))))
+        (insert (format "reassign %s %s" bug-number package))
+        (when (and version (not (string-empty-p version)))
+          (insert (format " %s" version)))
+        (insert "\n")))
      ((string-equal "reopen" action)
       (let* ((verbose (if debian-bts-control-verbose-prompts-flag
                           "reopen bugnumber [ originator-address | = | ! ]
