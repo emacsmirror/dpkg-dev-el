@@ -16,7 +16,7 @@ Rules-Requires-Root: no
 
 Package: elpa-dpkg-dev-el
 Architecture: all
-Depends: ${elpa:Depends}, ${misc:Depends}, elpa-debian-el
+Depends: ${elpa:Depends}, ${misc:Depends}
 Recommends: emacs
 Enhances: emacs
 Description: Emacs helpers specific to Debian development
