@@ -413,6 +413,75 @@ This defaults to the value of (in order of precedence):
   :group 'debian-changelog
   :type '(repeat string))
 
+(defcustom debian-changelog-debian-code-names
+  '("buzz"
+    "rex"
+    "bo"
+    "hamm"
+    "slink"
+    "potato"
+    "woody"
+    "sarge"
+    "etch"
+    "lenny"
+    "squeeze"
+    "wheezy"
+    "jessie"
+    "stretch"
+    "buster"
+    "bullseye"
+    "bookworm"
+    "trixie")
+  "*Known code names for Debian releases sorted from oldest to newest."
+  :group 'debian-changelog
+  :type '(repeat string))
+
+(defcustom debian-changelog-ubuntu-code-names
+  '("warty"
+    "hoary"
+    "breezy"
+    "dapper"
+    "edgy"
+    "feisty"
+    "gutsy"
+    "hardy"
+    "intrepid"
+    "jaunty"
+    "karmic"
+    "lucid"
+    "maverick"
+    "natty"
+    "oneiric"
+    "precise"
+    "quantal"
+    "raring"
+    "saucy"
+    "trusty"
+    "utopic"
+    "vivid"
+    "wily"
+    "xenial"
+    "yakkety"
+    "zesty"
+    "artful"
+    "bionic"
+    "cosmic"
+    "disco"
+    "eoan"
+    "focal"
+    "groovy"
+    "hirsute"
+    "impish"
+    "jammy"
+    "kinetic"
+    "lunar"
+    "mantic"
+    "noble"
+    "oracular")
+  "*Known code names for Ubuntu releases sorted from oldest to newest."
+  :group 'debian-changelog
+  :type '(repeat string))
+
 (defcustom debian-changelog-local-variables-maybe-remove t
   "*Ask to remove obsolete \"Local Variables:\" block from changelog.
 This is done only under certain conditions."
@@ -494,6 +563,7 @@ Pass ARGS to `replace-regexp-in-string' (GNU Emacs) or to
 (require 'easymenu)
 (eval-when-compile
   (require 'cl-lib))
+(require 'subr-x)
 
 ;; XEmacs21.1 compatibility -- from XEmacs's apel/poe.el
 (unless (fboundp 'match-string-no-properties)
@@ -648,6 +718,17 @@ Upload to " val  " anyway?")))
         (if (y-or-n-p (format "Upload to %s anyway? " val))
             (debian-changelog-setheadervalue ") \\(.*\\)\\;" val))
         (set-window-configuration window-config))))))
+
+(defun debian-changelog--get-all-code-names()
+  "Get all code names from all supported distributions."
+  (append
+   ;; Here is a particular situation in Debian code names: `bo' is a prefix of
+   ;; `bookworm'.  If `bo' appears earlier in the regexp of alternatives it will
+   ;; break detection for the latter.  So as a simple/hacky workaround we
+   ;; reverse the order to make `bookworm' appear before `bo' without having to
+   ;; change the code name sequences.
+   (reverse debian-changelog-debian-code-names)
+   debian-changelog-ubuntu-code-names))
 
 ;;
 ;; keymap table definition
@@ -1533,6 +1614,7 @@ interface to set it, or simply set the variable
    '(debian-changelog-fontify-urgency-high . debian-changelog-warning-face)
    '(debian-changelog-fontify-urgency-med . font-lock-type-face)
    '(debian-changelog-fontify-urgency-low . font-lock-string-face)
+   '(debian-changelog-fontify-known-releases . font-lock-string-face)
    ;; bug closers
    '(;"\\(closes:\\) *\\(\\(bug\\)?#? *[0-9]+\\(, *\\(bug\\)?#? *[0-9]+\\)*\\)"
      ;; Process lines that continue on multiple lines - Fred Bothamy
@@ -1671,6 +1753,18 @@ match 1 -> package name
     (store-match-data
      (list (match-beginning 1)(match-end 1)))
     t))
+
+(defun debian-changelog-fontify-known-releases (limit)
+  (let* ((releases-partial-regexp
+          (concat "\\(\\(?:"
+                  (string-join (debian-changelog--get-all-code-names)
+                               "\\|")
+                  "\\)\\(?:\\(?:-proposed\\)?-updates\\|-backports\\)?\\)")))
+    (when (re-search-forward (concat "^\\sw.* (.+).* " releases-partial-regexp)
+                             limit t)
+      (store-match-data
+       (list (match-beginning 1) (match-end 1)))
+      t)))
 
 ;;
 ;; browse-url interfaces, by Peter Galbraith, Feb 23 2001
