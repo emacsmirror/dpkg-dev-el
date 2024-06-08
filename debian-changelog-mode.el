@@ -1667,7 +1667,7 @@ match 1 -> package name
     t))
 
 (defun debian-changelog-fontify-backports (limit)
-  (when (re-search-forward "^\\sw.* (.+).* \\([a-z][a-z]*-backports\\)" limit t)
+  (when (re-search-forward "^\\sw.* (.+).* \\(\\(?:\\(?:old\\)?stable\\)-backports\\)" limit t)
     (store-match-data
      (list (match-beginning 1)(match-end 1)))
     t))
