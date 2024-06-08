@@ -1643,7 +1643,7 @@ match 1 -> package name
     t))
 
 (defun debian-changelog-fontify-frozen (limit)
-  (when (re-search-forward "^\\sw.* (.+).* \\(testing\\(-security\\)?\\|frozen\\|woody-proposed-updates\\)" limit t)
+  (when (re-search-forward "^\\sw.* (.+).* \\(testing\\(-security\\|-proposed-updates\\)?\\|frozen\\)" limit t)
     (store-match-data
      (list (match-beginning 1)(match-end 1)))
     t))
