@@ -682,7 +682,9 @@ Upload to " val  " anyway?")))
   (define-key debian-changelog-mode-map "\C-c\C-n"
               'outline-next-visible-heading)
   (define-key debian-changelog-mode-map "\C-c\C-p"
-              'outline-previous-visible-heading))
+              'outline-previous-visible-heading)
+  (define-key debian-changelog-mode-map "\C-c\C-t"
+              'debian-changelog-toggle-team-upload))
 
 ;;
 ;; menu definition (Chris Waters)
@@ -1322,6 +1324,63 @@ can be made."
     (let ((dels (point)))
       (end-of-line)
       (delete-region dels (point)))))
+
+;;
+;; Functions to handle team upload
+;;
+
+(defun debian-changelog--first-line-is-well-formed-p ()
+  "Returns true if the first line of the file is the correct changelog header."
+  (save-excursion
+    (goto-char (point-min))
+    (string-match-p "^\\S-+ (\\S-+) \\S-+; urgency=\\S-+$"
+                    (thing-at-point 'line t))))
+
+(defun debian-changelog--go-to-first-entry ()
+  "Put `point' to the beginning of the line of the first changelog entry."
+  (goto-char (point-min))
+  (forward-line)
+  (when (string= (thing-at-point 'line t) "\n")
+    (forward-line)))
+
+(defun debian-changelog--has-team-upload-p ()
+  "Returns whether the first entry is the `Team upload' entry."
+  (save-excursion
+    (debian-changelog--go-to-first-entry)
+    (string-match-p "^  \\* [Tt]eam upload\\.?$" (thing-at-point 'line t))))
+
+(defun debian-changelog--has-comaintainer-p ()
+  "Returns whether the first entry is a comaintainer mark."
+  (save-excursion
+    (debian-changelog--go-to-first-entry)
+    (string-match-p "^  \\[ .+ \\]\\s-*$" (thing-at-point 'line t))))
+
+(defun debian-changelog--add-team-upload ()
+  "Add `Team upload' as the first item."
+  (let ((has-comaintainer (debian-changelog--has-comaintainer-p)))
+    (save-excursion
+      (debian-changelog--go-to-first-entry)
+      (insert "  * Team upload\n")
+      (when has-comaintainer
+        (insert "\n")))))
+
+(defun debian-changelog--remove-team-upload ()
+  "Remove the first entry that is assumed to be `team upload'."
+  (save-excursion
+    (debian-changelog--go-to-first-entry)
+    (kill-whole-line)
+    (when (string= (thing-at-point 'line t) "\n")  ;; empty line
+      (kill-whole-line))))
+
+(defun debian-changelog-toggle-team-upload ()
+  "Toggles `Team upload' as first item in changelog."
+  (interactive)
+  (when (null (debian-changelog--first-line-is-well-formed-p))
+    (error (concat "First line of the file is not in the correct format.  "
+                   "Please fix first.")))
+  (if (debian-changelog--has-team-upload-p)
+      (debian-changelog--remove-team-upload)
+    (debian-changelog--add-team-upload)))
 
 ;;
 ;; top level interactive function to activate mode
