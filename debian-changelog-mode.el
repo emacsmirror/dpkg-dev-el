@@ -1327,7 +1327,7 @@ can be made."
 ;; top level interactive function to activate mode
 ;;
 
-(defun debian-changelog-forward-paragraph (&optional arg)
+(defun debian-changelog--forward-paragraph (&optional arg)
   "Forward paragraph with special fill-prefix handling.
 This function tries to work around an inconvenience that
 forward-paragraph will additionally move forward fill-prefix when
@@ -1375,7 +1375,7 @@ interface to set it, or simply set the variable
   (use-local-map debian-changelog-mode-map)
   ;; Let each entry behave as one paragraph:
   (set (make-local-variable 'fill-forward-paragraph-function)
-       #'debian-changelog-forward-paragraph)
+       #'debian-changelog--forward-paragraph)
   (set (make-local-variable 'paragraph-start) "\\s *\\*\\|\\s *$\\|\f\\|^\\<")
   (set (make-local-variable 'paragraph-separate) "\\s *$\\|\f\\|^\\<")
   ;; Let each version behave as one page.
