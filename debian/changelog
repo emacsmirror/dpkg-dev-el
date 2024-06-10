@@ -10,8 +10,9 @@ dpkg-dev-el (37.13) UNRELEASED; urgency=medium
   * Fix fontification for frozen to properly detect proposed updates
   * Improve fontification of backports to only detect stable and oldstable
   * Add fontification for known release code names
+  * Add font lock for emails in debian-control-mode
 
- -- Xiyue Deng <manphiz@gmail.com>  Sun, 09 Jun 2024 16:18:01 -0700
+ -- Xiyue Deng <manphiz@gmail.com>  Mon, 10 Jun 2024 04:14:19 -0700
 
 dpkg-dev-el (37.12) unstable; urgency=medium
 
