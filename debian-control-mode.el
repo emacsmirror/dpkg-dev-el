@@ -247,6 +247,10 @@
    "\\):")
   "font-lock regexp matching known fields in the binary section.")
 
+(defvar debian-control--email-regexp
+  "<?\\([^<>]+@[^<>]+\\.[^<>]+\\)>?"
+  "font-lock regexp matching an email address.")
+
 (defvar debian-control-font-lock-keywords
   `((,(concat "^\\(Source:\\)\\s-*"
               debian-control-package-name-regexp
@@ -263,7 +267,9 @@
     (,debian-control-source-fields-regexp
      (1 font-lock-keyword-face))
     (,debian-control-binary-fields-regexp
-     (1 font-lock-function-name-face))))
+     (1 font-lock-function-name-face))
+    (,debian-control--email-regexp
+     (1 font-lock-variable-name-face))))
 
 (defvar debian-control-mode-menu nil)
 
