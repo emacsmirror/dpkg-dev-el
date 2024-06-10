@@ -564,6 +564,7 @@ Pass ARGS to `replace-regexp-in-string' (GNU Emacs) or to
 (eval-when-compile
   (require 'cl-lib))
 (require 'subr-x)
+(require 'seq)
 
 ;; XEmacs21.1 compatibility -- from XEmacs's apel/poe.el
 (unless (fboundp 'match-string-no-properties)
@@ -719,16 +720,10 @@ Upload to " val  " anyway?")))
             (debian-changelog-setheadervalue ") \\(.*\\)\\;" val))
         (set-window-configuration window-config))))))
 
-(defun debian-changelog--get-all-code-names()
-  "Get all code names from all supported distributions."
-  (append
-   ;; Here is a particular situation in Debian code names: `bo' is a prefix of
-   ;; `bookworm'.  If `bo' appears earlier in the regexp of alternatives it will
-   ;; break detection for the latter.  So as a simple/hacky workaround we
-   ;; reverse the order to make `bookworm' appear before `bo' without having to
-   ;; change the code name sequences.
-   (reverse debian-changelog-debian-code-names)
-   debian-changelog-ubuntu-code-names))
+(defun debian-changelog--get-all-code-names ()
+  "Returns a list of all code names from supported distributions."
+  (append debian-changelog-debian-code-names
+          debian-changelog-ubuntu-code-names))
 
 ;;
 ;; keymap table definition
@@ -1476,8 +1471,8 @@ detection.  So instead, we disable fill-prefix, do a normal
 forward-paragraph which properly detects the fill region, and
 restore its value so that fill-prefix is honored when doing the
 actual filling."
-  (let* ((ofill-prefix fill-prefix)
-         ret)
+  (let ((ofill-prefix fill-prefix)
+        ret)
     (setq-local fill-prefix "")
     (setq ret (forward-paragraph arg))
     (setq-local fill-prefix ofill-prefix)
@@ -1755,11 +1750,10 @@ match 1 -> package name
     t))
 
 (defun debian-changelog-fontify-known-releases (limit)
-  (let* ((releases-partial-regexp
-          (concat "\\(\\(?:"
-                  (string-join (debian-changelog--get-all-code-names)
-                               "\\|")
-                  "\\)\\(?:\\(?:-proposed\\)?-updates\\|-backports\\)?\\)")))
+  (let ((releases-partial-regexp
+         (concat "\\("
+                 (regexp-opt (debian-changelog--get-all-code-names) nil)
+                 "\\(?:\\(?:-proposed\\)?-updates\\|-backports\\)?\\)")))
     (when (re-search-forward (concat "^\\sw.* (.+).* " releases-partial-regexp)
                              limit t)
       (store-match-data
