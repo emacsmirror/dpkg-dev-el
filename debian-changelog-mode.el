@@ -1416,7 +1416,7 @@ can be made."
   "Put `point' to the beginning of the line of the first changelog entry."
   (goto-char (point-min))
   (forward-line)
-  (when (string= (thing-at-point 'line t) "\n")
+  (when (eolp)
     (forward-line)))
 
 (defun debian-changelog--has-team-upload-p ()
@@ -1445,7 +1445,7 @@ can be made."
   (save-excursion
     (debian-changelog--go-to-first-entry)
     (kill-whole-line)
-    (when (string= (thing-at-point 'line t) "\n")  ;; empty line
+    (when (eolp)
       (kill-whole-line))))
 
 (defun debian-changelog-toggle-team-upload ()
