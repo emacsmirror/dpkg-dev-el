@@ -1405,7 +1405,7 @@ can be made."
 ;; Functions to handle team upload
 ;;
 
-(defun debian-changelog--first-line-is-well-formed-p ()
+(defun debian-changelog--first-line-well-formed-p ()
   "Returns true if the first line of the file is the correct changelog header."
   (save-excursion
     (goto-char (point-min))
@@ -1419,13 +1419,13 @@ can be made."
   (when (eolp)
     (forward-line)))
 
-(defun debian-changelog--has-team-upload-p ()
+(defun debian-changelog--team-upload-p ()
   "Returns whether the first entry is the `Team upload' entry."
   (save-excursion
     (debian-changelog--go-to-first-entry)
     (string-match-p "^  \\* [Tt]eam upload\\.?$" (thing-at-point 'line t))))
 
-(defun debian-changelog--has-comaintainer-p ()
+(defun debian-changelog--comaintainer-p ()
   "Returns whether the first entry is a comaintainer mark."
   (save-excursion
     (debian-changelog--go-to-first-entry)
@@ -1433,7 +1433,7 @@ can be made."
 
 (defun debian-changelog--add-team-upload ()
   "Add `Team upload' as the first item."
-  (let ((has-comaintainer (debian-changelog--has-comaintainer-p)))
+  (let ((has-comaintainer (debian-changelog--comaintainer-p)))
     (save-excursion
       (debian-changelog--go-to-first-entry)
       (insert "  * Team upload\n")
@@ -1451,10 +1451,10 @@ can be made."
 (defun debian-changelog-toggle-team-upload ()
   "Toggles `Team upload' as first item in changelog."
   (interactive)
-  (when (null (debian-changelog--first-line-is-well-formed-p))
+  (when (null (debian-changelog--first-line-well-formed-p))
     (error (concat "First line of the file is not in the correct format.  "
                    "Please fix first.")))
-  (if (debian-changelog--has-team-upload-p)
+  (if (debian-changelog--team-upload-p)
       (debian-changelog--remove-team-upload)
     (debian-changelog--add-team-upload)))
 
