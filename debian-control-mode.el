@@ -251,6 +251,25 @@
   "<?\\([^<>]+@[^<>]+\\.[^<>]+\\)>?"
   "font-lock regexp matching an email address.")
 
+(defvar debian-control--supported-url-protocol-prefixes
+  '("file:///"
+    "ftp://"
+    "git://"
+    "http://"
+    "https://"
+    "ssh://"
+    "mailto:")
+  "Supported common protocol prefix in URLs.
+It should be immediately followed by a non-slash character.")
+
+(defvar debian-control--url-regexp
+  (concat
+   "\\("
+   (let ((max-lisp-eval-depth 1000))
+     (regexp-opt debian-control--supported-url-protocol-prefixes nil))
+   "[^/ \t][^ \t]*\\)$")
+  "font-lock regexp matching a URL.")
+
 (defvar debian-control-font-lock-keywords
   `((,(concat "^\\(Source:\\)\\s-*"
               debian-control-package-name-regexp
@@ -269,7 +288,9 @@
     (,debian-control-binary-fields-regexp
      (1 font-lock-function-name-face))
     (,debian-control--email-regexp
-     (1 font-lock-variable-name-face))))
+     (1 font-lock-variable-name-face))
+    (,debian-control--url-regexp
+     (1 font-lock-constant-face))))
 
 (defvar debian-control-mode-menu nil)
 
