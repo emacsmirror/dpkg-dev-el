@@ -248,7 +248,7 @@
   "font-lock regexp matching known fields in the binary section.")
 
 (defvar debian-control--email-regexp
-  "<?\\([^<>]+@[^<>]+\\.[^<>]+\\)>?"
+  "<?\\([^<> \t\n]+@[^<> \t\n]+\\.[^<> \t\n]+\\)>?"
   "font-lock regexp matching an email address.")
 
 (defvar debian-control--supported-url-protocol-prefixes
@@ -267,7 +267,7 @@ It should be immediately followed by a non-slash character.")
    "\\("
    (let ((max-lisp-eval-depth 1000))
      (regexp-opt debian-control--supported-url-protocol-prefixes nil))
-   "[^/ \t][^ \t]*\\)$")
+   "[^/ \t\n][^ \t\n]*\\)")
   "font-lock regexp matching a URL.")
 
 (defvar debian-control-font-lock-keywords

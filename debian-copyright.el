@@ -117,15 +117,15 @@ additionally detects the extra `<' and `>' around the address.  I
 hope this works well enough until the day we have to follow
 https://stackoverflow.com/a/201378."
   (add-to-list 'debian-copyright-font-lock-keywords
-               '("<?\\([^<>]+@[^<>]+\\.[^<>]+\\)>?"
+               '("<?\\([^<> \t\n]+@[^<> \t\n]+\\.[^<> \t\n]+\\)>?"
                  (1 font-lock-variable-name-face))))
 
 (defun debian-copyright--font-lock-add-urls (protocol-prefixes)
   "Add font lock for a URL with PROTOCOL-PREFIXES."
   (dolist (protocol-prefix protocol-prefixes)
     (add-to-list 'debian-copyright-font-lock-keywords
-                 `(,(concat protocol-prefix "[^/ \t]\\S-*") .
-                   font-lock-function-name-face))))
+                 `(,(concat "\\(" protocol-prefix "[^/ \t\n][^ \t\n]*\\)")
+                   (1 font-lock-constant-face)))))
 
 (defun debian-copyright--font-lock-add-licenses (supported-licenses)
   "Add font lock for SUPPORTED-LICENSES."
