@@ -2,17 +2,22 @@ dpkg-dev-el (37.13) UNRELEASED; urgency=medium
 
   * Add Homepage in d/control
   * Add Source in d/copyright
-  * Drop explicit dependency on elpa-debian-el in favor of Package-Requires
+  * Drop explicit dependency on elpa-debian-el in favor of
+    Package-Requires
   * Add optional version support to `reassign' (Closes: #503108)
-  * Rename forward paragraph helper function using the internal function convention
+  * Rename forward paragraph helper function using the internal function
+    convention
   * Implement toggling team upload (Closes: #595067)
     - Also bind to "C-c C-t"
   * Fix fontification for frozen to properly detect proposed updates
   * Improve fontification of backports to only detect stable and oldstable
   * Add fontification for known release code names
+    - Currently includes Debian and Ubuntu release code names
   * Add font lock for emails in debian-control-mode
+  * Add font lock regexp for URLs in debian-control-mode
+  * Improve email and url detection regexps
 
- -- Xiyue Deng <manphiz@gmail.com>  Mon, 10 Jun 2024 04:14:19 -0700
+ -- Xiyue Deng <manphiz@gmail.com>  Thu, 13 Jun 2024 18:13:33 -0700
 
 dpkg-dev-el (37.12) unstable; urgency=medium
 
