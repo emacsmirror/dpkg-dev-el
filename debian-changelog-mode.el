@@ -1544,7 +1544,7 @@ interface to set it, or simply set the variable
    (debian-changelog-highlight-mouse-t
     (debian-changelog-setup-highlight-mouse-keymap)
     (debian-changelog-highlight-mouse)))
-  (run-hooks 'debian-changelog-mode-hook))
+  (run-mode-hooks 'debian-changelog-mode-hook))
 ;;(easy-menu-add debian-changelog-menu))
 
 ;;
