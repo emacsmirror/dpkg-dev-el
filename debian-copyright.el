@@ -162,7 +162,7 @@ https://stackoverflow.com/a/201378."
           nil  ;case-fold
           ()   ;syntax-alist
           ))
-  (run-hooks 'debian-copyright-mode-hook))
+  (run-mode-hooks 'debian-copyright-mode-hook))
 
 
 ;;;###autoload
