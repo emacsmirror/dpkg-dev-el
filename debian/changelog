@@ -1,5 +1,6 @@
 dpkg-dev-el (37.13) UNRELEASED; urgency=medium
 
+  [ Xiyue Deng ]
   * Add Homepage in d/control
   * Add Source in d/copyright
   * Drop explicit dependency on elpa-debian-el in favor of
@@ -17,7 +18,10 @@ dpkg-dev-el (37.13) UNRELEASED; urgency=medium
   * Add font lock regexp for URLs in debian-control-mode
   * Improve email and url detection regexps
 
- -- Xiyue Deng <manphiz@gmail.com>  Thu, 13 Jun 2024 18:13:33 -0700
+  [ Sven Joachim ]
+  * Use run-mode-hooks rather than run-hooks (Closes: #1074305)
+
+ -- Xiyue Deng <manphiz@gmail.com>  Sat, 29 Jun 2024 06:10:28 -0700
 
 dpkg-dev-el (37.12) unstable; urgency=medium
 
