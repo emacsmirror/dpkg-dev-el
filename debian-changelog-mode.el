@@ -1309,16 +1309,16 @@ Use UTC if `debian-changelog-date-utc-flag' is non-nil."
 
 (defun debian-changelog-last-maintainer ()
   "Return maintainer name and e-mail of the last changelog entry as
-a list in the form (NAME EMAIL)."
-  (save-excursion
-    (goto-char (point-min))
-    (let ((string
-           (if (re-search-forward "^ -- \\(.*\\)>" nil t)
-               (if (fboundp 'match-string-no-properties)
-                   (match-string-no-properties 1)
-                 (match-string 1))
-             (error "Maintainer name and email not found."))))
-      (split-string string " <"))))
+a list in the form (NAME EMAIL).
+The point is left after the > character closing the email part of the
+signature line at the end of the last entry."
+  (goto-char (point-min))
+  (unless (re-search-forward "^ -- \\(.*\\)>" nil t)
+    (error "Maintainer name and email not found."))
+  (let ((string (if (fboundp 'match-string-no-properties)
+                    (match-string-no-properties 1)
+                  (match-string 1))))
+    (split-string string " <")))
 
 (defun debian-changelog-web-developer-page ()
   "Browse the BTS for the last upload maintainer's developer summary page."
@@ -1328,47 +1328,9 @@ a list in the form (NAME EMAIL)."
         (load "browse-url" nil t)
         (if (not (featurep 'browse-url))
             (error "This function requires the browse-url elisp package"))))
-  (let ((email (cadr (debian-changelog-last-maintainer))))
+  (let ((email (cadr (save-excursion (debian-changelog-last-maintainer)))))
     (browse-url (concat "http://qa.debian.org/developer.php?login=" email))
     (message "Looking up developer summary page for %s via browse-url" email)))
-
-;; co-maintenance as per bug #352957 by Luca Capello 2006
-(defun debian-changelog-comaintainer-insert (name separator)
-  "In the line before SEPARATOR, insert the co-maintainer name as for
-the form [ NAME ]."
-  (goto-char (point-min))
-  (re-search-forward (concat "\n " separator))
-  (forward-line -1)
-  (insert "\n  [ " name " ]")
-  (when (string= "--" separator)
-    (insert "\n")))
-
-(defun debian-changelog-comaintainer ()
-  "If the last maintainer is different from the current one, create a
-co-maintained changelog entry."
-  (let ((name (car (debian-changelog-last-maintainer))))
-    (unless (string= name debian-changelog-full-name)
-      (let ((maintainers-found)
-            (debian-changelog-last-entry-end
-             (progn (goto-char (point-min))
-                    (re-search-forward "\n --"))))
-        (mapc (lambda (x)
-                (goto-char (point-min))
-                (when (search-forward x debian-changelog-last-entry-end t)
-                  (add-to-list 'maintainers-found x)))
-              (list name debian-changelog-full-name))
-        ;; set the co-maintenance if any
-        (if maintainers-found
-            ;; co-maintenance, debian-changelog-full-name is not present
-            (if (and (member name maintainers-found)
-                     (not (member debian-changelog-full-name
-                                  maintainers-found)))
-                (debian-changelog-comaintainer-insert
-                 debian-changelog-full-name "--"))
-          ;; no co-maintenance
-          (mapc (lambda (x)
-                  (debian-changelog-comaintainer-insert (car x) (cadr x)))
-                `((,name " *") (,debian-changelog-full-name "--"))))))))
 
 ;;
 ;; interactive function to unfinalise changelog (so modifications can be made)
@@ -1382,12 +1344,18 @@ can be made."
   (if (debian-changelog-finalised-p) nil
     (error "Most recent version is not finalised"))
   (save-excursion
-    (debian-changelog-comaintainer)
-    (goto-char (point-min))
-    (re-search-forward "\n --")
-    (let ((dels (point)))
-      (end-of-line)
-      (delete-region dels (point)))))
+    ;; Save the name of the last maintainer, then cut after " --".
+    (let ((last-maintainer (car (debian-changelog-last-maintainer))))
+      (beginning-of-line)
+      (delete-region (+ 3 (point)) (point-at-eol))
+      (unless (or (string= last-maintainer debian-changelog-full-name)
+                  (search-backward debian-changelog-full-name nil t))
+        ;; Mention the new co-maintainer at the end of the entry.
+        (insert "  [ " debian-changelog-full-name " ]\n\n")
+        (unless (search-backward last-maintainer nil 1)
+          ;; Mention the last maintainer at the beginning of the entry.
+          (end-of-line)
+          (insert "\n  [ " last-maintainer " ]"))))))
 
 ;;
 ;; Functions to handle team upload
