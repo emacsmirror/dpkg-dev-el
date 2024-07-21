@@ -84,13 +84,14 @@ Automatically invoked when saving file."
 (if readme-debian-mode-map
     ()
   (setq readme-debian-mode-map (make-sparse-keymap)))
-(defvar readme-debian-mode-syntax-table nil "Syntax table for README.Debian mode.")
-(if readme-debian-mode-syntax-table
-    ()                   ; Do not change the table if it is already set up.
-  (setq readme-debian-mode-syntax-table (make-syntax-table))
-  (modify-syntax-entry ?\" ".   " readme-debian-mode-syntax-table)
-  (modify-syntax-entry ?\\ ".   " readme-debian-mode-syntax-table)
-  (modify-syntax-entry ?' "w   " readme-debian-mode-syntax-table))
+
+(defvar readme-debian-mode-syntax-table
+  (let ((table (make-syntax-table)))
+    (modify-syntax-entry ?\" ".   " table)
+    (modify-syntax-entry ?\\ ".   " table)
+    (modify-syntax-entry ?'  "w   " table)
+    table)
+  "Syntax table for README.Debian mode.")
 
 (defvar font-lock-defaults)             ;For XEmacs byte-compilation
 ;;;###autoload

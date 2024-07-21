@@ -155,13 +155,11 @@
   :type 'face
   :group 'debian-control)
 
-(defvar debian-control-syntax-table nil
+(defvar debian-control-syntax-table
+  (let ((table (make-syntax-table)))
+    (modify-syntax-entry ?\n "> " table)
+    table)
   "Syntax table used in debian-control-mode buffers.")
-
-(if debian-control-syntax-table
-    ()
-  (setq debian-control-syntax-table (make-syntax-table))
-  (modify-syntax-entry ?\n "> " debian-control-syntax-table))
 
 ;; FIXME: As of policy 3.5.6.0, the allowed characters in a field name
 ;; are not specified.  So we just go with "word constituent" or '-'

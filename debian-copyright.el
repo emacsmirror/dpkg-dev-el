@@ -49,8 +49,6 @@
 
 (defvar debian-copyright-mode-map nil
   "Keymap for debian/copyright mode.")
-(defvar debian-copyright-mode-syntax-table nil
-  "Syntax table for debian/copyright mode.")
 
 (defvar debian-copyright-font-lock-keywords nil
   "Regexps to highlight in font-lock.")
@@ -98,12 +96,13 @@ It should be immediately followed by a non-slash character.")
     "MPL-2\\.0")
   "Supported licenses based on /usr/share/common-licenses.")
 
-(if debian-copyright-mode-syntax-table
-    ()              ; Do not change the table if it is already set up.
-  (setq debian-copyright-mode-syntax-table (make-syntax-table))
-  (modify-syntax-entry ?\" ".   " debian-copyright-mode-syntax-table)
-  (modify-syntax-entry ?\\ ".   " debian-copyright-mode-syntax-table)
-  (modify-syntax-entry ?' "w   " debian-copyright-mode-syntax-table))
+(defvar debian-copyright-mode-syntax-table
+  (let ((table (make-syntax-table)))
+    (modify-syntax-entry ?\" ".   " table)
+    (modify-syntax-entry ?\\ ".   " table)
+    (modify-syntax-entry ?'  "w   " table)
+    table)
+  "Syntax table for debian/copyright mode.")
 
 (defun debian-copyright--font-lock-add-field-keywords (field-names)
   "Add font lock for field in FIELD-NAMES."

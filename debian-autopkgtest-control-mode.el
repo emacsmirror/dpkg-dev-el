@@ -48,8 +48,6 @@
 
 (defvar debian-autopkgtest-control-mode-map nil
   "Keymap for debian-autopkgtest-control-mode.")
-(defvar debian-autopkgtest-control-mode-syntax-table nil
-  "Syntax table for debian-autopkgtest-control-mode.")
 
 (defvar debian-autopkgtest-control-mode-font-lock-keywords nil
   "Regexps to highlight in font-lock.")
@@ -96,12 +94,13 @@ https://people.debian.org/~eriberto/README.package-tests.html.")
 As defined in the `Depends' section in
 https://people.debian.org/~eriberto/README.package-tests.html.")
 
-(if debian-autopkgtest-control-mode-syntax-table
-    ()              ; Do not change the table if it is already set up.
-  (setq debian-autopkgtest-control-mode-syntax-table (make-syntax-table))
-  (modify-syntax-entry ?\" ".   " debian-autopkgtest-control-mode-syntax-table)
-  (modify-syntax-entry ?\\ ".   " debian-autopkgtest-control-mode-syntax-table)
-  (modify-syntax-entry ?' "w   " debian-autopkgtest-control-mode-syntax-table))
+(defvar debian-autopkgtest-control-mode-syntax-table
+  (let ((table (make-syntax-table)))
+    (modify-syntax-entry ?\" ".   " table)
+    (modify-syntax-entry ?\\ ".   " table)
+    (modify-syntax-entry ?'  "w   " table)
+    table)
+  "Syntax table for debian-autopkgtest-control-mode.")
 
 (defun debian-autopkgtest-control-mode--font-lock-add-field-keywords (field-names)
   "Add font lock for field in FIELD-NAMES."
