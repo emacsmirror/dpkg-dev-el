@@ -298,31 +298,27 @@ It should be immediately followed by a non-slash character.")
   "A major mode for editing Debian control files (i.e. debian/control)."
   (set-syntax-table debian-control-syntax-table)
   ;; Comments
-  (make-local-variable 'comment-start-skip)  ;Need this for font-lock...
-  (setq comment-start-skip "^#+\s-*")
-  (make-local-variable 'comment-start)
-  (make-local-variable 'comment-end)
-  (setq comment-start "#"
-        comment-end "")
+  (setq-local comment-start-skip "^#+\s-*")  ;Need this for font-lock...
+  (setq-local comment-start "#")
+  (setq-local comment-end "")
 
   ;; Support # style comments
   (setq-local syntax-propertize-function
               (syntax-propertize-rules ("^\\(#\\)" (1 "<"))))
 
-  (make-local-variable 'font-lock-defaults)
-  (setq font-lock-defaults
-        '(debian-control-font-lock-keywords
-          nil           ;;; Keywords only? No, let it do syntax via table.
-          nil           ;;; case-fold?
-          nil           ;;; Local syntax table.
-          nil           ;;; Use `backward-paragraph' ? No
-          ))
-  (set (make-local-variable 'fill-paragraph-function)
-       #'debian-control-mode-fill-paragraph)
+  (setq-local font-lock-defaults
+              '(debian-control-font-lock-keywords
+                nil           ;;; Keywords only? No, let it do syntax via table.
+                nil           ;;; case-fold?
+                nil           ;;; local syntax table alist
+                ))
+  (setq-local fill-paragraph-function
+              #'debian-control-mode-fill-paragraph)
   (make-local-variable 'after-change-functions)
   (push 'debian-control-mode-after-change-function after-change-functions)
-  (set (make-local-variable 'imenu-generic-expression)
-       '((nil "^\\(Package\\|Source\\):\\s-*\\([-a-zA-Z0-9+.]+?\\)\\s-*$" 2)))
+  (setq-local imenu-generic-expression
+              '((nil "^\\(Package\\|Source\\):\\s-*\\([-a-zA-Z0-9+.]+?\\)\\s-*$"
+                     2)))
 
   (define-key debian-control-mode-map (kbd "C-c C-b") 'debian-control-view-package-bugs)
   (define-key debian-control-mode-map (kbd "C-c C-p") 'debian-control-visit-policy)

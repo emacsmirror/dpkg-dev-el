@@ -135,6 +135,7 @@ https://people.debian.org/~eriberto/README.package-tests.html.")
   (kill-all-local-variables)
   (setq major-mode 'debian-autopkgtest-control-mode)
   (setq mode-name "debian-autopkgtest-control")
+  (make-local-variable 'write-file-hooks)
   (use-local-map debian-autopkgtest-control-mode-map)
   (set-syntax-table debian-autopkgtest-control-mode-syntax-table)
   ;; Add font locks
@@ -145,12 +146,12 @@ https://people.debian.org/~eriberto/README.package-tests.html.")
   (debian-autopkgtest-control-mode--font-lock-add-restrictions
    debian-autopkgtest-control-mode--restrictions)
   (debian-autopkgtest-control-mode--font-lock-comments)
-  (setq font-lock-defaults
-        '(debian-autopkgtest-control-mode-font-lock-keywords
-          nil  ;keywords-only
-          nil  ;case-fold
-          nil  ;syntax-alist
-          ))
+  (setq-local font-lock-defaults
+              '(debian-autopkgtest-control-mode-font-lock-keywords
+                nil  ;keywords-only
+                nil  ;case-fold
+                nil  ;syntax-alist
+                ))
   (dpkg-dev-common-utils--add-debputy-settings 'debian-autopkgtest-control-mode)
   (run-mode-hooks 'debian-autopkgtest-control-mode-hook))
 

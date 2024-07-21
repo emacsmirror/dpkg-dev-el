@@ -104,14 +104,13 @@ will be updated.
   (kill-all-local-variables)
   (setq major-mode 'readme-debian-mode)
   (setq mode-name "README.Debian")
-  (make-local-variable 'font-lock-defaults)
   (use-local-map readme-debian-mode-map)
   (set-syntax-table readme-debian-mode-syntax-table)
-  (setq font-lock-defaults
+  (setq-local font-lock-defaults
         '(readme-debian-font-lock-keywords
           nil ;; keywords-only? No, let it do syntax via table.
           nil ;; case-fold?
-          nil ;; Local syntax table.
+          ()  ;; Local syntax table.
           ))
   ;; add timestamp update func to write-contents-hooks
   (if (or (= emacs-major-version 20)

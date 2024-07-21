@@ -1543,24 +1543,26 @@ interface to set it, or simply set the variable
   ;;  done.
   (use-local-map debian-changelog-mode-map)
   ;; Let each entry behave as one paragraph:
-  (set (make-local-variable 'fill-forward-paragraph-function)
-       #'debian-changelog--forward-paragraph)
-  (set (make-local-variable 'paragraph-start) "\\s *[*+-]\\|\\s *$\\|\f\\|^\\<")
-  (set (make-local-variable 'paragraph-separate) "\\s *$\\|\f\\|^\\<")
+  (setq-local fill-forward-paragraph-function
+              #'debian-changelog--forward-paragraph)
+  (setq-local paragraph-start "\\s *[*+-]\\|\\s *$\\|\f\\|^\\<")
+  (setq-local paragraph-separate "\\s *$\\|\f\\|^\\<")
   ;; Let each version behave as one page.
   ;; Match null string on the heading line so that the heading line
   ;; is grouped with what follows.
-  (set (make-local-variable 'page-delimiter) "^\\<")
-  (set (make-local-variable 'version-control) 'never)
-  (set (make-local-variable 'adaptive-fill-regexp) "\\s *")
-  (set (make-local-variable 'font-lock-defaults)
+  (setq-local page-delimiter "^\\<")
+  (setq-local version-control 'never)
+  (setq-local adaptive-fill-regexp "\\s *")
+  (setq-local font-lock-defaults
        '((debian-changelog-font-lock-keywords
           debian-changelog-font-lock-keywords-1
-          debian-changelog-font-lock-keywords-2) t t))
-  (set (make-local-variable
-        'debian-changelog-local-variables-maybe-remove-done) nil)
-  (set (make-local-variable 'indent-line-function) 'indent-relative-maybe)
-  (set (make-local-variable 'outline-regexp) "^[a-z]")
+          debian-changelog-font-lock-keywords-2)
+         t               ; keywords-only?
+         t               ; case-fold?
+         ()))            ; local syntax table alist
+  (setq-local debian-changelog-local-variables-maybe-remove-done nil)
+  (setq-local indent-line-function 'indent-relative-maybe)
+  (setq-local outline-regexp "^[a-z]")
   (setq local-abbrev-table text-mode-abbrev-table)
   (set-syntax-table text-mode-syntax-table)
   (debian-bug-bug-menu-init debian-changelog-mode-map)

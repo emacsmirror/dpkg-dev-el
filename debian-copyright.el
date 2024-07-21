@@ -143,7 +143,7 @@ https://stackoverflow.com/a/201378."
   (kill-all-local-variables)
   (setq major-mode 'debian-copyright-mode)
   (setq mode-name "debian/copyright")
-  (mapc 'make-local-variable '(font-lock-defaults write-file-hooks))
+  (make-local-variable 'write-file-hooks)
   (use-local-map debian-copyright-mode-map)
   (set-syntax-table debian-copyright-mode-syntax-table)
   ;; Add font locks
@@ -156,7 +156,7 @@ https://stackoverflow.com/a/201378."
       (debian-copyright--font-lock-add-urls
        debian-copyright--supported-url-protocol-prefixes)
     (goto-address))
-  (setq font-lock-defaults
+  (setq-local font-lock-defaults
         '(debian-copyright-font-lock-keywords
           nil  ;keywords-only
           nil  ;case-fold

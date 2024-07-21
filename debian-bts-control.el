@@ -302,10 +302,10 @@ a negative prefix argument turns it off.
 \\<debian-bts-control-minor-mode-map>
 \\[debian-bts-control]\t\tAdd a control command to the current message."
   (interactive "P")
-  (set (make-local-variable 'debian-bts-control-minor-mode)
-       (if arg
-           (> (prefix-numeric-value arg) 0)
-         (not debian-bts-control-minor-mode)))
+  (setq-local debian-bts-control-minor-mode
+              (if arg
+                  (> (prefix-numeric-value arg) 0)
+                (not debian-bts-control-minor-mode)))
   (cond
    (debian-bts-control-minor-mode                 ;Setup the minor-mode
     (if (fboundp 'font-lock-add-keywords)
