@@ -121,12 +121,11 @@ the top of the message."
   "Email address domain to send control message to.")
 
 (defvar debian-bts-control-minor-mode nil)
-(defvar debian-bts-control-minor-mode-map nil
+(defvar debian-bts-control-minor-mode-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map "\C-c\C-b" 'debian-bts-control)
+    map)
   "Keymap for `debian-bts-control' minor mode.")
-(if debian-bts-control-minor-mode-map
-    nil
-  (setq debian-bts-control-minor-mode-map (make-sparse-keymap))
-  (define-key debian-bts-control-minor-mode-map "\C-c\C-b" 'debian-bts-control))
 
 (easy-menu-define debian-bts-control-menu debian-bts-control-minor-mode-map
   "Debian Bug Mode Menu"

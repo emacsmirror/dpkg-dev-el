@@ -733,35 +733,22 @@ Upload to " val  " anyway?")))
 (autoload 'outline-next-visible-heading "outline")
 (autoload 'outline-prev-visible-heading "outline")
 
-(defvar debian-changelog-mode-map nil
+(defvar debian-changelog-mode-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map "\C-c\C-a" 'debian-changelog-add-entry)
+    (define-key map "\C-c\C-o" 'debian-changelog-build-open-bug-list)
+    (define-key map "\C-c\C-b" 'debian-changelog-close-bug)
+    (define-key map "\C-c\C-f" 'debian-changelog-finalise-last-version)
+    (define-key map "\C-c\C-c" 'debian-changelog-finalise-and-save)
+    (define-key map "\C-c\C-v" 'debian-changelog-add-version)
+    (define-key map "\C-c\C-d" 'debian-changelog-distribution)
+    (define-key map "\C-c\C-u" 'debian-changelog-urgency)
+    (define-key map "\C-c\C-e" 'debian-changelog-unfinalise-last-version)
+    (define-key map "\C-c\C-n" 'outline-next-visible-heading)
+    (define-key map "\C-c\C-p" 'outline-previous-visible-heading)
+    (define-key map "\C-c\C-t" 'debian-changelog-toggle-team-upload)
+    map)
   "Keymap for Debian changelog major mode.")
-(if debian-changelog-mode-map
-    nil
-  (setq debian-changelog-mode-map (make-sparse-keymap))
-  (define-key debian-changelog-mode-map "\C-c\C-a"
-              'debian-changelog-add-entry)
-  (define-key debian-changelog-mode-map "\C-c\C-o"
-              'debian-changelog-build-open-bug-list)
-  (define-key debian-changelog-mode-map "\C-c\C-b"
-              'debian-changelog-close-bug)
-  (define-key debian-changelog-mode-map "\C-c\C-f"
-              'debian-changelog-finalise-last-version)
-  (define-key debian-changelog-mode-map "\C-c\C-c"
-              'debian-changelog-finalise-and-save)
-  (define-key debian-changelog-mode-map "\C-c\C-v"
-              'debian-changelog-add-version)
-  (define-key debian-changelog-mode-map "\C-c\C-d"
-              'debian-changelog-distribution)
-  (define-key debian-changelog-mode-map "\C-c\C-u"
-              'debian-changelog-urgency)
-  (define-key debian-changelog-mode-map "\C-c\C-e"
-              'debian-changelog-unfinalise-last-version)
-  (define-key debian-changelog-mode-map "\C-c\C-n"
-              'outline-next-visible-heading)
-  (define-key debian-changelog-mode-map "\C-c\C-p"
-              'outline-previous-visible-heading)
-  (define-key debian-changelog-mode-map "\C-c\C-t"
-              'debian-changelog-toggle-team-upload))
 
 ;;
 ;; menu definition (Chris Waters)

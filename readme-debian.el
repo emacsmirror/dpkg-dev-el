@@ -80,10 +80,9 @@ Automatically invoked when saving file."
     (if (and (= (point)(point-max)) (not (bolp)))
         (insert "\n"))))
 
-(defvar readme-debian-mode-map nil "Keymap for README.Debian mode.")
-(if readme-debian-mode-map
-    ()
-  (setq readme-debian-mode-map (make-sparse-keymap)))
+(defvar readme-debian-mode-map
+  (make-sparse-keymap)
+  "Keymap for README.Debian mode.")
 
 (defvar readme-debian-mode-syntax-table
   (let ((table (make-syntax-table)))
