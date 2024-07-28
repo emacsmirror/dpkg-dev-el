@@ -1,0 +1,214 @@
+dpkg-dev-el (37.16) unstable; urgency=medium
+
+  [ Xiyue Deng ]
+  * Add Homepage in d/control
+  * Add Source in d/copyright
+  * Drop explicit dependency on elpa-debian-el in favor of
+    Package-Requires
+  * Add optional version support to `reassign' (Closes: #503108)
+  * Rename forward paragraph helper function using the internal function
+    convention
+  * Implement toggling team upload (Closes: #595067)
+    - Also bind to "C-c C-t"
+  * Fix fontification for frozen to properly detect proposed updates
+  * Improve fontification of backports to only detect stable and oldstable
+  * Add fontification for known release code names
+    - Currently includes Debian and Ubuntu release code names
+  * Add font lock for emails in debian-control-mode
+  * Add font lock regexp for URLs in debian-control-mode
+  * Improve email and url detection regexps
+
+  [ Sven Joachim ]
+  * Use run-mode-hooks rather than run-hooks (Closes: #1074305)
+
+ -- Xiyue Deng <manphiz@gmail.com>  Sat, 27 Jul 2024 22:12:32 -0700
+
+dpkg-dev-el (37.15) unstable; urgency=medium
+
+  * Team upload.
+  * Rebuild against dh-elpa 2.1.5.
+    Upload pushed to dgit-repos but not salsa.
+    See <https://lists.debian.org/debian-emacsen/2024/07/msg00077.html>.
+
+ -- Sean Whitton <spwhitton@spwhitton.name>  Thu, 25 Jul 2024 18:58:37 +0900
+
+dpkg-dev-el (37.14) unstable; urgency=medium
+
+  * Team upload.
+  * Rebuild against dh-elpa 2.1.5.
+    Upload pushed to dgit-repos but not salsa.
+    See <https://lists.debian.org/debian-emacsen/2024/07/msg00077.html>.
+
+ -- Sean Whitton <spwhitton@spwhitton.name>  Thu, 25 Jul 2024 18:01:46 +0900
+
+dpkg-dev-el (37.13) unstable; urgency=medium
+
+  * Team upload.
+  * Rebuild against dh-elpa 2.1.3.
+    Upload pushed to dgit-repos but not salsa.
+    See <https://lists.debian.org/debian-emacsen/2024/07/msg00077.html>.
+
+ -- Sean Whitton <spwhitton@spwhitton.name>  Wed, 24 Jul 2024 21:54:52 +0900
+
+dpkg-dev-el (37.12) unstable; urgency=medium
+
+  [ Niels Thykier ]
+  * Update list of known d/control fields for debian-control-mode
+
+  [ Xiyue Deng ]
+  * Untabify and reindent source code in Emacs 29 for consistency
+  * Fix fill-paragraph in debian-changelog-mode (Closes: #620185)
+  * Improve highlighting in debian-copyright (Closes: #557594, #1067589)
+    - Add highlighting for more field names
+    - Properly highlight common URLs
+    - Add highlighting for emails
+    - Add highlighting for common licenses as defined in base-files
+  * Fix comp warnings (Closes: #1026450, #1028470)
+    - Drop calls to obsolete easy-menu-add
+    - Guard XEmacs functions
+    - Require debian-bug for function usage
+    - There are still some warnings due to compatibility with XEmacs
+      which are being tracked in Bug#1068370.
+    - Replace obsolete `max-specpdl-size' with `max-lisp-eval-depth'
+    - Drop calls to no-op function `easy-menu-add'
+    - Use defvar for variables without a require
+    - Replace `position' with `seq-position'
+    - Replace `subseq' with `seq-subseq'
+    - Fix long docstring
+    - Use `goto-char' instead of `goto-line'
+  * Initial support for autopkgtest control files (Closes: #1067590)
+    - Add initial highlighting for field names, dependency extensions,
+      and restrictions
+  * Bump version to prepare for release
+  * Add myself to uploaders
+  * Add copyright info for debian-autopkgtest-control-mode.el
+  * Add Vcs-Browser to valid VCS name fields
+  * Update the link of valid VCS name fields to point to Debian policy
+  * Update Standards-Version to 4.7.0; no change needed
+  * Update package description with new mode in d/control
+
+ -- Xiyue Deng <manphiz@gmail.com>  Mon, 15 Apr 2024 21:02:25 -0700
+
+dpkg-dev-el (37.11) unstable; urgency=medium
+
+  * Team upload.
+
+  [ Xiyue Deng ]
+  * d/control: add elpa-debian-el to Build-Depends and the dependencies of
+    elpa-dpkg-dev-el (Closes: #1061650).
+  * Add a dummy ERT test to force byte-compiling all addons to help catch
+    issues.
+
+ -- Arto Jantunen <viiru@debian.org>  Sat, 03 Feb 2024 10:28:42 +0200
+
+dpkg-dev-el (37.10) unstable; urgency=medium
+
+  * Team upload
+
+  [ Nicholas D Steeves ]
+  * Drop emacs25 from Enhances (package does not exist in bullseye).
+
+  [ Amin Bandali ]
+  * Fix a few warnings.
+
+  [ Xiyue Deng ]
+  * Convert debian-changelog-mode file encoding to UTF-8
+  * Drop emacs version from recommends
+  * Update Standards-Version to 4.6.2, no changes needed
+  * Migrate to debhelper-compat version 13
+  * Mark Rules-Requires-Root as no in d/control
+  * Use dh_elpa to generate autoloads and pkg el files
+  * Add "Package" to debian-control-binary-fields
+  * Fix a few more warnings
+  * Add Upstream-Contact to d/copyright
+
+ -- Arto Jantunen <viiru@debian.org>  Sat, 27 Jan 2024 14:47:15 +0200
+
+dpkg-dev-el (37.9) unstable; urgency=medium
+
+  * Rebuild with current dh-elpa (no changes)
+
+ -- David Bremner <bremner@debian.org>  Sun, 06 Dec 2020 08:14:57 -0400
+
+dpkg-dev-el (37.8) unstable; urgency=medium
+
+  [ Nicholas D Steeves ]
+  * Remove trailing whitespace and inconsistent use of newlines.
+  * Update metadata headers needed for ELPA packages (Closes: #911062).
+    - Add Commentary and Code sections to debian-copyright.el.
+    - Add Commentary section to readme-debian.el.
+    - Fix Commentary section in dpkg-dev-el.el.
+    - Add Copyright, Author, and Created headers to dpkg-dev-el.el.
+    - Make GPL-2+ licensing explicit in dpkg-dev-el.el by adding a GPL-2+
+      licensing header.  Previously this could only be determined by
+      examining debian/copyright.
+  * debian/copyright:
+    - Add entry for dpkg-dev-el.el.
+    - Use secure copyright-format URL.
+  * dpkg-dev-el.el: Change description to name dpkg-dev-el rather than
+    debian-el, which is now anachronistic.
+
+  [ David Bremner ]
+  * rebuild with dh_elpa 1.16
+
+ -- David Bremner <bremner@debian.org>  Sat, 24 Aug 2019 20:15:16 -0300
+
+dpkg-dev-el (37.7) unstable; urgency=medium
+
+  * fix comment-start-skip (Closes: #718539)
+  * use syntax-propertize-function for comments (Closes: 737673)
+
+ -- David Bremner <bremner@debian.org>  Sat, 20 Oct 2018 20:39:34 -0300
+
+dpkg-dev-el (37.6) unstable; urgency=medium
+
+  * Load dpkg-dev-el.el at startup.
+  * Bug fix: "auto-mode-alist README.source regexp", thanks to Kevin Ryde
+    (Closes: #672195).
+
+ -- David Bremner <bremner@debian.org>  Fri, 19 Oct 2018 22:44:15 -0300
+
+dpkg-dev-el (37.5) unstable; urgency=medium
+
+  * debian-changelog-mode: (require 'faces).  Bug fix:
+    "debian-changelog-warning-face not defined in Emacs 23", thanks to
+    Trent W. Buck (Closes: #592195).
+  * debian-changelog-mode: use defface to define
+    debian-changelog-warning-face (Closes: #500642)
+
+ -- David Bremner <bremner@debian.org>  Thu, 18 Oct 2018 21:28:20 -0300
+
+dpkg-dev-el (37.4) unstable; urgency=medium
+
+  * Upload to unstable (Closes: #904816). Thanks to Sven Joachim for
+    noticing.
+
+ -- David Bremner <bremner@debian.org>  Sun, 29 Jul 2018 06:12:32 +0800
+
+dpkg-dev-el (37.3) experimental; urgency=medium
+
+  * Fix Vcs-*
+
+ -- David Bremner <bremner@debian.org>  Sun, 08 Jul 2018 12:21:22 -0300
+
+dpkg-dev-el (37.2) experimental; urgency=medium
+
+  * Bug fix: "debian-control-source-fields is outdated", thanks to Sven
+    Joachim (Closes: #882775).
+
+ -- David Bremner <bremner@debian.org>  Sun, 01 Jul 2018 07:04:31 -0300
+
+dpkg-dev-el (37.1) experimental; urgency=medium
+
+  * update debian/copyright for split package
+
+ -- David Bremner <bremner@debian.org>  Fri, 29 Jun 2018 13:37:08 -0300
+
+dpkg-dev-el (37.0) experimental; urgency=medium
+
+  * Adopting emacs-goodies-el to the emacsen-team, see
+    https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=901157#20
+  * Split from emacs-goodies-el source (36.4), and dh-elpafied
+    (Closes: #901157)
+
+ -- David Bremner <bremner@debian.org>  Sun, 24 Jun 2018 08:28:27 -0300
