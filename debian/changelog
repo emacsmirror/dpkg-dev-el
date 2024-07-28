@@ -1,4 +1,4 @@
-dpkg-dev-el (37.16) UNRELEASED; urgency=medium
+dpkg-dev-el (37.16) unstable; urgency=medium
 
   [ Xiyue Deng ]
   * Add Homepage in d/control
@@ -21,7 +21,7 @@ dpkg-dev-el (37.16) UNRELEASED; urgency=medium
   [ Sven Joachim ]
   * Use run-mode-hooks rather than run-hooks (Closes: #1074305)
 
- -- Xiyue Deng <manphiz@gmail.com>  Sat, 29 Jun 2024 06:10:28 -0700
+ -- Xiyue Deng <manphiz@gmail.com>  Sat, 27 Jul 2024 22:12:32 -0700
 
 dpkg-dev-el (37.15) unstable; urgency=medium
 

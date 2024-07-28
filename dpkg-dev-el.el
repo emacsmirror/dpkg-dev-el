@@ -3,7 +3,7 @@
 ;; Copyright: 2003-2014 Peter S Galbraith
 
 ;; Author: Peter S Galbraith <psg@debian.org>
-;; Version: 37.16-git
+;; Version: 37.16
 ;; Package-Requires: ((emacs "27.1") (debian-el "37.0"))
 ;; Created: 2003-11-03
 
