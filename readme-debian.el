@@ -119,7 +119,7 @@ will be updated.
       (make-local-hook 'write-contents-hooks))
   (add-hook 'write-contents-hooks 'readme-debian-update-timestamp
             nil t)
-  (run-hooks 'readme-debian-mode-hook))
+  (run-mode-hooks 'readme-debian-mode-hook))
 
 (add-to-list 'auto-mode-alist
              '("debian/.*README.*Debian$" . readme-debian-mode))

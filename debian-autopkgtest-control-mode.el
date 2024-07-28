@@ -146,7 +146,7 @@ https://people.debian.org/~eriberto/README.package-tests.html.")
           nil  ;case-fold
           nil  ;syntax-alist
           ))
-  (run-hooks 'debian-autopkgtest-control-mode-hook))
+  (run-mode-hooks 'debian-autopkgtest-control-mode-hook))
 
 
 ;;;###autoload

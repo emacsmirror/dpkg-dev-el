@@ -6,6 +6,7 @@ Comment:
  authors contacted Roland directly, some users sent me the files by email.
  Most of them are covered by the GNU GPL, but the individual licences can
  vary.
+Source: https://salsa.debian.org/emacsen-team/dpkg-dev-el
 Upstream-Contact: Debian Emacsen Team <debian-emacsen@lists.debian.org>
 
 Files: *

@@ -1,3 +1,28 @@
+dpkg-dev-el (37.16) unstable; urgency=medium
+
+  [ Xiyue Deng ]
+  * Add Homepage in d/control
+  * Add Source in d/copyright
+  * Drop explicit dependency on elpa-debian-el in favor of
+    Package-Requires
+  * Add optional version support to `reassign' (Closes: #503108)
+  * Rename forward paragraph helper function using the internal function
+    convention
+  * Implement toggling team upload (Closes: #595067)
+    - Also bind to "C-c C-t"
+  * Fix fontification for frozen to properly detect proposed updates
+  * Improve fontification of backports to only detect stable and oldstable
+  * Add fontification for known release code names
+    - Currently includes Debian and Ubuntu release code names
+  * Add font lock for emails in debian-control-mode
+  * Add font lock regexp for URLs in debian-control-mode
+  * Improve email and url detection regexps
+
+  [ Sven Joachim ]
+  * Use run-mode-hooks rather than run-hooks (Closes: #1074305)
+
+ -- Xiyue Deng <manphiz@gmail.com>  Sat, 27 Jul 2024 22:12:32 -0700
+
 dpkg-dev-el (37.15) unstable; urgency=medium
 
   * Team upload.

@@ -9,13 +9,14 @@ Build-Depends: debhelper-compat (= 13),
  dh-elpa,
  elpa-debian-el,
 Standards-Version: 4.7.0
+Homepage: https://salsa.debian.org/emacsen-team/dpkg-dev-el
 Vcs-Browser: https://salsa.debian.org/emacsen-team/dpkg-dev-el
 Vcs-Git: https://salsa.debian.org/emacsen-team/dpkg-dev-el.git
 Rules-Requires-Root: no
 
 Package: elpa-dpkg-dev-el
 Architecture: all
-Depends: ${elpa:Depends}, ${misc:Depends}, elpa-debian-el
+Depends: ${elpa:Depends}, ${misc:Depends}
 Recommends: emacs
 Enhances: emacs
 Description: Emacs helpers specific to Debian development

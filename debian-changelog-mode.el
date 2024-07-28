@@ -413,6 +413,75 @@ This defaults to the value of (in order of precedence):
   :group 'debian-changelog
   :type '(repeat string))
 
+(defcustom debian-changelog-debian-code-names
+  '("buzz"
+    "rex"
+    "bo"
+    "hamm"
+    "slink"
+    "potato"
+    "woody"
+    "sarge"
+    "etch"
+    "lenny"
+    "squeeze"
+    "wheezy"
+    "jessie"
+    "stretch"
+    "buster"
+    "bullseye"
+    "bookworm"
+    "trixie")
+  "*Known code names for Debian releases sorted from oldest to newest."
+  :group 'debian-changelog
+  :type '(repeat string))
+
+(defcustom debian-changelog-ubuntu-code-names
+  '("warty"
+    "hoary"
+    "breezy"
+    "dapper"
+    "edgy"
+    "feisty"
+    "gutsy"
+    "hardy"
+    "intrepid"
+    "jaunty"
+    "karmic"
+    "lucid"
+    "maverick"
+    "natty"
+    "oneiric"
+    "precise"
+    "quantal"
+    "raring"
+    "saucy"
+    "trusty"
+    "utopic"
+    "vivid"
+    "wily"
+    "xenial"
+    "yakkety"
+    "zesty"
+    "artful"
+    "bionic"
+    "cosmic"
+    "disco"
+    "eoan"
+    "focal"
+    "groovy"
+    "hirsute"
+    "impish"
+    "jammy"
+    "kinetic"
+    "lunar"
+    "mantic"
+    "noble"
+    "oracular")
+  "*Known code names for Ubuntu releases sorted from oldest to newest."
+  :group 'debian-changelog
+  :type '(repeat string))
+
 (defcustom debian-changelog-local-variables-maybe-remove t
   "*Ask to remove obsolete \"Local Variables:\" block from changelog.
 This is done only under certain conditions."
@@ -494,6 +563,8 @@ Pass ARGS to `replace-regexp-in-string' (GNU Emacs) or to
 (require 'easymenu)
 (eval-when-compile
   (require 'cl-lib))
+(require 'subr-x)
+(require 'seq)
 
 ;; XEmacs21.1 compatibility -- from XEmacs's apel/poe.el
 (unless (fboundp 'match-string-no-properties)
@@ -649,6 +720,11 @@ Upload to " val  " anyway?")))
             (debian-changelog-setheadervalue ") \\(.*\\)\\;" val))
         (set-window-configuration window-config))))))
 
+(defun debian-changelog--get-all-code-names ()
+  "Returns a list of all code names from supported distributions."
+  (append debian-changelog-debian-code-names
+          debian-changelog-ubuntu-code-names))
+
 ;;
 ;; keymap table definition
 ;;
@@ -682,7 +758,9 @@ Upload to " val  " anyway?")))
   (define-key debian-changelog-mode-map "\C-c\C-n"
               'outline-next-visible-heading)
   (define-key debian-changelog-mode-map "\C-c\C-p"
-              'outline-previous-visible-heading))
+              'outline-previous-visible-heading)
+  (define-key debian-changelog-mode-map "\C-c\C-t"
+              'debian-changelog-toggle-team-upload))
 
 ;;
 ;; menu definition (Chris Waters)
@@ -1324,10 +1402,67 @@ can be made."
       (delete-region dels (point)))))
 
 ;;
+;; Functions to handle team upload
+;;
+
+(defun debian-changelog--first-line-well-formed-p ()
+  "Returns true if the first line of the file is the correct changelog header."
+  (save-excursion
+    (goto-char (point-min))
+    (string-match-p "^\\S-+ (\\S-+) \\S-+; urgency=\\S-+$"
+                    (thing-at-point 'line t))))
+
+(defun debian-changelog--go-to-first-entry ()
+  "Put `point' to the beginning of the line of the first changelog entry."
+  (goto-char (point-min))
+  (forward-line)
+  (when (eolp)
+    (forward-line)))
+
+(defun debian-changelog--team-upload-p ()
+  "Returns whether the first entry is the `Team upload' entry."
+  (save-excursion
+    (debian-changelog--go-to-first-entry)
+    (string-match-p "^  \\* [Tt]eam upload\\.?$" (thing-at-point 'line t))))
+
+(defun debian-changelog--comaintainer-p ()
+  "Returns whether the first entry is a comaintainer mark."
+  (save-excursion
+    (debian-changelog--go-to-first-entry)
+    (string-match-p "^  \\[ .+ \\]\\s-*$" (thing-at-point 'line t))))
+
+(defun debian-changelog--add-team-upload ()
+  "Add `Team upload' as the first item."
+  (let ((has-comaintainer (debian-changelog--comaintainer-p)))
+    (save-excursion
+      (debian-changelog--go-to-first-entry)
+      (insert "  * Team upload\n")
+      (when has-comaintainer
+        (insert "\n")))))
+
+(defun debian-changelog--remove-team-upload ()
+  "Remove the first entry that is assumed to be `team upload'."
+  (save-excursion
+    (debian-changelog--go-to-first-entry)
+    (kill-whole-line)
+    (when (eolp)
+      (kill-whole-line))))
+
+(defun debian-changelog-toggle-team-upload ()
+  "Toggles `Team upload' as first item in changelog."
+  (interactive)
+  (when (null (debian-changelog--first-line-well-formed-p))
+    (error (concat "First line of the file is not in the correct format.  "
+                   "Please fix first.")))
+  (if (debian-changelog--team-upload-p)
+      (debian-changelog--remove-team-upload)
+    (debian-changelog--add-team-upload)))
+
+;;
 ;; top level interactive function to activate mode
 ;;
 
-(defun debian-changelog-forward-paragraph (&optional arg)
+(defun debian-changelog--forward-paragraph (&optional arg)
   "Forward paragraph with special fill-prefix handling.
 This function tries to work around an inconvenience that
 forward-paragraph will additionally move forward fill-prefix when
@@ -1336,8 +1471,8 @@ detection.  So instead, we disable fill-prefix, do a normal
 forward-paragraph which properly detects the fill region, and
 restore its value so that fill-prefix is honored when doing the
 actual filling."
-  (let* ((ofill-prefix fill-prefix)
-         ret)
+  (let ((ofill-prefix fill-prefix)
+        ret)
     (setq-local fill-prefix "")
     (setq ret (forward-paragraph arg))
     (setq-local fill-prefix ofill-prefix)
@@ -1375,7 +1510,7 @@ interface to set it, or simply set the variable
   (use-local-map debian-changelog-mode-map)
   ;; Let each entry behave as one paragraph:
   (set (make-local-variable 'fill-forward-paragraph-function)
-       #'debian-changelog-forward-paragraph)
+       #'debian-changelog--forward-paragraph)
   (set (make-local-variable 'paragraph-start) "\\s *\\*\\|\\s *$\\|\f\\|^\\<")
   (set (make-local-variable 'paragraph-separate) "\\s *$\\|\f\\|^\\<")
   ;; Let each version behave as one page.
@@ -1409,7 +1544,7 @@ interface to set it, or simply set the variable
    (debian-changelog-highlight-mouse-t
     (debian-changelog-setup-highlight-mouse-keymap)
     (debian-changelog-highlight-mouse)))
-  (run-hooks 'debian-changelog-mode-hook))
+  (run-mode-hooks 'debian-changelog-mode-hook))
 ;;(easy-menu-add debian-changelog-menu))
 
 ;;
@@ -1474,6 +1609,7 @@ interface to set it, or simply set the variable
    '(debian-changelog-fontify-urgency-high . debian-changelog-warning-face)
    '(debian-changelog-fontify-urgency-med . font-lock-type-face)
    '(debian-changelog-fontify-urgency-low . font-lock-string-face)
+   '(debian-changelog-fontify-known-releases . font-lock-string-face)
    ;; bug closers
    '(;"\\(closes:\\) *\\(\\(bug\\)?#? *[0-9]+\\(, *\\(bug\\)?#? *[0-9]+\\)*\\)"
      ;; Process lines that continue on multiple lines - Fred Bothamy
@@ -1584,7 +1720,7 @@ match 1 -> package name
     t))
 
 (defun debian-changelog-fontify-frozen (limit)
-  (when (re-search-forward "^\\sw.* (.+).* \\(testing\\(-security\\)?\\|frozen\\|woody-proposed-updates\\)" limit t)
+  (when (re-search-forward "^\\sw.* (.+).* \\(testing\\(-security\\|-proposed-updates\\)?\\|frozen\\)" limit t)
     (store-match-data
      (list (match-beginning 1)(match-end 1)))
     t))
@@ -1608,10 +1744,21 @@ match 1 -> package name
     t))
 
 (defun debian-changelog-fontify-backports (limit)
-  (when (re-search-forward "^\\sw.* (.+).* \\([a-z][a-z]*-backports\\)" limit t)
+  (when (re-search-forward "^\\sw.* (.+).* \\(\\(?:\\(?:old\\)?stable\\)-backports\\)" limit t)
     (store-match-data
      (list (match-beginning 1)(match-end 1)))
     t))
+
+(defun debian-changelog-fontify-known-releases (limit)
+  (let ((releases-partial-regexp
+         (concat "\\("
+                 (regexp-opt (debian-changelog--get-all-code-names) nil)
+                 "\\(?:\\(?:-proposed\\)?-updates\\|-backports\\)?\\)")))
+    (when (re-search-forward (concat "^\\sw.* (.+).* " releases-partial-regexp)
+                             limit t)
+      (store-match-data
+       (list (match-beginning 1) (match-end 1)))
+      t)))
 
 ;;
 ;; browse-url interfaces, by Peter Galbraith, Feb 23 2001
