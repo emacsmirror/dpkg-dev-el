@@ -1463,20 +1463,14 @@ can be made."
 ;;
 
 (defun debian-changelog--forward-paragraph (&optional arg)
-  "Forward paragraph with special fill-prefix handling.
+  "Forward paragraph with special `fill-prefix' handling.
 This function tries to work around an inconvenience that
-forward-paragraph will additionally move forward fill-prefix when
-matched, which breaks the intended paragraph-{start,separate}
-detection.  So instead, we disable fill-prefix, do a normal
-forward-paragraph which properly detects the fill region, and
-restore its value so that fill-prefix is honored when doing the
-actual filling."
-  (let ((ofill-prefix fill-prefix)
-        ret)
-    (setq-local fill-prefix "")
-    (setq ret (forward-paragraph arg))
-    (setq-local fill-prefix ofill-prefix)
-    ret))
+`forward-paragraph' will additionally move forward `fill-prefix'
+(which is set to two spaces) when matched, which breaks the
+intended `paragraph-start' detection.  So we temporarily set
+`fill-prefix' to an empty string and perform `forward-paragraph'."
+  (let ((fill-prefix ""))
+    (forward-paragraph arg)))
 
 (defvar imenu-create-index-function)
 ;;;###autoload
