@@ -1505,7 +1505,7 @@ interface to set it, or simply set the variable
   ;; Let each entry behave as one paragraph:
   (set (make-local-variable 'fill-forward-paragraph-function)
        #'debian-changelog--forward-paragraph)
-  (set (make-local-variable 'paragraph-start) "\\s *\\*\\|\\s *$\\|\f\\|^\\<")
+  (set (make-local-variable 'paragraph-start) "\\s *[*+-]\\|\\s *$\\|\f\\|^\\<")
   (set (make-local-variable 'paragraph-separate) "\\s *$\\|\f\\|^\\<")
   ;; Let each version behave as one page.
   ;; Match null string on the heading line so that the heading line
