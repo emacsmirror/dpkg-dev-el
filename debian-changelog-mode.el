@@ -1464,12 +1464,64 @@ can be made."
 
 (defun debian-changelog--forward-paragraph (&optional arg)
   "Forward paragraph with special `fill-prefix' handling.
-This function tries to work around an inconvenience that
-`forward-paragraph' will additionally move forward `fill-prefix'
-(which is set to two spaces) when matched, which breaks the
-intended `paragraph-start' detection.  So we temporarily set
-`fill-prefix' to an empty string and perform `forward-paragraph'."
+This function provides two workarounds to make indentation more
+natural.
+
+First, there is an inconvenience that `forward-paragraph' will
+additionally move forward `fill-prefix' (which is set to two
+spaces) when matched, which breaks the intended `paragraph-start'
+detection.  So we temporarily set `fill-prefix' to an empty
+string and perform `forward-paragraph'.
+
+Second, when using indented bullet points (usually starts by `-'
+or `+'), the default `fill-paragraph` function will use the same
+`left-margin' and `fill-prefix' as the upper level bullet points,
+which results in the same indentation level of continued lines,
+which looks like:
+
+  * Top level ...
+    continued top level ...
+    - Sub level 1 ...
+    continued sub level 1 ...
+
+It is discovered that the `current-left-margin' function takes
+into account the text property of \\='left-margin.  This function
+takes advantage of this to provide an adaptive `left-margin'
+setting according to bullet `left-margin' and apply to the
+paragraph text, so that we can have:
+
+  * Top level ...
+    continued top level ...
+    - Sub level 1 ...
+      continued sub level 1 ...
+      + Sub level 2
+        continued sub level 2 ...
+    - Another sub level 1 ...
+      continued another sub level 1 ...
+
+See the comments for implementation details."
+  ;; Workaround 1: temporarily set `fill-prefix' to empty.
   (let ((fill-prefix ""))
+    ;; Workaround 2, for a paragraph (separated by the line with a bullet point
+    ;; as specified in `paragraph-start'), detect the indentation level of the
+    ;; bullet point at the beginning and set the corresponding `left-margin' for
+    ;; the text of the paragraph, so that fill-paragraph will respect
+    ;; indentation levels.  It also take advantage of the fact that
+    ;; `fill-forward-paragraph' is called before performing the filling so that
+    ;; the text properties are set in time.
+    (save-excursion
+      (let* ((bound (progn
+                      (forward-paragraph 1)
+                      (- (point) 1))))
+        (forward-paragraph -1)
+        (when (re-search-forward paragraph-start bound t)
+          (let* ((bullet (- (point) 1))
+                 (line-begin (progn
+                               (move-beginning-of-line nil)
+                               (point))))
+            (when (and (char-equal ?\s (char-after (+ bullet 1))))
+              (add-text-properties line-begin bound
+                                   `(left-margin ,(- bullet line-begin))))))))
     (forward-paragraph arg)))
 
 (defvar imenu-create-index-function)
@@ -1493,7 +1545,7 @@ interface to set it, or simply set the variable
   (kill-all-local-variables)
   (setq major-mode 'debian-changelog-mode
         mode-name "Debian changelog"
-        left-margin 2
+        left-margin 0
         fill-prefix "  "
         fill-column 74)
   ;;(hack-local-variables)
