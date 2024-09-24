@@ -1,3 +1,14 @@
+dpkg-dev-el (37.17) UNRELEASED; urgency=medium
+
+  * Support more bullet types
+    - Currently supports "*", "-", and "+".
+  * More robust indentation through better `left-margin' handling
+    - Now `fill-paragraph' properly handles bullet points of different
+      levels and the corresponding text filling will be wrapped
+      accordingly.
+
+ -- Xiyue Deng <manphiz@gmail.com>  Mon, 23 Sep 2024 22:21:10 -0700
+
 dpkg-dev-el (37.16) unstable; urgency=medium
 
   [ Xiyue Deng ]
