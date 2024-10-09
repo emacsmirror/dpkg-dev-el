@@ -1,4 +1,6 @@
-dpkg-dev-el (37.17) UNRELEASED; urgency=medium
+dpkg-dev-el (37.17~1.gbp8edbcb) UNRELEASED; urgency=medium
+
+  ** SNAPSHOT build @8edbcb5a7a261c0c2cb6765ccf990bbd932a26ab **
 
   * Support more bullet types
     - Currently supports "*", "-", and "+".
@@ -7,7 +9,7 @@ dpkg-dev-el (37.17) UNRELEASED; urgency=medium
       levels and the corresponding text filling will be wrapped
       accordingly.
 
- -- Xiyue Deng <manphiz@gmail.com>  Mon, 23 Sep 2024 22:21:10 -0700
+ -- Xiyue Deng <manphiz@gmail.com>  Wed, 09 Oct 2024 16:00:44 -0700
 
 dpkg-dev-el (37.16) unstable; urgency=medium
 
