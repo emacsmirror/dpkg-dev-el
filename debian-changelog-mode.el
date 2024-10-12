@@ -1774,20 +1774,18 @@ match 1 -> package name
 Also set keymap."
   (interactive)
   (save-excursion
-    (let ((s)(e)(extent)(local-extent-list debian-changelog-ext-list)
+    (let ((s)(e)(local-extent-list debian-changelog-ext-list)
           (inhibit-read-only t)
           (modified (buffer-modified-p))) ;put-text-property changing this?
       ;; Remove the mouse face properties first.
       (setq debian-changelog-ext-list nil)              ;Reconstructed below...
       (if (string-match "XEmacs\\|Lucid" emacs-version)
-          (while local-extent-list
-            (setq extent (car local-extent-list))
+          (dolist (extent local-extent-list)
             (if (or (extent-detached-p extent)
                     (and (<= (point-min)(extent-start-position extent))
                          (>= (point-max)(extent-end-position extent))))
                 (delete-extent extent)
-              (push extent debian-changelog-ext-list))
-            (setq local-extent-list (cdr local-extent-list)))
+              (push extent debian-changelog-ext-list)))
         ;; Remove properties for regular emacs
         ;; FIXME This detroys all mouse-faces and local-maps!
         (let ((before-change-functions) (after-change-functions))
