@@ -312,13 +312,10 @@ a negative prefix argument turns it off.
 
 ;; Install ourselves:
 (unless (assq 'debian-bts-control-minor-mode minor-mode-alist)
-  (setq minor-mode-alist
-        (cons '(debian-bts-control-minor-mode " DBugC") minor-mode-alist)))
+  (push '(debian-bts-control-minor-mode " DBugC") minor-mode-alist))
 (unless (assq 'debian-bts-control-minor-mode minor-mode-map-alist)
-  (setq minor-mode-map-alist
-        (cons (cons 'debian-bts-control-minor-mode
-                    debian-bts-control-minor-mode-map)
-              minor-mode-map-alist)))
+  (push (cons 'debian-bts-control-minor-mode debian-bts-control-minor-mode-map)
+        minor-mode-map-alist))
 
 (defvar debian-bts-control-alist
   '(("reassign") ("severity") ("reopen") ("submitter") ("forwarded")

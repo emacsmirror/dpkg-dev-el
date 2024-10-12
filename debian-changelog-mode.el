@@ -1786,8 +1786,7 @@ Also set keymap."
                     (and (<= (point-min)(extent-start-position extent))
                          (>= (point-max)(extent-end-position extent))))
                 (delete-extent extent)
-              (setq debian-changelog-ext-list
-                    (cons extent debian-changelog-ext-list)))
+              (push extent debian-changelog-ext-list))
             (setq local-extent-list (cdr local-extent-list)))
         ;; Remove properties for regular emacs
         ;; FIXME This detroys all mouse-faces and local-maps!
