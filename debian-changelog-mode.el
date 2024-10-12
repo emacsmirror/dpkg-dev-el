@@ -517,7 +517,7 @@ the bug number."
   :options '(turn-on-auto-fill flyspell-mode))
 
 (defcustom debian-changelog-add-version-hook
-  (list 'debian-changelog-add-new-upstream-release)
+  '(debian-changelog-add-new-upstream-release)
   "Hooks run just before inserting the signature separator \"--\" in a
 new version in debian/changelog."
   :group 'debian-changelog
@@ -542,7 +542,7 @@ Pass ARGS to `replace-regexp-in-string' (GNU Emacs) or to
         ;; and arguments are in different order.
         ;; Patch from Rafael Laboissiere <rafael@debian.org>
         ;; Closes: #476271
-        (apply 'replace-in-string (list (nth 2 args) (nth 0 args) (nth 1 args))))
+        (replace-in-string (nth 2 args) (nth 0 args) (nth 1 args)))
     ;; Emacs:
     (apply 'replace-regexp-in-string args)))
 
@@ -1570,36 +1570,36 @@ interface to set it, or simply set the variable
 ;; this is somewhat limiting; I may consider adding my own faces later.
 
 (defvar debian-changelog-font-lock-keywords-1
-  (list
-   ;; package name line: pkg (1.0-1) unstable; urgency=medium
-   '(debian-changelog-fontify-version
+  '(
+    ;; package name line: pkg (1.0-1) unstable; urgency=medium
+    (debian-changelog-fontify-version
      (1 font-lock-function-name-face)
      (2 font-lock-type-face nil t)
      (3 font-lock-string-face nil t)
      (4 debian-changelog-warning-face nil t))
-   '(debian-changelog-fontify-stable . debian-changelog-warning-face)
-   '(debian-changelog-fontify-backports . debian-changelog-warning-face)
-   '(debian-changelog-fontify-frozen . font-lock-type-face)
-   '(debian-changelog-fontify-unstable . font-lock-string-face)
-   '(debian-changelog-fontify-experimental . debian-changelog-warning-face)
-   '(debian-changelog-fontify-unreleased . debian-changelog-warning-face)
-   '(debian-changelog-fontify-urgency-crit . debian-changelog-warning-face)
-   '(debian-changelog-fontify-urgency-high . debian-changelog-warning-face)
-   '(debian-changelog-fontify-urgency-med . font-lock-type-face)
-   '(debian-changelog-fontify-urgency-low . font-lock-string-face)
-   '(debian-changelog-fontify-known-releases . font-lock-string-face)
+   (debian-changelog-fontify-stable . debian-changelog-warning-face)
+   (debian-changelog-fontify-backports . debian-changelog-warning-face)
+   (debian-changelog-fontify-frozen . font-lock-type-face)
+   (debian-changelog-fontify-unstable . font-lock-string-face)
+   (debian-changelog-fontify-experimental . debian-changelog-warning-face)
+   (debian-changelog-fontify-unreleased . debian-changelog-warning-face)
+   (debian-changelog-fontify-urgency-crit . debian-changelog-warning-face)
+   (debian-changelog-fontify-urgency-high . debian-changelog-warning-face)
+   (debian-changelog-fontify-urgency-med . font-lock-type-face)
+   (debian-changelog-fontify-urgency-low . font-lock-string-face)
+   (debian-changelog-fontify-known-releases . font-lock-string-face)
    ;; bug closers
-   '(;"\\(closes:\\) *\\(\\(bug\\)?#? *[0-9]+\\(, *\\(bug\\)?#? *[0-9]+\\)*\\)"
-     ;; Process lines that continue on multiple lines - Fred Bothamy
-     "\\(closes:\\)[ \t\n]*\\(\\(bug\\)?#? *[0-9]+\\(,[ \t\n]*\\(bug\\)?#? *[0-9]+\\)*\\)"
-     (1 font-lock-keyword-face)
-     (2 debian-changelog-warning-face))
-   '("^\t.*$" . debian-changelog-warning-face)
+   (;"\\(closes:\\) *\\(\\(bug\\)?#? *[0-9]+\\(, *\\(bug\\)?#? *[0-9]+\\)*\\)"
+    ;; Process lines that continue on multiple lines - Fred Bothamy
+    "\\(closes:\\)[ \t\n]*\\(\\(bug\\)?#? *[0-9]+\\(,[ \t\n]*\\(bug\\)?#? *[0-9]+\\)*\\)"
+    (1 font-lock-keyword-face)
+    (2 debian-changelog-warning-face))
+   ("^\t.*$" . debian-changelog-warning-face)
    ;; maintainer line (enforce 2 space exactly between email and date)
-   '("^ -- \\(.+\\) <\\(.+@.+\\)>  \\([^ ].+\\)$"
-     (1 font-lock-variable-name-face)
-     (2 font-lock-variable-name-face)
-     (3 font-lock-string-face)))
+   ("^ -- \\(.+\\) <\\(.+@.+\\)>  \\([^ ].+\\)$"
+    (1 font-lock-variable-name-face)
+    (2 font-lock-variable-name-face)
+    (3 font-lock-string-face)))
   "First level highlighting for `debian-changelog-mode'.")
 
 (defvar debian-changelog-font-lock-keywords-2
