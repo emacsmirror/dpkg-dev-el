@@ -750,115 +750,69 @@ Upload to %s anyway?")
    (not (null (save-match-data (string-match "XEmacs\\|Lucid" emacs-version))))
    (= 21 emacs-major-version)))
 
-(cond
- (debian-changelog-is-XEmacs
-  (easy-menu-define
-    debian-changelog-menu debian-changelog-mode-map "Debian Changelog Mode Menu"
-    '("Changelog"
-      ["New Version" debian-changelog-add-version (debian-changelog-finalised-p)]
-      ["Add Entry" debian-changelog-add-entry
-       (not (debian-changelog-finalised-p))]
-      ["Build Open Bug List" debian-changelog-build-open-bug-list]
-      ["Close Bug" debian-changelog-close-bug
-       (not (debian-changelog-finalised-p))]
-      "--"
-      ("Set Distribution"
-       ["unstable" (debian-changelog-setdistribution "unstable") t]
-       ("--")
-       ["testing" (debian-changelog-setdistribution "testing") t]
-       ["testing-security" (debian-changelog-setdistribution "testing-security") t]
-       ("--")
-       ["stable" (debian-changelog-setdistribution "stable") t]
-       ["stable-security" (debian-changelog-setdistribution "stable-security") t]
-       ["stable-proposed-updates" (debian-changelog-setdistribution "stable-proposed-updates") t]
-       ("--")
-       ["oldstable-security" (debian-changelog-setdistribution "oldstable-security") t]
-       ["oldstable-proposed-updates" (debian-changelog-setdistribution "oldstable-proposed-updates") t]
-       ("--")
-       ["experimental" (debian-changelog-setdistribution "experimental") t]
-       ["UNRELEASED" (debian-changelog-setdistribution "UNRELEASED") t])
-      ("Set Urgency"
-       ["low" (debian-changelog-seturgency "low") t]
-       ["medium" (debian-changelog-seturgency "medium") t]
-       ["high" (debian-changelog-seturgency "high") t]
-       ["critical" (debian-changelog-seturgency "critical") t])
-      "--"
-      ["Unfinalise" debian-changelog-unfinalise-last-version
-       (debian-changelog-finalised-p)]
-      ["Finalise" debian-changelog-finalise-last-version
-       (not (debian-changelog-finalised-p))]
-      ["Finalise+Save" debian-changelog-finalise-and-save
-       (not (debian-changelog-finalised-p))]
-      "--"
-      "Web View"
-      ["Best Practices" (browse-url "http://www.debian.org/doc/developers-reference/best-pkging-practices.html#bpp-debian-changelog") t]
-      ["Bugs for This Package" (debian-bug-web-bugs) t]
-      ["Archived Bugs for This Package" (debian-bug-web-bugs t) t]
-      ["Bug Number..." (debian-bug-web-bug) t]
-      ["Package Info" (debian-bug-web-packages) t]
-      ;; ("Package web pages..."
-      ;;  ["stable" (debian-bug-web-package "stable") t]
-      ;;  ["testing" (debian-bug-web-package "testing") t]
-      ;;  ["unstable" (debian-bug-web-package "unstable") t])
-      ["Developer Page for This Package" (debian-bug-web-developer-page) t]
-      ["Developer Page for This Maintainer" (debian-changelog-web-developer-page)
-       t]
-      "--"
-      ["Customize" (customize-group "debian-changelog") (fboundp 'customize-group)])))
- (t
-  (easy-menu-define
-    debian-changelog-menu debian-changelog-mode-map "Debian Changelog Mode Menu"
-    '("Changelog"
-      ["New Version" debian-changelog-add-version (debian-changelog-finalised-p)]
-      ["Add Entry" debian-changelog-add-entry
-       (not (debian-changelog-finalised-p))]
-      ["Build Open Bug List" debian-changelog-build-open-bug-list]
-      ["Close Bug" debian-changelog-close-bug
-       (not (debian-changelog-finalised-p))]
-      "--"
-      ("Set Distribution"     :active (not (debian-changelog-finalised-p))
-       ["unstable" (debian-changelog-setdistribution "unstable") t]
-       ("--")
-       ["testing" (debian-changelog-setdistribution "testing") t]
-       ["testing-security" (debian-changelog-setdistribution "testing-security") t]
-       ("--")
-       ["stable" (debian-changelog-setdistribution "stable") t]
-       ["stable-security" (debian-changelog-setdistribution "stable-security") t]
-       ["stable-proposed-updates" (debian-changelog-setdistribution "stable-proposed-updates") t]
-       ("--")
-       ["oldstable-security" (debian-changelog-setdistribution "oldstable-security") t]
-       ["oldstable-proposed-updates" (debian-changelog-setdistribution "oldstable-proposed-updates") t]
-       ("--")
-       ["experimental" (debian-changelog-setdistribution "experimental") t]
-       ["UNRELEASED" (debian-changelog-setdistribution "UNRELEASED") t])
-      ("Set Urgency"     :active (not (debian-changelog-finalised-p))
-       ["low" (debian-changelog-seturgency "low") t]
-       ["medium" (debian-changelog-seturgency "medium") t]
-       ["high" (debian-changelog-seturgency "high") t]
-       ["critical" (debian-changelog-seturgency "critical") t])
-      "--"
-      ["Unfinalise" debian-changelog-unfinalise-last-version
-       (debian-changelog-finalised-p)]
-      ["Finalise" debian-changelog-finalise-last-version
-       (not (debian-changelog-finalised-p))]
-      ["Finalise+Save" debian-changelog-finalise-and-save
-       (not (debian-changelog-finalised-p))]
-      "--"
-      "Web View"
-      ["Best Practices" (browse-url "http://www.debian.org/doc/developers-reference/ch-best-pkging-practices.en.html#s-bpp-debian-changelog") t]
-      ["Bugs for This Package" (debian-bug-web-bugs) t]
-      ["Archived Bugs for This Package" (debian-bug-web-bugs t) t]
-      ["Bug Number..." (debian-bug-web-bug) t]
-      ["Package Info" (debian-bug-web-packages) t]
-      ("Package web pages..."
-       ["stable" (debian-bug-web-package "stable") t]
-       ["testing" (debian-bug-web-package "testing") t]
-       ["unstable" (debian-bug-web-package "unstable") t])
-      ["Developer Page for This Package" (debian-bug-web-developer-page) t]
-      ["Developer Page for This Maintainer" (debian-changelog-web-developer-page)
-       t]
-      "--"
-      ["Customize" (customize-group "debian-changelog") (fboundp 'customize-group)]))))
+(easy-menu-define
+  debian-changelog-menu debian-changelog-mode-map "Debian Changelog Mode Menu"
+  `("Changelog"
+    ["New Version" debian-changelog-add-version (debian-changelog-finalised-p)]
+    ["Add Entry" debian-changelog-add-entry
+     (not (debian-changelog-finalised-p))]
+    ["Build Open Bug List" debian-changelog-build-open-bug-list]
+    ["Close Bug" debian-changelog-close-bug
+     (not (debian-changelog-finalised-p))]
+    "--"
+    ("Set Distribution"
+     ,@(unless debian-changelog-is-XEmacs
+         '(:active (not (debian-changelog-finalised-p))))
+     ["unstable" (debian-changelog-setdistribution "unstable") t]
+     ("--")
+     ["testing" (debian-changelog-setdistribution "testing") t]
+     ["testing-security" (debian-changelog-setdistribution "testing-security") t]
+     ("--")
+     ["stable" (debian-changelog-setdistribution "stable") t]
+     ["stable-security" (debian-changelog-setdistribution "stable-security") t]
+     ["stable-proposed-updates" (debian-changelog-setdistribution "stable-proposed-updates") t]
+     ("--")
+     ["oldstable-security" (debian-changelog-setdistribution "oldstable-security") t]
+     ["oldstable-proposed-updates" (debian-changelog-setdistribution "oldstable-proposed-updates") t]
+     ("--")
+     ["experimental" (debian-changelog-setdistribution "experimental") t]
+     ["UNRELEASED" (debian-changelog-setdistribution "UNRELEASED") t])
+    ("Set Urgency"
+     ,@(unless debian-changelog-is-XEmacs
+         '(:active (not (debian-changelog-finalised-p))))
+     ["low" (debian-changelog-seturgency "low") t]
+     ["medium" (debian-changelog-seturgency "medium") t]
+     ["high" (debian-changelog-seturgency "high") t]
+     ["critical" (debian-changelog-seturgency "critical") t])
+    "--"
+    ["Unfinalise" debian-changelog-unfinalise-last-version
+     (debian-changelog-finalised-p)]
+    ["Finalise" debian-changelog-finalise-last-version
+     (not (debian-changelog-finalised-p))]
+    ["Finalise+Save" debian-changelog-finalise-and-save
+     (not (debian-changelog-finalised-p))]
+    "--"
+    "Web View"
+    ["Best Practices"
+     (browse-url
+      ,(if debian-changelog-is-XEmacs
+           "http://www.debian.org/doc/developers-reference/best-pkging-practices.html#bpp-debian-changelog"
+         "http://www.debian.org/doc/developers-reference/ch-best-pkging-practices.en.html#s-bpp-debian-changelog"))
+     t]
+    ["Bugs for This Package" (debian-bug-web-bugs) t]
+    ["Archived Bugs for This Package" (debian-bug-web-bugs t) t]
+    ["Bug Number..." (debian-bug-web-bug) t]
+    ["Package Info" (debian-bug-web-packages) t]
+    ,@(unless debian-changelog-is-XEmacs
+        '("Package web pages..."
+          ["stable" (debian-bug-web-package "stable") t]
+          ["testing" (debian-bug-web-package "testing") t]
+          ["unstable" (debian-bug-web-package "unstable") t]))
+    ["Developer Page for This Package" (debian-bug-web-developer-page) t]
+    ["Developer Page for This Maintainer" (debian-changelog-web-developer-page)
+     t]
+    "--"
+    ["Customize" (customize-group "debian-changelog") (fboundp 'customize-group)]))
 
 ;;
 ;; interactive function to add a new line to the changelog
