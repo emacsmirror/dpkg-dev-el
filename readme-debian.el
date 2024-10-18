@@ -54,8 +54,8 @@
   ;; this function could be simpler if xemacs supported %z, but
   ;; it doesn't, so we're shelling out to invoke date -R to obtain
   ;; Debian-policy-compliant date string.
-  (let* ((date-program "date -R")
-         (system-time-locale "C"))
+  (let ((date-program "date -R")
+        (system-time-locale "C"))
     (if (featurep 'xemacs)
         (replace-in-string (exec-to-string date-program) "\n" "")
       ;; if it's not xemacs, just use format-time-string
