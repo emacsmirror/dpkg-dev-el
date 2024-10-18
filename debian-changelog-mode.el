@@ -1835,39 +1835,29 @@ Also set keymap."
 (make-variable-buffer-local 'debian-changelog-imenu-doing-closebug)
 
 (defun debian-changelog-imenu-prev-index-position-function ()
-  (cond
-   (debian-changelog-imenu-doing-closebug
-    (if (not (posix-search-backward
-              "\\(closes:\\)\\|[^0-9]\\([0-9]+\\)" nil t))
-        nil                             ; No match
-      ;; match 1 -> "closes:"
-      ;; match 2 -> a bug number
-      (cond
-       ((match-string 1)
-        (setq debian-changelog-imenu-doing-closebug nil)
-        (debian-changelog-imenu-prev-index-position-function))
-       (t
-        ;; Return the bug number match
-        t))))
-   (t
-    (if (not (re-search-backward
-              "\\(closes: *\\(bug\\)?#? *[0-9]+\\)\\|\\(^\\sw.* (\\(.+\\))\\)"
-              nil t))
-        nil                             ; No match
-      ;; match 1 -> "closes:"
-      ;; match 4 -> a version number
-      (cond
-       ((match-string 1)
-        (setq debian-changelog-imenu-doing-closebug t)
-        (forward-char -1)
-        (re-search-forward
-         "\\(closes:\\) *\\(\\(bug\\)?#? *[0-9]+\\(, *\\(bug\\)?#? *[0-9]+\\)*\\)"
-         nil t)
-        (forward-char 1)
-        (debian-changelog-imenu-prev-index-position-function))
-       (t
-        ;; Return the version number match
-        t))))))
+  (if debian-changelog-imenu-doing-closebug
+      (and (posix-search-backward "\\(closes:\\)\\|[^0-9]\\([0-9]+\\)" nil t)
+           ;; match 1 -> "closes:"
+           ;; match 2 -> a bug number
+           (or (not (match-string 1)) ;; Return the bug number match
+
+               (progn
+                 (setq debian-changelog-imenu-doing-closebug nil)
+                 (debian-changelog-imenu-prev-index-position-function))))
+    (and (re-search-backward
+          "\\(closes: *\\(bug\\)?#? *[0-9]+\\)\\|\\(^\\sw.* (\\(.+\\))\\)"
+          nil t)
+         ;; match 1 -> "closes:"
+         ;; match 4 -> a version number
+         (or (not (match-string 1)) ;; Return the version number match
+             (progn
+               (setq debian-changelog-imenu-doing-closebug t)
+               (forward-char -1)
+               (re-search-forward
+                "\\(closes:\\) *\\(\\(bug\\)?#? *[0-9]+\\(, *\\(bug\\)?#? *[0-9]+\\)*\\)"
+                nil t)
+               (forward-char 1)
+               (debian-changelog-imenu-prev-index-position-function))))))
 
 (defvar debian-changelog-imenu-counter nil
   "Debian-changelog-mode internal variable for imenu support.")
