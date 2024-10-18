@@ -434,7 +434,7 @@ It should be immediately followed by a non-slash character.")
                               (beginning-of-line)
                               (looking-at "^\\(Package\\|Source\\)"))
                             (re-search-backward "^\\(Package\\|Source\\)" nil t))
-                        (string-match "Package" (match-string 0))
+                        (string-prefix-p "P" (match-string 0))
                       (error "Couldn't find Package or Source field")))
           (fields (if binary-p
                       debian-control-binary-fields
@@ -529,9 +529,8 @@ text file."
      (browse-url
       (if (file-exists-p "/usr/share/doc/debian-policy/policy.html/index.html")
           "file:///usr/share/doc/debian-policy/policy.html/index.html"
-        (prog1
-            "http://www.debian.org/doc/debian-policy"
-          (message "Note: package `debian-policy' not installed, using web version")))))
+        (message "Note: package `debian-policy' not installed, using web version")
+        "http://www.debian.org/doc/debian-policy")))
     (t
      (error "Unknown format %s for policy" format))))
 
@@ -561,7 +560,7 @@ text file."
       (while (not (eobp))
         (when (looking-at "^\\(Package\\|Source\\):\\s-*\\([-a-zA-Z0-9+.]+?\\)\\s-*$")
           (push (concat
-                 (if (save-match-data (string-match "Source" (match-string 1)))
+                 (if (string-prefix-p "S" (match-string 1))
                      "src:"
                    "")
                  (match-string-no-properties 2)) result))

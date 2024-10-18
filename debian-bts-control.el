@@ -362,8 +362,7 @@ in `debian-bts-control-modes-to-reuse'."
   (let ((number-default (debian-bts-bug-number-at-point)))
     (cond
      ((or arg
-          (and (car (memq t (mapcar #'(lambda (item) (eq item major-mode))
-                                    debian-bts-control-modes-to-reuse)))
+          (and (memq major-mode debian-bts-control-modes-to-reuse)
                (not debian-bts-control-minor-mode)))
       (debian-bug--set-CC debian-bts-emailaddress
                           (concat
