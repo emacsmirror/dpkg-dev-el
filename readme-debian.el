@@ -66,18 +66,18 @@
 Automatically invoked when saving file."
   (save-excursion
     (goto-char (point-min))
-    (if (re-search-forward "^ -- " nil t)
-        (delete-region (progn (beginning-of-line) (point)) (progn (end-of-line) (point)))
-      (goto-char (point-max))
-      (if (bolp)
-          (insert "\n")
-        (insert "\n\n")))
-    (insert (concat
-             " -- "
-             debian-changelog-full-name
-             " <" debian-changelog-mailing-address ">, "
-             (readme-debian-date-string)))
-    (if (and (= (point)(point-max)) (not (bolp)))
+    (cond
+     ((re-search-forward "^ -- " nil 1)
+      (delete-region (point-at-bol) (point-at-eol)))
+     ((bolp)
+      (insert "\n"))
+     (t
+      (insert "\n\n")))
+    (insert " -- "
+            debian-changelog-full-name
+            " <" debian-changelog-mailing-address ">, "
+            (readme-debian-date-string))
+    (if (and (eobp) (not (bolp)))
         (insert "\n"))))
 
 (defvar readme-debian-mode-map

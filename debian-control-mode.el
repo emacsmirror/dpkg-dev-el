@@ -129,16 +129,6 @@
 
 ;; XEmacs compatibility
 (eval-and-compile
-  (unless (fboundp 'line-beginning-position)
-    (defun line-beginning-position ()
-      (save-excursion
-        (beginning-of-line)
-        (point))))
-  (unless (fboundp 'line-end-position)
-    (defun line-end-position ()
-      (save-excursion
-        (end-of-line)
-        (point))))
   (unless (fboundp 'match-string-no-properties)
     (defalias 'match-string-no-properties 'match-string)))
 
@@ -344,27 +334,19 @@ It should be immediately followed by a non-slash character.")
             (goto-char beg)
             (beginning-of-line)
             (while (< (point) end)
-              (cond ((looking-at (concat "^\\(Source:\\)\\s-*"
-                                         debian-control-package-name-regexp
-                                         "\\s-*$"))
-                     (add-text-properties
-                      (match-beginning 2) (match-end 2)
-                      `(mouse-face
-                        highlight
-                        debian-control-mode-package ,(match-string 2)
-                        help-echo "C-mouse-2: View bugs for this source package"
-                        keymap ,debian-control-mode-package-name-keymap)))
-                    ((looking-at (concat "^\\(Package:\\)\\s-*"
-                                         debian-control-package-name-regexp
-                                         "\\s-*$"))
-                     (add-text-properties
-                      (match-beginning 2) (match-end 2)
-                      `(mouse-face
-                        highlight
-                        debian-control-mode-package ,(match-string 2)
-                        help-echo "C-mouse-2: View bugs for this binary package"
-                        keymap ,debian-control-mode-package-name-keymap)))
-                    (t nil))
+              (when (looking-at (concat "^\\(Source\\|Package\\):\\s-*"
+                                        debian-control-package-name-regexp
+                                        "\\s-*$"))
+                (add-text-properties
+                 (match-beginning 2) (match-end 2)
+                 `(mouse-face
+                   highlight
+                   debian-control-mode-package ,(match-string 2)
+                   help-echo ,(format "C-mouse-2: View bugs for this %s package"
+                                      (if (string-prefix-p "S" (match-string 1))
+                                          "source"
+                                        "binary"))
+                   keymap ,debian-control-mode-package-name-keymap)))
               (forward-line 1)))
         (set-match-data data)
         (set-buffer-modified-p modified)))))
@@ -400,7 +382,7 @@ It should be immediately followed by a non-slash character.")
             (beginning-of-line)
             (looking-at debian-control-field-regexp))
           (setq beg (match-end 0)
-                end (line-end-position))
+                end (point-at-eol))
         ;; Otherwise, we're looking at a description; handle filling
         ;; areas separated with "."  specially
         (setq beg (save-excursion
