@@ -113,10 +113,10 @@
 If [package] is a debian native (no separate changelog.Debian) then answer
 `utf-8', otherwise remove ourselves from `file-coding-system-alist' and see
 what other rules say."
-    (let ((filename (if (consp (cadr args))
-                        (car (cadr args)) ;; ("filename" . buffer) in emacs 22
-                      (cadr args)))       ;; "filename" in emacs 21
-          (dirname  (file-name-directory filename)))
+    (let* ((filename (if (consp (cadr args))
+                         (car (cadr args)) ;; ("filename" . buffer) in emacs 22
+                       (cadr args)))       ;; "filename" in emacs 21
+           (dirname  (file-name-directory filename)))
       (if (file-exists-p (concat dirname "changelog.Debian.gz"))
           (let ((file-coding-system-alist
                  (remove '("/usr/share/doc/[^/]+/changelog\\'"
