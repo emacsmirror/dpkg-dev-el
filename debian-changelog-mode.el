@@ -944,10 +944,9 @@ for the debian/changelog file to add the entry to."
 \(ie, has a maintainer name and email address and a release date."
   (save-excursion
     (goto-char (point-min))
-    (unless (re-search-forward "\n\\S-" (point-max) t)
-      (goto-char (point-max)))
-    (if (re-search-backward "\n --" (point-min) t)
-        (forward-char 4)
+    (re-search-forward "\n\\S-" nil 1)
+    (when (re-search-backward "\n --" nil t)
+      (forward-char 4)
       ;;(beginning-of-line)
       ;;(insert " --\n\n")
       ;;(backward-char 2)
