@@ -445,23 +445,22 @@ It should be immediately followed by a non-slash character.")
                (point))))
     (save-restriction
       (narrow-to-region beg end)
-      (let ((curfields (let ((result nil))
-                         (goto-char (point-min))
-                         (while (not (eobp))
-                           (when (looking-at debian-control-field-regexp)
-                             (push (cons (seq-subseq
-                                          ;; Text properties are evil
-                                          (match-string-no-properties 1)
-                                          0
-                                          ;; Strip off the ':'
-                                          (- (match-end 1)
-                                             (match-beginning 1)
-                                             1))
-                                         (match-beginning 0))
-                                   result))
-                           (forward-line 1))
-                         result))
-            (x nil))
+      (let ((curfields nil) x)
+        ;; Populate curfields
+        (goto-char (point-min))
+        (while (not (eobp))
+          (when (looking-at debian-control-field-regexp)
+            (push (cons (seq-subseq
+                         ;; Text properties are evil
+                         (match-string-no-properties 1)
+                         0
+                         ;; Strip off the ':'
+                         (- (match-end 1)
+                            (match-beginning 1)
+                            1))
+                        (match-beginning 0))
+                  curfields))
+          (forward-line 1))
         ;; If the field is already present, just jump to it
         (if (setq x (assoc field curfields))
             (goto-char (cdr x))
