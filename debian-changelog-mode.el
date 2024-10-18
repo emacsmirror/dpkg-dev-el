@@ -927,7 +927,7 @@ for the debian/changelog file to add the entry to."
       (error (substitute-command-keys "most recent version has been finalised - use \\[debian-changelog-unfinalise-last-version] or \\[debian-changelog-add-version]")))
   (let ((str (completing-read
               "Select urgency: "
-              '(("low" 1) ("medium" 2) ("high" 3) ("critical" 4))
+              '("low" "medium" "high" "critical")
               nil t nil)))
     (unless (equal str "")
       (debian-changelog-seturgency str))))

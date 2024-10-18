@@ -318,11 +318,12 @@ a negative prefix argument turns it off.
         minor-mode-map-alist))
 
 (defvar debian-bts-control-alist
-  '(("reassign") ("severity") ("reopen") ("submitter") ("forwarded")
-    ("notforwarded") ("retitle") ("clone") ("merge") ("unmerge")
-    ("tags") ("package") ("owner") ("noowner") ("found")
-    ("notfound") ("fixed") ("notfixed") ("block") ("unblock") ("archive")
-    ("unarchive") ("affects") ("forcemerge") ("summary"))
+  ;; The name is historical, this is not an alist.
+  '("reassign" "severity" "reopen" "submitter" "forwarded"
+    "notforwarded" "retitle" "clone" "merge" "unmerge"
+    "tags" "package" "owner" "noowner" "found"
+    "notfound" "fixed" "notfixed" "block" "unblock" "archive"
+    "unarchive" "affects" "forcemerge" "summary")
   "List of available commands at control@bugs.debian.org.")
 
 (defun debian-bts-bug-number-at-point ()
@@ -446,7 +447,7 @@ in `debian-bts-control-modes-to-reuse'."
                           number-default))
              (sign (completing-read
                     (concat verbose "[ + | - | = ] ")
-                    '(("+") ("-") ("=")) nil nil))
+                    '("+" "-" "=") nil nil))
              (package (completing-read
                        (concat verbose "Package affected: ")
                        (debian-bug-fill-packages-obarray) nil nil)))
@@ -747,7 +748,7 @@ in `debian-bts-control-modes-to-reuse'."
                           (concat verbose "Bug number")
                           number-default))
              (add (completing-read "+, -, = (default +): "
-                                   '(("+") ("-") ("=")) nil t nil nil "+"))
+                                   '("+" "-" "=") nil t nil nil "+"))
              (tag (completing-read "Tag: " debian-bug-alltags-alist nil t)))
         (insert (format "tags %s %s %s\n" bug-number add tag))))
      ((string-equal "close" action)

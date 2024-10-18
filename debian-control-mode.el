@@ -443,7 +443,7 @@ It should be immediately followed by a non-slash character.")
      (list
       binary-p
       (completing-read (format "Add %s package field: " (if binary-p "binary" "source"))
-                       (mapcar #'(lambda (x) (cons x nil)) fields)))))
+                       fields))))
   (require 'cl-lib)
   (let ((fields (if binary
                     debian-control-binary-fields
@@ -516,8 +516,7 @@ text file."
   (interactive
    (list (intern
           (completing-read "Policy format: "
-                           (mapcar #'(lambda (x) (cons x 0))
-                                   '("html" "text" "checklist"))
+                           '("html" "text" "checklist")
                            nil t))))
   (cl-case format
     (text
@@ -574,8 +573,7 @@ text file."
   (interactive
    (list
     (completing-read "View bugs for package: "
-                     (mapcar #'(lambda (x) (cons x 0))
-                             (debian-control-mode-bug-package-names))
+                     (debian-control-mode-bug-package-names)
                      nil t)))
   (browse-url (concat "http://bugs.debian.org/" package)))
 
