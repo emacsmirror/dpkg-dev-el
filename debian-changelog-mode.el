@@ -1728,7 +1728,7 @@ match 1 -> package name
 Also set keymap."
   (interactive)
   (save-excursion
-    (let ((s)(e)(local-extent-list debian-changelog-ext-list)
+    (let ((local-extent-list debian-changelog-ext-list)
           (inhibit-read-only t)
           (modified (buffer-modified-p))) ;put-text-property changing this?
       ;; Remove the mouse face properties first.
@@ -1754,23 +1754,21 @@ Also set keymap."
            ;; Same deal as for font-lock - patch from Fred Bothamy.
            "\\(closes:\\)[ \t\n]*\\(\\(bug\\)?#? *[0-9]+\\(,[ \t\n]*\\(bug\\)?#? *[0-9]+\\)*\\)"
            nil t)
-        (setq s (match-beginning 2))
-        (setq e (match-end 2))
-        (cond
-         ((string-match "XEmacs\\|Lucid" emacs-version)
-          (setq extent (make-extent s e))
-          (setq debian-changelog-ext-list
-                (cons extent debian-changelog-ext-list))
-          (set-extent-property extent 'highlight t)
-          (set-extent-property extent 'start-open t)
-          ;; (set-extent-property extent 'balloon-help 'debian-changelog-label-help)
-          ;; (set-extent-property extent 'help-echo 'debian-changelog-label-help-echo)
-          (set-extent-property extent 'keymap debian-changelog-mouse-keymap))
-         (t
-          (let ((before-change-functions) (after-change-functions))
-            (put-text-property s e 'local-map
-                               debian-changelog-mouse-keymap)
-            (put-text-property s e 'mouse-face 'highlight))))
+        (let ((s (match-beginning 2))
+              (e (match-end 2)))
+          (if (string-match "XEmacs\\|Lucid" emacs-version)
+              (let ((extent (make-extent s e)))
+                (push extent debian-changelog-ext-list)
+                (set-extent-property extent 'highlight t)
+                (set-extent-property extent 'start-open t)
+                ;; (set-extent-property extent 'balloon-help 'debian-changelog-label-help)
+                ;; (set-extent-property extent 'help-echo 'debian-changelog-label-help-echo)
+                (set-extent-property extent 'keymap debian-changelog-mouse-keymap))
+            (let ((before-change-functions)
+                  (after-change-functions))
+              (put-text-property s e 'local-map
+                                 debian-changelog-mouse-keymap)
+              (put-text-property s e 'mouse-face 'highlight)))))
       (set-buffer-modified-p modified))))
 
 ;;;-------------
