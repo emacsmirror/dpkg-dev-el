@@ -1637,34 +1637,28 @@ match 1 -> package name
     ;; match 3: upstream version number
     ;; match 4: debian version number exists if matched
     ;; match 5: debian version number
-    (cond
-     ((not (match-string 4))
-      ;; No Debian version number -> Debian native package
-      (store-match-data
+    (store-match-data
+     (cond
+      ((not (match-string 4))
+       ;; No Debian version number -> Debian native package
        (list (match-beginning 1)(match-end 3)
              (match-beginning 1)(match-end 1)
              (match-beginning 3)(match-end 3)
              nil nil
-             nil nil)))
-     ((match-string 4)
+             nil nil))
       ;; Debian version number -> Let's see if NMU...
-      (let* ((deb-vsn (match-string 5))
-             (is-NMU (save-match-data (string-match "\\." deb-vsn))))
-        (cond
-         (is-NMU
-          (store-match-data
-           (list (match-beginning 1)(match-end 5)
-                 (match-beginning 1)(match-end 1)
-                 nil nil
-                 nil nil
-                 (match-beginning 3)(match-end 5))))
-         (t
-          (store-match-data
-           (list (match-beginning 1)(match-end 5)
-                 (match-beginning 1)(match-end 1)
-                 nil nil
-                 (match-beginning 3)(match-end 5)
-                 nil nil)))))))
+      ((save-match-data (string-match "\\." (match-string 5)))
+       (list (match-beginning 1)(match-end 5)
+             (match-beginning 1)(match-end 1)
+             nil nil
+             nil nil
+             (match-beginning 3)(match-end 5)))
+      (t
+       (list (match-beginning 1)(match-end 5)
+             (match-beginning 1)(match-end 1)
+             nil nil
+             (match-beginning 3)(match-end 5)
+             nil nil))))
     t))
 
 (defun debian-changelog-fontify-urgency-crit (limit)
