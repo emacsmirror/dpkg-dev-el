@@ -684,41 +684,33 @@ STRING should be given if the last search was by `string-match' on STRING."
 (defun debian-changelog-getdistribution ()
   (debian-changelog-getheadervalue ") \\(.*\\)\\;"))
 (defvar last-nonmenu-event)
+(defvar debian-changelog-setdistribution-question
+  "Warning, although the {oldstable,stable,testing}-security
+distribution exists it should not be used unless you are a
+member of the security team.  Please don't upload to it if you
+are not 150% sure that your package is suitable.  In case of
+doubt, please send the files to team@security.debian.org via
+mail instead.
+
+Upload to %s anyway?")
 (defun debian-changelog-setdistribution (val)
-  (if (not (string-match "^.*security" val))
-      (debian-changelog-setheadervalue ") \\(.*\\)\\;" val)
-    (cond
-     ((or (and (fboundp 'should-use-dialog-box-p)
-               (should-use-dialog-box-p))
-          (and window-system
-               (equal last-nonmenu-event '(menu-bar))
-               use-dialog-box))
-      (if (y-or-n-p
-           (concat
-            "Warning, although the {oldstable,stable,testing}-security
-distribution exists it should not be used unless you are a
-member of the security team.  Please don't upload to it if you
-are not 150% sure that your package is suitable.  In case of
-doubt, please send the files to team@security.debian.org via
-mail instead.
-
-Upload to " val  " anyway?"))
-          (debian-changelog-setheadervalue ") \\(.*\\)\\;" val)))
-     (t
-      (let ((window-config (current-window-configuration)))
-        (with-output-to-temp-buffer "*Help*"
-          (princ (concat
-                  "Warning, although the {oldstable,stable,testing}-security
-distribution exists it should not be used unless you are a
-member of the security team.  Please don't upload to it if you
-are not 150% sure that your package is suitable.  In case of
-doubt, please send the files to team@security.debian.org via
-mail instead.
-
-Upload to " val  " anyway?")))
-        (if (y-or-n-p (format "Upload to %s anyway? " val))
-            (debian-changelog-setheadervalue ") \\(.*\\)\\;" val))
-        (set-window-configuration window-config))))))
+  (cond
+   ((not (string-match "^.*security" val))
+    (debian-changelog-setheadervalue ") \\(.*\\)\\;" val))
+   ((or (and (fboundp 'should-use-dialog-box-p)
+             (should-use-dialog-box-p))
+        (and window-system
+             (equal last-nonmenu-event '(menu-bar))
+             use-dialog-box))
+    (if (y-or-n-p (format debian-changelog-setdistribution-question val))
+        (debian-changelog-setheadervalue ") \\(.*\\)\\;" val)))
+   (t
+    (let ((window-config (current-window-configuration)))
+      (with-output-to-temp-buffer "*Help*"
+        (princ (format debian-changelog-setdistribution-question val)))
+      (if (y-or-n-p (format "Upload to %s anyway? " val))
+          (debian-changelog-setheadervalue ") \\(.*\\)\\;" val))
+      (set-window-configuration window-config)))))
 
 (defun debian-changelog--get-all-code-names ()
   "Returns a list of all code names from supported distributions."
