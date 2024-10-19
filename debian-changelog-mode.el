@@ -888,26 +888,19 @@ for the debian/changelog file to add the entry to."
 
 (defun debian-changelog-add-entry-file ()
   "Add an entry for current file in debian/changelog."
-  (let* ((this-file (buffer-file-name))
-         (directory (if (not this-file)
-                        (error "This buffer has no file associated to it")
-                      (directory-file-name (file-name-directory this-file))))
+  (let* ((this-file (or (buffer-file-name)
+                        (error "This buffer has no file associated to it")))
+         (directory (directory-file-name (file-name-directory this-file)))
          (filename (file-name-nondirectory this-file))
-         (success))
-    (while directory
-      (let ((changelog (expand-file-name "debian/changelog" directory)))
-        (cond
-         ((file-readable-p changelog)
-          (debian-changelog-add-entry-file-specified changelog filename)
-          (setq directory nil
-                success t))
-         (t
-          (if (not (string-match "\\(.*\\)/\\([^/]+\\)$" directory))
-              (setq directory nil)
-            (setq filename (concat (match-string 2 directory) "/" filename)
-                  directory (match-string 1 directory)))))))
-    (if (not success)
-        (error "debian directory not found"))))
+         changelog)
+    (while (progn
+             (setq changelog (expand-file-name "debian/changelog" directory))
+             (not (file-readable-p changelog)))
+      (unless (string-match "\\(.*\\)/\\([^/]+\\)$" directory)
+        (error "debian directory not found"))
+      (setq filename (concat (match-string 2 directory) "/" filename)
+            directory (match-string 1 directory)))
+    (debian-changelog-add-entry-file-specified changelog filename)))
 
 (defun debian-changelog-add-entry-file-specified (changelog filename)
   "Insert an entry in debian CHANGELOG file for FILENAME."
