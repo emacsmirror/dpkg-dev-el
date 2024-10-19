@@ -608,9 +608,8 @@ STRING should be given if the last search was by `string-match' on STRING."
 (defun debian-changelog-local-variables-maybe-remove ()
   "Ask to remove local variables block if buffer not read-only."
   (interactive)
-  (if (or debian-changelog-local-variables-maybe-remove-done
-          buffer-read-only)
-      nil
+  (unless (or debian-changelog-local-variables-maybe-remove-done
+              buffer-read-only)
     (setq debian-changelog-local-variables-maybe-remove-done t)
     (if (debian-changelog-local-variables-exists-p)
         (save-excursion
@@ -890,8 +889,7 @@ for the debian/changelog file to add the entry to."
   (goto-char (point-min))
   (re-search-forward "\n --")
   (backward-char 5)
-  (if (prog1 (looking-at "\n") (forward-char 1))
-      nil
+  (unless (prog1 (looking-at "\n") (forward-char 1))
     (insert "\n"))
   (insert "  * ")
   (save-excursion (insert "\n")))
@@ -949,13 +947,12 @@ for the debian/changelog file to add the entry to."
 (defun debian-changelog-close-bug (bug-number)
   "Add a new change entry to close a BUG-NUMBER."
   (interactive
-   (progn
-     (if (eq (debian-changelog-finalised-p) t)
-         (error (substitute-command-keys "most recent version has been finalised - use \\[debian-changelog-unfinalise-last-version] or \\[debian-changelog-add-version]")))
+   (if (eq (debian-changelog-finalised-p) t)
+       (error (substitute-command-keys "most recent version has been finalised - use \\[debian-changelog-unfinalise-last-version] or \\[debian-changelog-add-version]"))
      (list (completing-read "Bug number to close: "
                             debian-bug-open-alist nil nil))))
-  (if (not (string-match "^[0-9]+$" bug-number))
-      (error "The bug number should consists of only digits"))
+  (unless (string-match "^[0-9]+$" bug-number)
+    (error "The bug number should consists of only digits"))
   (debian-changelog-add-entry)
   (cond
    ((and debian-bug-open-alist
@@ -981,8 +978,8 @@ for the debian/changelog file to add the entry to."
               "Select distribution: "
               debian-changelog-allowed-distributions
               nil t nil)))
-    (if (not (equal str ""))
-        (debian-changelog-setdistribution str))))
+    (unless (equal str "")
+      (debian-changelog-setdistribution str))))
 
 (defun debian-changelog-urgency ()
   "Delete the current urgency and prompt for a new one."
@@ -993,8 +990,8 @@ for the debian/changelog file to add the entry to."
               "Select urgency: "
               '(("low" 1) ("medium" 2) ("high" 3) ("critical" 4))
               nil t nil)))
-    (if (not (equal str ""))
-        (debian-changelog-seturgency str))))
+    (unless (equal str "")
+      (debian-changelog-seturgency str))))
 
 ;;
 ;; internal function: test if changelog has been finalized or not
@@ -1008,8 +1005,8 @@ for the debian/changelog file to add the entry to."
 \(ie, has a maintainer name and email address and a release date."
   (save-excursion
     (goto-char (point-min))
-    (or (re-search-forward "\n\\S-" (point-max) t)
-        (goto-char (point-max)))
+    (unless (re-search-forward "\n\\S-" (point-max) t)
+      (goto-char (point-max)))
     (if (re-search-backward "\n --" (point-min) t)
         (forward-char 4)
       ;;(beginning-of-line)
@@ -1041,10 +1038,10 @@ for the debian/changelog file to add the entry to."
   "Add a new version section to a debian-style changelog file.
 If file is empty, create initial entry."
   (interactive)
-  (if (not (= (point-min)(point-max)))
-      (let ((f (debian-changelog-finalised-p)))
-        (and (stringp f) (error f))
-        (or f (error "Previous version not yet finalised"))))
+  (unless (= (point-min)(point-max))
+    (let ((f (debian-changelog-finalised-p)))
+      (if (stringp f) (error f))
+      (unless f (error "Previous version not yet finalised"))))
   (goto-char (point-min))
   (let ((pkg-name (or (debian-changelog-suggest-package-name)
                       (read-string "Package name: ")))
@@ -1079,12 +1076,8 @@ If file is empty, create initial entry."
                        " *debian-changelog-mode-temp-buffer*")))
       (set-buffer tmp-buffer)
       (unwind-protect
-          (progn
-            (let ((mesg (call-process "dpkg" nil '(t nil) nil
-                                      "--compare-versions" vsn1 "gt" vsn2)))
-              (if (equal mesg 0)
-                  t
-                nil)))
+          (equal 0 (call-process "dpkg" nil '(t nil) nil
+                                 "--compare-versions" vsn1 "gt" vsn2))
         (kill-buffer tmp-buffer)))))
 
 (defun debian-changelog-suggest-version ()
@@ -1130,8 +1123,7 @@ If file is empty, create initial entry."
 ;;; match 4: debian version number exists if matched
 ;;; match 5: debian version number
 ;;; match 6: rest of string
-      (if (not findmatch)
-          nil
+      (when findmatch
         (let ((pkg-name (match-string-no-properties 1))
               (epoch (or (match-string-no-properties 2) ""))
               (upstream-vsn (match-string-no-properties 3))
@@ -1270,8 +1262,8 @@ If file is empty, create initial entry."
   "Finalise, if necessary, and then save a debian-style changelog file."
   (interactive)
   (let ((f (debian-changelog-finalised-p)))
-    (and (stringp f) (error f))
-    (or f (debian-changelog-finalise-last-version)))
+    (if (stringp f) (error f))
+    (unless f (debian-changelog-finalise-last-version)))
   (save-buffer))
 
 ;;
@@ -1295,8 +1287,8 @@ Use UTC if `debian-changelog-date-utc-flag' is non-nil."
 (defun debian-changelog-finalise-last-version ()
   "Finalise maintainer's name and email and release date."
   (interactive)
-  (and (debian-changelog-finalised-p)
-       (debian-changelog-unfinalise-last-version))
+  (if (debian-changelog-finalised-p)
+      (debian-changelog-unfinalise-last-version))
   (if debian-changelog-local-variables-maybe-remove
       (debian-changelog-local-variables-maybe-remove))
   (save-excursion
@@ -1323,11 +1315,10 @@ signature line at the end of the last entry."
 (defun debian-changelog-web-developer-page ()
   "Browse the BTS for the last upload maintainer's developer summary page."
   (interactive)
-  (if (not (featurep 'browse-url))
-      (progn
-        (load "browse-url" nil t)
-        (if (not (featurep 'browse-url))
-            (error "This function requires the browse-url elisp package"))))
+  (unless (featurep 'browse-url)
+    (load "browse-url" nil t)
+    (unless (featurep 'browse-url)
+      (error "This function requires the browse-url elisp package")))
   (let ((email (cadr (save-excursion (debian-changelog-last-maintainer)))))
     (browse-url (concat "http://qa.debian.org/developer.php?login=" email))
     (message "Looking up developer summary page for %s via browse-url" email)))
@@ -1341,7 +1332,7 @@ signature line at the end of the last entry."
 Removes maintainer's name, email address and release date so that new entries
 can be made."
   (interactive)
-  (if (debian-changelog-finalised-p) nil
+  (unless (debian-changelog-finalised-p)
     (error "Most recent version is not finalised"))
   (save-excursion
     ;; Save the name of the last maintainer, then cut after " --".
@@ -1534,20 +1525,17 @@ interface to set it, or simply set the variable
   (setq local-abbrev-table text-mode-abbrev-table)
   (set-syntax-table text-mode-syntax-table)
   (debian-bug-bug-menu-init debian-changelog-mode-map)
-  (cond
-   (debian-changelog-use-imenu
+  (when debian-changelog-use-imenu
     (require 'imenu)
     (setq imenu-create-index-function 'imenu--create-debian-changelog-index)
-    (if (or window-system
-            (fboundp 'tmm-menubar))
-        (progn
-          (imenu-add-to-menubar "History")
-          ;; (imenu-update-menubar)
-          ))))
-  (cond
-   (debian-changelog-highlight-mouse-t
+    (when (or window-system
+              (fboundp 'tmm-menubar))
+      (imenu-add-to-menubar "History")
+      ;; (imenu-update-menubar)
+      ))
+  (when debian-changelog-highlight-mouse-t
     (debian-changelog-setup-highlight-mouse-keymap)
-    (debian-changelog-highlight-mouse)))
+    (debian-changelog-highlight-mouse))
   (dpkg-dev-common-utils--add-debputy-settings 'debian-changelog-mode)
   (run-mode-hooks 'debian-changelog-mode-hook))
 ;;(easy-menu-add debian-changelog-menu))
@@ -1852,7 +1840,7 @@ Also set keymap."
           (let ((before-change-functions) (after-change-functions))
             (put-text-property s e 'local-map
                                debian-changelog-mouse-keymap)
-            (put-text-property s e 'mouse-face 'highlight)))))
+            (put-text-property s e 'mouse-face 'highlight))))
       (set-buffer-modified-p modified))))
 
 ;;;-------------
@@ -1929,8 +1917,7 @@ Also set keymap."
               (push (cons (match-string-no-properties 4) marker)
                     index-alist)))))
 ;;;       (message "Scanning changelog history... done.")
-        (cond
-         (index-bug-alist
+        (when index-bug-alist
           (push (cons "Closed Bugs (chrono)"
                       index-bug-alist)
                 index-alist)
@@ -1938,7 +1925,7 @@ Also set keymap."
           (push (cons "Closed Bugs (sorted)"
                       (sort index-bugsorted-alist
                             'debian-changelog-imenu-sort))
-                index-alist)))
+                index-alist))
         index-alist))))
 
 (defun debian-changelog-imenu-sort (el1 el2)

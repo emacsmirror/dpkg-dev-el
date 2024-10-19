@@ -306,21 +306,19 @@ a negative prefix argument turns it off.
               (if arg
                   (> (prefix-numeric-value arg) 0)
                 (not debian-bts-control-minor-mode)))
-  (cond
-   (debian-bts-control-minor-mode                 ;Setup the minor-mode
-    (if (fboundp 'font-lock-add-keywords)
-        (font-lock-add-keywords nil debian-bts-control-font-lock-keywords t))
-    )))
+  (when (and debian-bts-control-minor-mode ; Setup the minor-mode
+             (fboundp 'font-lock-add-keywords))
+    (font-lock-add-keywords nil debian-bts-control-font-lock-keywords t)))
 
 ;; Install ourselves:
-(or (assq 'debian-bts-control-minor-mode minor-mode-alist)
-    (setq minor-mode-alist
-          (cons '(debian-bts-control-minor-mode " DBugC") minor-mode-alist)))
-(or (assq 'debian-bts-control-minor-mode minor-mode-map-alist)
-    (setq minor-mode-map-alist
-          (cons (cons 'debian-bts-control-minor-mode
-                      debian-bts-control-minor-mode-map)
-                minor-mode-map-alist)))
+(unless (assq 'debian-bts-control-minor-mode minor-mode-alist)
+  (setq minor-mode-alist
+        (cons '(debian-bts-control-minor-mode " DBugC") minor-mode-alist)))
+(unless (assq 'debian-bts-control-minor-mode minor-mode-map-alist)
+  (setq minor-mode-map-alist
+        (cons (cons 'debian-bts-control-minor-mode
+                    debian-bts-control-minor-mode-map)
+              minor-mode-map-alist)))
 
 (defvar debian-bts-control-alist
   '(("reassign") ("severity") ("reopen") ("submitter") ("forwarded")
@@ -346,10 +344,9 @@ a negative prefix argument turns it off.
         (if (re-search-forward (concat "\\([0-9]+\\)@" debian-bts-emaildomain)
                                (mail-header-end) t)
             (setq default-number (match-string-no-properties 1)))))
-    (if default-number
-        (read-string (format "%s [%s]: " prompt default-number)
-                     nil nil default-number)
-      (read-string (format "%s: " prompt)))))
+    (read-string (format (if default-number "%s [%s]: " "%s: ") prompt
+                         default-number)
+                 nil nil default-number)))
 
 ;;;###autoload
 (defun debian-bts-control (action &optional arg)

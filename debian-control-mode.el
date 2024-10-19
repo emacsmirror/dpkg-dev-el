@@ -434,7 +434,7 @@ It should be immediately followed by a non-slash character.")
                               (beginning-of-line)
                               (looking-at "^\\(Package\\|Source\\)"))
                             (re-search-backward "^\\(Package\\|Source\\)" nil t))
-                        (not (not (string-match "Package" (match-string 0))))
+                        (string-match "Package" (match-string 0))
                       (error "Couldn't find Package or Source field")))
           (fields (if binary-p
                       debian-control-binary-fields
@@ -540,10 +540,10 @@ text file."
   "Find-file a possibly compressed FILE"
   (require 'jka-compr)
   (let ((installed (jka-compr-installed-p)))
-    (if (not installed)
+    (unless installed
         (auto-compression-mode t))
     (find-file file)
-    (if (not installed)
+    (unless installed
         (auto-compression-mode -1))))
 
 (defun debian-control-mode-bugs-mouse-click (event)
