@@ -1,0 +1,76 @@
+Name: basic
+
+=-=
+test-package (0.10.21) unstable; urgency=medium
+
+  * Some short entry.
+  * Some very long long long long long long long long long long long long long entry.
+  * Another short entry.
+
+ -- John Doe <john@doe.name>  Thu, 12 Sep 2024 11:16:02 +0100
+=-=
+test-package (0.10.21) unstable; urgency=medium
+
+  * Some short entry.
+  * Some very long long long long long long long long long long long long
+    long entry.
+  * Another short entry.
+
+ -- John Doe <john@doe.name>  Thu, 12 Sep 2024 11:16:02 +0100
+=-=-=
+
+Name: simple-sub-entry
+
+=-=
+test-package (0.10.21) unstable; urgency=medium
+
+  * Some short entry.
+  * Some very long long long long long long long long long long long long long entry.
+    - Some very long long long long long long long long long long long long long long sub-entry.
+  * Another short entry.
+
+ -- John Doe <john@doe.name>  Thu, 12 Sep 2024 11:16:02 +0100
+=-=
+test-package (0.10.21) unstable; urgency=medium
+
+  * Some short entry.
+  * Some very long long long long long long long long long long long long
+    long entry.
+    - Some very long long long long long long long long long long long
+      long long long sub-entry.
+  * Another short entry.
+
+ -- John Doe <john@doe.name>  Thu, 12 Sep 2024 11:16:02 +0100
+=-=-=
+
+Name: multi-level-entries
+
+=-=
+test-package (0.10.21) unstable; urgency=medium
+
+  * Some short entry.
+  * Some very long long long long long long long long long long long long long entry.
+    - Some very long long long long long long long long long long long long long long sub-entry.
+      + Some short nested sub-entry.
+      + Some Some very long long long long long long long long long long long long long long nested sub-entry.
+    - Another very long long long long long long long long long long long long long long sub-entry.
+  * Another short entry.
+
+ -- John Doe <john@doe.name>  Thu, 12 Sep 2024 11:16:02 +0100
+=-=
+test-package (0.10.21) unstable; urgency=medium
+
+  * Some short entry.
+  * Some very long long long long long long long long long long long long
+    long entry.
+    - Some very long long long long long long long long long long long
+      long long long sub-entry.
+      + Some short nested sub-entry.
+      + Some Some very long long long long long long long long long long
+        long long long long nested sub-entry.
+    - Another very long long long long long long long long long long long
+      long long long sub-entry.
+  * Another short entry.
+
+ -- John Doe <john@doe.name>  Thu, 12 Sep 2024 11:16:02 +0100
+=-=-=
