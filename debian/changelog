@@ -1,3 +1,11 @@
+dpkg-dev-el (37.19~1.gbp2f0ca0) UNRELEASED; urgency=medium
+
+  ** SNAPSHOT build @2f0ca07057bb267a342a2a5962857302a88dcd93 **
+
+  * Add comment face handling in debian-autopkgtest-control-mode
+
+ -- Xiyue Deng <manphiz@gmail.com>  Sun, 23 Mar 2025 03:12:26 -0700
+
 dpkg-dev-el (37.18) unstable; urgency=medium
 
   * Add erts files tests for debian-changelog-mode
