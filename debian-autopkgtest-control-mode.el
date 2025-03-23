@@ -122,6 +122,10 @@ https://people.debian.org/~eriberto/README.package-tests.html.")
                             "\\)\\_>")
                    (1 font-lock-type-face)))))
 
+(defun debian-autopkgtest-control-mode--font-lock-comments ()
+  (add-to-list 'debian-autopkgtest-control-mode-font-lock-keywords
+               '("#.*$" . font-lock-comment-face)))
+
 ;;;###autoload
 (defun debian-autopkgtest-control-mode ()
   "Mode to edit and read debian-autopkgtest-control-mode.
@@ -130,7 +134,6 @@ https://people.debian.org/~eriberto/README.package-tests.html.")
   (kill-all-local-variables)
   (setq major-mode 'debian-autopkgtest-control-mode)
   (setq mode-name "debian-autopkgtest-control")
-  (mapc 'make-local-variable '(font-lock-defaults write-file-hooks))
   (use-local-map debian-autopkgtest-control-mode-map)
   (set-syntax-table debian-autopkgtest-control-mode-syntax-table)
   ;; Add font locks
@@ -140,6 +143,7 @@ https://people.debian.org/~eriberto/README.package-tests.html.")
    debian-autopkgtest-control-mode--dependency-extensions)
   (debian-autopkgtest-control-mode--font-lock-add-restrictions
    debian-autopkgtest-control-mode--restrictions)
+  (debian-autopkgtest-control-mode--font-lock-comments)
   (setq font-lock-defaults
         '(debian-autopkgtest-control-mode-font-lock-keywords
           nil  ;keywords-only
