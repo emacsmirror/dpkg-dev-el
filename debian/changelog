@@ -1,10 +1,22 @@
-dpkg-dev-el (37.19~1.gbp2f0ca0) UNRELEASED; urgency=medium
+dpkg-dev-el (37.19~2.gbpbbc527) UNRELEASED; urgency=medium
 
-  ** SNAPSHOT build @2f0ca07057bb267a342a2a5962857302a88dcd93 **
+  ** SNAPSHOT build @bbc5274bc1718986896dbf7556bf962613e564d8 **
 
   * Add comment face handling in debian-autopkgtest-control-mode
+  * Use run-mode-hooks instead of run-hooks
+    - Using run-hooks in major modes may interfere with
+      global-font-lock-mode in Emacs 30+.
+    - See also https://debbugs.gnu.org/76701.
+  * Add simple faceup tests for debian-autopkgtest-control-mode
+  * Add simple faceup tests for debian-changelog-mode
+  * Add simple faceup tests for debian-control-mode
+  * Add simple faceup tests for debian-copyright-mode
+  * Add simple faceup tests for readme-debian-mode
+  * Enable lexical binding for all sources.
+  * Update Standards-Version to 4.7.2; no change needed
+  * Enable "Testsuite: autopkgtest-pkg-elpa" for faster migration
 
- -- Xiyue Deng <manphiz@gmail.com>  Sun, 23 Mar 2025 03:12:26 -0700
+ -- Xiyue Deng <manphiz@gmail.com>  Mon, 24 Mar 2025 00:27:56 -0700
 
 dpkg-dev-el (37.18) unstable; urgency=medium
 
