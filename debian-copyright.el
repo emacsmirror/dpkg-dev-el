@@ -172,7 +172,7 @@ https://stackoverflow.com/a/201378."
 (add-to-list 'auto-mode-alist
              '("\\`/usr/share/doc/.*/copyright" . debian-copyright-mode))
 
-(run-hooks 'debian-copyright-mode-load-hook)
+(run-mode-hooks 'debian-copyright-mode-load-hook)
 
 (provide 'debian-copyright)
 

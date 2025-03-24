@@ -128,7 +128,7 @@ will be updated.
 ;;;###autoload(add-to-list 'auto-mode-alist '("debian/.*README.*Debian$" . readme-debian-mode))
 ;;;###autoload(add-to-list 'auto-mode-alist '("^/usr/share/doc/.*/README.*Debian.*$" . readme-debian-mode))
 
-(run-hooks 'readme-debian-mode-load-hook)
+(run-mode-hooks 'readme-debian-mode-load-hook)
 
 (provide 'readme-debian)
 

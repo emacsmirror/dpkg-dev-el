@@ -1065,7 +1065,7 @@ If file is empty, create initial entry."
     (if (debian-changelog-experimental-p)
         (insert pkg-name " (" version ") experimental; urgency=medium\n\n  * ")
       (insert pkg-name " (" version ") " (car debian-changelog-allowed-distributions) "; urgency=medium\n\n  * "))
-    (run-hooks 'debian-changelog-add-version-hook)
+    (run-mode-hooks 'debian-changelog-add-version-hook)
     (save-excursion (insert "\n\n --\n\n"))))
 
 (defun debian-changelog-experimental-p ()

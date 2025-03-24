@@ -157,7 +157,7 @@ https://people.debian.org/~eriberto/README.package-tests.html.")
 (add-to-list 'auto-mode-alist
              '("debian/tests/control\\'" . debian-autopkgtest-control-mode))
 
-(run-hooks 'debian-autopkgtest-control-mode-load-hook)
+(run-mode-hooks 'debian-autopkgtest-control-mode-load-hook)
 
 (provide 'debian-autopkgtest-control-mode)
 
