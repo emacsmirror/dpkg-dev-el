@@ -1,0 +1,6 @@
+Test README.Debian file
+«s:-----------------------»
+
+  This file tests for font lock in README.Debian file.
+
+ -- «k:Jane Doe »«f:<jane@doe.name>»«s:, Sun, 15 Dec 2021 20:06:31 -0500»
