@@ -1,6 +1,4 @@
-dpkg-dev-el (37.19~2.gbpbbc527) UNRELEASED; urgency=medium
-
-  ** SNAPSHOT build @bbc5274bc1718986896dbf7556bf962613e564d8 **
+dpkg-dev-el (37.19~exp1) experimental; urgency=medium
 
   * Add comment face handling in debian-autopkgtest-control-mode
   * Use run-mode-hooks instead of run-hooks
@@ -16,7 +14,7 @@ dpkg-dev-el (37.19~2.gbpbbc527) UNRELEASED; urgency=medium
   * Update Standards-Version to 4.7.2; no change needed
   * Enable "Testsuite: autopkgtest-pkg-elpa" for faster migration
 
- -- Xiyue Deng <manphiz@gmail.com>  Mon, 24 Mar 2025 00:27:56 -0700
+ -- Xiyue Deng <manphiz@gmail.com>  Mon, 24 Mar 2025 14:43:27 -0700
 
 dpkg-dev-el (37.18) unstable; urgency=medium
 
