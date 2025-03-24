@@ -1,0 +1,42 @@
+«k:Format:» «c:https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/»
+«k:Comment:»
+ This is a test file to test Debian copyright file highlighting.
+«k:Source:» «c:https://salsa.debian.org/emacsen-team/dpkg-dev-el»
+«k:Upstream-Name:» test-package
+«k:Upstream-Contact:» Debian Test <«v:debian-test-team@fake.debian.org»>
+
+«k:Files:» *
+«k:Copyright:» 2000-2003 John Doe <«v:john@doe.name»>,
+ 2005-2014 Jane Doe <«v:jane@doe.name»>,
+«k:License:» «t:GPL-2+»
+«k:Disclaimer:» none
+
+«k:Files:» debian/*
+«k:Copyright:» 2015-2025 Jane Doe <«v:jane@doe.name»>,
+«k:License:» «t:GPL-3+»
+
+«k:Files:» debian/all-license-file
+«k:Copyright:» 2015-2025 Jane Doe <«v:jane@doe.name»>,
+«k:License:» «t:Apache-2.0», «t:Artistic», «t:BSD», «t:CC0-1.0», «t:GFDL», «t:GFDL-1.2», «t:GFDL-1.3», «t:GPL», «t:GPL-1», «t:GPL-2», «t:GPL-3», «t:LGPL», «t:LGPL-2.1», «t:LGPL-3», «t:MPL-1.1», «t:MPL-2.0»
+«k:Comment:» An artificial file that list all supported licenses.
+
+«k:License:» «t:GPL-2+»
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License as
+ published by the Free Software Foundation; either version 2, or (at
+ your option) any later version.
+ .
+ This program is distributed in the hope that it will be
+ useful, but WITHOUT ANY WARRANTY; without even the implied
+ warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ PURPOSE.  See the GNU General Public License for more
+ details.
+ .
+ You should have received a copy of the GNU General Public
+ License along with this package; if not, write to the Free
+ Software Foundation, Inc., 51 Franklin St, Fifth Floor,
+ Boston, MA  02110-1301 USA
+ .
+ On Debian systems, the full text of the GNU General Public
+ License version 2 can be found in the file
+ `/usr/share/common-licenses/GPL-2'.
