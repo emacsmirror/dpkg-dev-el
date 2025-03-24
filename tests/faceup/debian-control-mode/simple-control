@@ -1,0 +1,25 @@
+Source: test-source-package
+Section: editors
+Priority: optional
+Maintainer: Test team <debian-test-team@fake.debian.org>
+Uploaders:
+ Jane Doe <jane@doe.name>,
+ John Doe <John@doe.name>,
+Build-Depends: debhelper-compat (= 13),
+ dh-elpa,
+Standards-Version: 4.7.2
+Homepage: https://salsa.debian.org/emacsen-team/test-source-package
+Vcs-Browser: https://salsa.debian.org/emacsen-team/test-source-package
+Vcs-Git: https://salsa.debian.org/emacsen-team/test-source-package.git
+Rules-Requires-Root: no
+
+Package: test-binary-package
+Architecture: all
+Depends: ${elpa:Depends}, ${misc:Depends}
+Recommends: emacs
+Enhances: emacs
+Description: Test binary package
+ This is a test binary package.  This serves the following purpose
+ .
+  * Testing for emacs font lock.
+  * Testing for highlighting errors.
