@@ -1,0 +1,28 @@
+«f:test-package» («s:1.0-1~bpo11+1») «s:bullseye-backports»; «t:urgency=medium»
+
+  «x:*» Backport for Bullseye.
+
+ -- «v:Jane Doe» <«v:jane@doe.name»>  «s:Sun, 29 Mar 2023 10:00:00 -0000»
+
+«f:test-package» («s:1.0-1+deb12u1») «s:bookworm»; «t:urgency=medium»
+
+  «x:*» Stable update to Bookworm.
+
+ -- «v:John Doe» <«v:john@doe.name»>  «s:Sun, 23 Mar 2023 09:12:30 -0000»
+
+«f:test-package» («s:1.0-1») «s:unstable»; «t:urgency=medium»
+
+  «x:*» Upload to unstable.
+
+ -- «v:John Doe» <«v:john@doe.name»>  «s:Sun, 20 Mar 2023 15:12:26 -0000»
+
+«f:test-package» («s:1.0-1~exp1») «:debian-changelog-warning-face:experimental»; «s:urgency=low»
+
+  [ John Doe ]
+  «x:*» New upstream release.
+
+  [ Jane Doe ]
+  «x:*» Rework packaging.
+    - Simplify debian/rules.
+«:debian-changelog-warning-face:	»
+ -- «v:Jane Doe» <«v:jane@doe.name»>  «s:Sun, 12 Mar 2023 21:12:26 -0000»

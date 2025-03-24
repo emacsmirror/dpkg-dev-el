@@ -1,0 +1,28 @@
+test-package (1.0-1~bpo11+1) bullseye-backports; urgency=medium
+
+  * Backport for Bullseye.
+
+ -- Jane Doe <jane@doe.name>  Sun, 29 Mar 2023 10:00:00 -0000
+
+test-package (1.0-1+deb12u1) bookworm; urgency=medium
+
+  * Stable update to Bookworm.
+
+ -- John Doe <john@doe.name>  Sun, 23 Mar 2023 09:12:30 -0000
+
+test-package (1.0-1) unstable; urgency=medium
+
+  * Upload to unstable.
+
+ -- John Doe <john@doe.name>  Sun, 20 Mar 2023 15:12:26 -0000
+
+test-package (1.0-1~exp1) experimental; urgency=low
+
+  [ John Doe ]
+  * New upstream release.
+
+  [ Jane Doe ]
+  * Rework packaging.
+    - Simplify debian/rules.
+	
+ -- Jane Doe <jane@doe.name>  Sun, 12 Mar 2023 21:12:26 -0000
