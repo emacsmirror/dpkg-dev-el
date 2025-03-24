@@ -13,6 +13,7 @@ Homepage: https://salsa.debian.org/emacsen-team/dpkg-dev-el
 Vcs-Browser: https://salsa.debian.org/emacsen-team/dpkg-dev-el
 Vcs-Git: https://salsa.debian.org/emacsen-team/dpkg-dev-el.git
 Rules-Requires-Root: no
+Testsuite: autopkgtest-pkg-elpa
 
 Package: elpa-dpkg-dev-el
 Architecture: all
