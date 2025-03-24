@@ -1,4 +1,4 @@
-;;; readme-debian.el --- a simple mode for README.Debian files
+;;; readme-debian.el --- a simple mode for README.Debian files -*- lexical-binding: t -*-
 
 ;; Copyright 2002, 2003, 2006 Junichi Uekawa.
 ;;

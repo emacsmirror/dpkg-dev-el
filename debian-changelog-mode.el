@@ -1,4 +1,4 @@
-;;; debian-changelog-mode.el --- major mode for Debian changelog files.
+;;; debian-changelog-mode.el --- major mode for Debian changelog files -*- lexical-binding: t -*-
 
 ;; Copyright (C) 1996 Ian Jackson
 ;; Copyright (C) 1997 Klee Dienes

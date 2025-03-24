@@ -1,4 +1,4 @@
-;;; debian-autopkgtest-control-mode.el --- Major mode for Debian package autopkgtest control files
+;;; debian-autopkgtest-control-mode.el --- Major mode for Debian package autopkgtest control files -*- lexical-binding: t -*-
 
 ;; Copyright 2024 Xiyue Deng <manphiz@gmail.com>
 

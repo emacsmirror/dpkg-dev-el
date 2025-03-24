@@ -1,4 +1,4 @@
-;;; debian-copyright.el --- Major mode for Debian package copyright files
+;;; debian-copyright.el --- Major mode for Debian package copyright files -*- lexical-binding: t -*-
 
 ;; Copyright 2002, 2003 Junichi Uekawa.
 

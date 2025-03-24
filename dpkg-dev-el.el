@@ -1,4 +1,4 @@
-;;; dpkg-dev-el.el --- startup file for the elpa-dpkg-dev-el package
+;;; dpkg-dev-el.el --- startup file for the elpa-dpkg-dev-el package -*- lexical-binding: t -*-
 
 ;; Copyright: 2003-2014 Peter S Galbraith
 

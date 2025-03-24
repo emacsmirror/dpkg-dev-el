@@ -1,4 +1,4 @@
-;;; debian-bts-control.el --- Create messages for Debian BTS control interface
+;;; debian-bts-control.el --- Create messages for Debian BTS control interface -*- lexical-binding: t -*-
 
 ;; Copyright (C) 2003, 2005, 2007, 2009 Peter S Galbraith
 ;;

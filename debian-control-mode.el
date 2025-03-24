@@ -1,4 +1,4 @@
-;;; debian-control-mode.el --- major mode for Debian control files
+;;; debian-control-mode.el --- major mode for Debian control files -*- lexical-binding: t -*-
 
 ;; Copyright (C) 2001, 2003 Free Software Foundation, Inc.
 ;; Copyright (C) 2003-2005, 2007-2011 Peter S Galbraith <psg@debian.org>
