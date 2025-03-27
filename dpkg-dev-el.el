@@ -125,6 +125,18 @@ what other rules say."
             (apply 'find-operation-coding-system args))
         'utf-8))))
 
+;; Add settings for using debputy as language server.
+;;;###autoload
+(when (fboundp 'eglot)
+  (require 'eglot)
+  (let ((dpkg-dev-modes '(debian-control-mode
+                          debian-changelog-mode
+                          debian-copyright-mode
+                          debian-autopkgtest-control-mode)))
+    (dolist (dpkg-dev-mode dpkg-dev-modes)
+      (add-to-list 'eglot-server-programs
+                   `(,dpkg-dev-mode "debputy" "lsp" "server"
+                                    "--ignore-language-ids")))))
 
 (provide 'dpkg-dev-el)
 
