@@ -1,3 +1,9 @@
+dpkg-dev-el (37.19~exp2) experimental; urgency=medium
+
+  * Add debputy language server settings to supported modes
+
+ -- Xiyue Deng <manphiz@gmail.com>  Thu, 27 Mar 2025 22:36:57 -0700
+
 dpkg-dev-el (37.19~exp1) experimental; urgency=medium
 
   * Add comment face handling in debian-autopkgtest-control-mode
