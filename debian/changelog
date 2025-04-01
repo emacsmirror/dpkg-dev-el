@@ -1,8 +1,13 @@
 dpkg-dev-el (37.19~exp3) UNRELEASED; urgency=medium
 
   * Remove old FSF address in d/copyright
+  * Introduce dpkg-dev-common-utils.el for hosting common utilities
+    - Add a helper function for adding debputy eglot settings.
+  * Rework adding debputy settings to supported dpkg dev major modes
+    - Use the utility function to add debputy settings when turning on the
+      major mode instead of using autoload.
 
- -- Xiyue Deng <manphiz@gmail.com>  Tue, 01 Apr 2025 15:43:16 -0700
+ -- Xiyue Deng <manphiz@gmail.com>  Tue, 01 Apr 2025 15:44:48 -0700
 
 dpkg-dev-el (37.19~exp2) experimental; urgency=medium
 
