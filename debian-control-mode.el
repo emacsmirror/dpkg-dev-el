@@ -121,6 +121,7 @@
 
 ;;; Code:
 
+(require 'dpkg-dev-common-utils)
 (require 'easymenu)
 (require 'font-lock)
 (eval-when-compile
@@ -336,7 +337,8 @@ It should be immediately followed by a non-slash character.")
   (if (and (featurep 'goto-addr) goto-address-highlight-p)
       (goto-address))
   (let ((after-change-functions nil))
-    (debian-control-mode-after-change-function (point-min) (point-max) 0)))
+    (debian-control-mode-after-change-function (point-min) (point-max) 0))
+  (dpkg-dev-common-utils--add-debputy-settings 'debian-control-mode))
 
 (defun debian-control-mode-after-change-function (beg end len)
   (save-excursion

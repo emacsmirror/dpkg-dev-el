@@ -29,6 +29,8 @@
 
 ;;; Code:
 
+(require 'dpkg-dev-common-utils)
+
 (defgroup debian-autopkgtest-control-mode nil "Debian autopkgtest control mode"
   :group 'tools
   :prefix "debian-autopkgtest-control-mode-")
@@ -150,6 +152,7 @@ https://people.debian.org/~eriberto/README.package-tests.html.")
           nil  ;case-fold
           nil  ;syntax-alist
           ))
+  (dpkg-dev-common-utils--add-debputy-settings 'debian-autopkgtest-control-mode)
   (run-mode-hooks 'debian-autopkgtest-control-mode-hook))
 
 

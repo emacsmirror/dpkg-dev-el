@@ -366,6 +366,7 @@
 
 ;;; Code:
 (require 'debian-bug)  ;; for debian-bug-build-bug-menu
+(require 'dpkg-dev-common-utils)
 
 (defgroup debian-changelog nil "Debian changelog maintenance"
   :group 'tools
@@ -1590,6 +1591,7 @@ interface to set it, or simply set the variable
    (debian-changelog-highlight-mouse-t
     (debian-changelog-setup-highlight-mouse-keymap)
     (debian-changelog-highlight-mouse)))
+  (dpkg-dev-common-utils--add-debputy-settings 'debian-changelog-mode)
   (run-mode-hooks 'debian-changelog-mode-hook))
 ;;(easy-menu-add debian-changelog-menu))
 

@@ -26,6 +26,7 @@
 ;;; Code:
 
 (require 'debian-changelog-mode)
+(require 'dpkg-dev-common-utils)
 
 ;;; Code:
 
@@ -162,6 +163,7 @@ https://stackoverflow.com/a/201378."
           nil  ;case-fold
           ()   ;syntax-alist
           ))
+  (dpkg-dev-common-utils--add-debputy-settings 'debian-copyright-mode)
   (run-mode-hooks 'debian-copyright-mode-hook))
 
 
