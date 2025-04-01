@@ -1,3 +1,9 @@
+dpkg-dev-el (37.19~exp3) UNRELEASED; urgency=medium
+
+  * Remove old FSF address in d/copyright
+
+ -- Xiyue Deng <manphiz@gmail.com>  Tue, 01 Apr 2025 15:43:16 -0700
+
 dpkg-dev-el (37.19~exp2) experimental; urgency=medium
 
   * Add debputy language server settings to supported modes
