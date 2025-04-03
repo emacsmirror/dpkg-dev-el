@@ -41,7 +41,7 @@
   :type 'hook)
 
 (defcustom debian-autopkgtest-control-mode-hook nil
-  "Normal hook run when entering Debian Copyright mode."
+  "Normal hook run when entering `debian-autopkgtest-control-mode'."
   :group 'debian-autopkgtest-control-mode
   :type 'hook
   :options '(turn-on-auto-fill flyspell-mode))
