@@ -1,3 +1,10 @@
+dpkg-dev-el (37.19) unstable; urgency=medium
+
+  * Upload to unstable
+  * Fix typo in debian-autopkgtest-control-mode.el
+
+ -- Xiyue Deng <manphiz@gmail.com>  Mon, 07 Apr 2025 23:36:25 -0700
+
 dpkg-dev-el (37.19~exp3) experimental; urgency=medium
 
   * Remove old FSF address in d/copyright
