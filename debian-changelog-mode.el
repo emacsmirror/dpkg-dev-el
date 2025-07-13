@@ -985,12 +985,13 @@ If file is empty, create initial entry."
   (let ((pkg-name (or (debian-changelog-suggest-package-name)
                       (read-string "Package name: ")))
         (version (or (debian-changelog-suggest-version)
-                     (read-string "New version (including any revision): "))))
-    (if (debian-changelog-experimental-p)
-        (insert pkg-name " (" version ") experimental; urgency=medium\n\n  * ")
-      (insert pkg-name " (" version ") " (car debian-changelog-allowed-distributions) "; urgency=medium\n\n  * "))
-    (run-mode-hooks 'debian-changelog-add-version-hook)
-    (save-excursion (insert "\n\n --\n\n"))))
+                     (read-string "New version (including any revision): ")))
+        (distribution (if (debian-changelog-experimental-p)
+                          "experimental"
+                        (car debian-changelog-allowed-distributions))))
+    (insert pkg-name " (" version ") " distribution "; urgency=medium\n\n  * "))
+  (run-mode-hooks 'debian-changelog-add-version-hook)
+  (save-excursion (insert "\n\n --\n\n")))
 
 (defun debian-changelog-experimental-p ()
   ;; Peter S Galbraith, 04 May 2001
