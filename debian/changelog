@@ -1,10 +1,12 @@
-dpkg-dev-el (37.20~1.gbp042404) UNRELEASED; urgency=medium
+dpkg-dev-el (37.20~2.gbpe1f42c) UNRELEASED; urgency=medium
 
-  ** SNAPSHOT build @042404f71699a1cbc1377994eeecef261acf7476 **
+  ** SNAPSHOT build @e1f42cafe621a8b0f928a35f36af9886c5dc30ad **
 
   * UNRELEASED
+  * Adapt improvements and fixes by Nicolas Boulenguez (Closes: #1085464)
+    - Thanks for the work!
 
- -- Xiyue Deng <manphiz@gmail.com>  Mon, 14 Jul 2025 01:18:37 -0700
+ -- Xiyue Deng <manphiz@gmail.com>  Sun, 17 Aug 2025 15:48:50 -0700
 
 dpkg-dev-el (37.19) unstable; urgency=medium
 
