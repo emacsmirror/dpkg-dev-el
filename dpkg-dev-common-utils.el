@@ -25,12 +25,17 @@
 
 ;;; Code:
 
-(defun dpkg-dev-common-utils--add-debputy-settings (mode)
+(defun dpkg-dev-common-utils--add-debputy-settings ()
   "Add debputy settings to eglot if it is available."
   (when (fboundp 'eglot)
     (require 'eglot)
     (add-to-list 'eglot-server-programs
-                 `(,mode "debputy" "lsp" "server" "--ignore-language-ids"))))
+                 `(((debian-autopkgtest-control-mode
+                     :language-id "debian/tests/control")
+                    (debian-control-mode :language-id "debian/control")
+                    (debian-changelog-mode :language-id "debian/changelog")
+                    (debian-copyright-mode :language-id "debian/copyright"))
+                   "debputy" "lsp" "server"))))
 
 (provide 'dpkg-dev-common-utils)
 

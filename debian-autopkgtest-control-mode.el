@@ -152,7 +152,7 @@ https://people.debian.org/~eriberto/README.package-tests.html.")
                 nil  ;case-fold
                 nil  ;syntax-alist
                 ))
-  (dpkg-dev-common-utils--add-debputy-settings 'debian-autopkgtest-control-mode)
+  (dpkg-dev-common-utils--add-debputy-settings)
   (run-mode-hooks 'debian-autopkgtest-control-mode-hook))
 
 

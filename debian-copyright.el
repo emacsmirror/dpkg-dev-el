@@ -162,7 +162,7 @@ https://stackoverflow.com/a/201378."
           nil  ;case-fold
           ()   ;syntax-alist
           ))
-  (dpkg-dev-common-utils--add-debputy-settings 'debian-copyright-mode)
+  (dpkg-dev-common-utils--add-debputy-settings)
   (run-mode-hooks 'debian-copyright-mode-hook))
 
 

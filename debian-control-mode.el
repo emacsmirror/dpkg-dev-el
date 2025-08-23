@@ -322,7 +322,7 @@ It should be immediately followed by a non-slash character.")
       (goto-address))
   (let ((after-change-functions nil))
     (debian-control-mode-after-change-function (point-min) (point-max) 0))
-  (dpkg-dev-common-utils--add-debputy-settings 'debian-control-mode))
+  (dpkg-dev-common-utils--add-debputy-settings))
 
 (defun debian-control-mode-after-change-function (beg end len)
   (save-excursion
