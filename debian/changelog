@@ -1,12 +1,16 @@
-dpkg-dev-el (37.20~2.gbpe1f42c) UNRELEASED; urgency=medium
+dpkg-dev-el (37.20~3.gbpd927ef) UNRELEASED; urgency=medium
 
-  ** SNAPSHOT build @e1f42cafe621a8b0f928a35f36af9886c5dc30ad **
+  ** SNAPSHOT build @d927ef386efed1bc2050c1c70bea8d83c34e6ecd **
 
   * UNRELEASED
   * Adapt improvements and fixes by Nicolas Boulenguez (Closes: #1085464)
     - Thanks for the work!
+  * Use one debputy lsp entry to manage all supported modes
+    - So that a single debputy instance can manage all opened buffers in
+      those supported modes.  Thanks Niels Thykier for the suggestion and
+      the example setting!
 
- -- Xiyue Deng <manphiz@gmail.com>  Sun, 17 Aug 2025 15:48:50 -0700
+ -- Xiyue Deng <manphiz@gmail.com>  Sat, 23 Aug 2025 02:56:26 -0700
 
 dpkg-dev-el (37.19) unstable; urgency=medium
 
