@@ -1,0 +1,285 @@
+# Some comments
+Version: 5
+Search-Mode: plain
+Source: https://registry.npmjs.org/aes-js
+Matching-Pattern: https://registry.npmjs.org/aes-js/-/aes-js-(\d[\d\.]*)@ARCHIVE_EXT@
+
+# Some more comments
+Version: 5
+Source: http://example.com/~user/release/@PACKAGE@.html
+Matching-Pattern: files/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@
+
+Version: 5
+Source: http://example.com/release/@PACKAGE@.html
+Matching-Pattern: files/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@
+Pgp-Sig-Url-Mangle: s%$%.asc%
+
+Version: 5
+Source: http://example.com/release/@PACKAGE@.html
+Matching-Pattern: files/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@
+Pgp-Sig-Url-Mangle: s%@ARCHIVE_EXT@$%.asc%
+Decompress: yes
+
+Version: 5
+Source: http://example.com/release/@PACKAGE@.html
+Matching-Pattern: files/(?:\d+)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@
+Pgp-Mode: next
+Source: http://example.com/release/@PACKAGE@.html
+Matching-Pattern: .*?files/(?:\d+)/@PACKAGE@@ANY_VERSION@@SIGNATURE_EXT@
+Pgp-Mode: previous
+Version-Schema: previous
+
+Version: 5
+Source: http://example.com/DL/
+Matching-Pattern: files/(?:\d+)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@
+Pgp-Mode: next
+Source: http://example.com/DL/
+Matching-Pattern: files/(?:\d+)/@PACKAGE@@ANY_VERSION@@SIGNATURE_EXT@
+Pgp-Mode: previous
+Version-Schema: previous
+
+Version: 5
+Source: http://example.com/release/foo.html
+Matching-Pattern: files/foo-@ANY_VERSION@@ARCHIVE_EXT@
+Pgp-Sig-Url-Mangle: s%$%.sig%
+Component: bar
+Source: http://example.com/release/foo.html
+Matching-Pattern: files/foobar-@ANY_VERSION@@ARCHIVE_EXT@
+Pgp-Sig-Url-Mangle: s%$%.sig%
+Version-Constraint: same
+Component: baz
+Source: http://example.com/release/foo.html
+Matching-Pattern: files/foobaz-@ANY_VERSION@@ARCHIVE_EXT@
+Pgp-Sig-Url-Mangle: s%$%.sig%
+Version-Constraint: same
+
+Version: 5
+Source: http://tmrc.mit.edu/mirror/twisted/Twisted/@ANY_VERSION@/
+Matching-Pattern: Twisted-@ANY_VERSION@@ARCHIVE_EXT@
+Dirversion-Mangle: s/-PRE/~pre/;s/-RC/~rc/
+Pgp-Sig-Url-Mangle: s%$%.sig%
+
+Version: 5
+Source: http://www.cpan.org/modules/by-module/Text/
+Matching-Pattern: Text-CSV_XS-@ANY_VERSION@@ARCHIVE_EXT@
+Pgp-Sig-Url-Mangle: s%$%.sig%
+
+Version: 5
+Source: http://www.cpan.org/modules/by-module/Text/
+Matching-Pattern: Text-CSV_XS-@ANY_VERSION@@ARCHIVE_EXT@
+Pgp-Sig-Url-Mangle: s%$%.sig%
+
+Version: 5
+Source: http://www.site.com/pub/foobar/
+Matching-Pattern: foobar_v(\d+)_(\d+)@ARCHIVE_EXT@
+
+Version: 5
+Source: http://some.site.org/some/path/
+Matching-Pattern: foobar-@ANY_VERSION@@ARCHIVE_EXT@
+Dversion-Mangle: s/\+dfsg\d*$//
+Repacksuffix: +dfsg
+
+Version: 5
+Source: http://foo.bar.org/dl/
+Matching-Pattern: \?path=&dl=foo-@ANY_VERSION@@ARCHIVE_EXT@
+Filename-Mangle: s/.*=(.*)/$1/
+
+Version: 5
+Source: http://foo.bar.org/dl/
+Matching-Pattern: \?path=&dl_version=@ANY_VERSION@
+Filename-Mangle: s/.*=(.*)/foo-$1\.tar\.gz/
+
+Version: 5
+Source: http://foo.bar.org/dl/@ANY_VERSION@/
+Matching-Pattern: foo.tar.gz
+Filename-Mangle: s|.*/dl/(.*)/foo\.tar\.gz|foo-$1\.tar\.gz|
+
+Version: 5
+Source: http://developer.berlios.de/project/showfiles.php?group_id=2051
+Matching-Pattern: http://prdownload.berlios.de/softdevice/vdr-softdevice-@ANY_VERSION@@ARCHIVE_EXT@
+Download-Url-Mangle: s/prdownload/download/
+
+Version: 5
+Source: http://example.com/~user/release/foo.html
+Matching-Pattern: files/foo-@ANY_VERSION@@ARCHIVE_EXT@
+Oversion-Mangle: s/(.*)/$1+dfsg/
+Component: bar
+Source: http://example.com/~user/release/foo.html
+Matching-Pattern: files/bar-@ANY_VERSION@@ARCHIVE_EXT@
+Version-Constraint: same
+
+Version: 5
+Source: href=/g"
+Matching-Pattern: http://example.com/release/foo.html
+Page-Mangle: "s/<a\s+bogus=/<a
+Version-Constraint: files/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@
+
+Version: 5
+Source: http://example.com/release/foo.html
+Matching-Pattern: (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@
+Page-Mangle: s%<Key>([^<]*)</Key>%<Key><a href="$1">$1</a></Key>%g
+
+Version: 5
+Source: ftp://ftp.tex.ac.uk/tex-archive/web/c_cpp/cweb/
+Matching-Pattern: cweb-@ANY_VERSION@@ARCHIVE_EXT@
+
+Version: 5
+Source: ftp://ftp.worldforge.org/pub/worldforge/libs/Atlas-C++/transitional/
+Matching-Pattern: Atlas-C\+\+-@ANY_VERSION@@ARCHIVE_EXT@
+
+Version: 5
+Source: ftp://ftp.ibiblio.org/pub/Linux/ALPHA/wine/development/
+Matching-Pattern: Wine-@ANY_VERSION@@ARCHIVE_EXT@
+Uversion-Mangle: s/^/0.0./
+
+Version: 5
+Source: https://sf.net/audacity/
+Matching-Pattern: audacity-minsrc-@ANY_VERSION@@ARCHIVE_EXT@
+
+Version: 5
+Source: http://sourceforge.net/projects/audacity/files/audacity/@ANY_VERSION@/
+Matching-Pattern: (?:.*)audacity-minsrc-@ANY_VERSION@@ARCHIVE_EXT@/download
+Filename-Mangle: s%(?:.*)audacity-minsrc-(.+)\.tar\.xz/download%audacity-$1.tar.xz%
+Uversion-Mangle: s/-pre/~pre/
+
+Version: 5
+Source: https://api.github.com/repos/<user>/<project>/git/matching-refs/tags/
+Matching-Pattern: https://api.github.com/repos/[^/]+/[^/]+/git/refs/tags/@ANY_VERSION@
+Download-Url-Mangle: s%(api.github.com/repos/[^/]+/[^/]+)/git/refs/%$1/tarball/refs/%g
+Filename-Mangle: s%.*/@ANY_VERSION@%@PACKAGE@-$1.tar.gz%
+Search-Mode: plain
+
+Version: 5
+Source: https://api.github.com/repos/<user>/<project>/git/matching-refs/tags/v1
+Matching-Pattern: https://api.github.com/repos/[^/]+/[^/]+/git/refs/tags/@ANY_VERSION@
+Download-Url-Mangle: s%(api.github.com/repos/[^/]+/[^/]+)/git/refs/%$1/tarball/refs/%g
+Filename-Mangle: s%.*/@ANY_VERSION@%@PACKAGE@-$1.tar.gz%
+Search-Mode: plain
+
+Version: 5
+Source: https://api.github.com/repos/<user>/<project>/git/matching-refs/tags/
+Matching-Pattern: https://api.github.com/repos/[^/]+/[^/]+/git/refs/tags/@ANY_VERSION@
+Download-Url-Mangle: s%api.github.com/repos/([^/]+/[^/]+)/git/refs/tags/@ANY_VERSION@%github.com/$1/archive/refs/tags/$2.tar.gz%g
+Filename-Mangle: s%.*/@ANY_VERSION@%@PACKAGE@-$1.tar.gz%
+Search-Mode: plain
+
+Version: 5
+Source: https://api.github.com/repos/<user>/<project>/releases?per_page=100
+Matching-Pattern: https://api.github.com/repos/<user>/<project>/tarball/@ANY_VERSION@
+Filename-Mangle: s%.*/@ANY_VERSION@%@PACKAGE@-$1.tar.gz%
+Search-Mode: plain
+
+Version: 5
+Source: https://api.github.com/repos/ImageMagick/ImageMagick/git/matching-refs/tags/
+Matching-Pattern: https://api.github.com/repos/[^/]+/[^/]+/git/refs/tags/@ANY_VERSION@
+Download-Url-Mangle: s%(api.github.com/repos/[^/]+/[^/]+)/git/refs/.*%$1/tarball/0123456789abcdf01234567890abcef012345678%g
+Filename-Mangle: s%.*%1.2.3~git.tar.gz%
+Oversion-Mangle: s/.*/1.2.3~git/g
+Search-Mode: plain
+
+Version: 5
+Source: https://codeberg.org/api/v1/repos/<user>/<project>/releases
+Matching-Pattern: https://codeberg.org/<user>/<project>/releases/download/[^/-_v]*@ANY_VERSION@/[^"]*@ARCHIVE_EXT@
+Search-Mode: plain
+
+Version: 5
+Source: https://codeberg.org/api/v1/repos/<user>/<project>/releases
+Matching-Pattern: https://codeberg.org/<user>/<project>/archive/[^"-_v]*@ANY_VERSION@@ARCHIVE_EXT@
+Search-Mode: plain
+Filename-Mangle: s%.*/[^"-_v]*@ANY_VERSION@%@PACKAGE@-$1%
+
+Version: 5
+Source: https://codeberg.org/api/v1/repos/<user>/<project>/tags
+Matching-Pattern: https://codeberg.org/<user>/<project>/archive/[^"-_v]*@ANY_VERSION@@ARCHIVE_EXT@
+Search-Mode: plain
+Filename-Mangle: s%.*/[^"-_v]*@ANY_VERSION@%@PACKAGE@-$1%
+
+Version: 5
+Source: https://pypi.python.org/packages/source/<initial>/<project>/
+Matching-Pattern: <tar-name>-@ANY_VERSION@@ARCHIVE_EXT@
+
+Version: 5
+Source: https://pypi.python.org/pypi/cfn-sphere/
+Matching-Pattern: https://pypi.python.org/packages/.*/.*/.*/cfn-sphere-@ANY_VERSION@@ARCHIVE_EXT@#.*
+
+Version: 5
+Source: https://registry.npmjs.org/aes-js
+Matching-Pattern: https://registry.npmjs.org/aes-js/-/aes-js-@ANY_VERSION@@ARCHIVE_EXT@
+Search-Mode: plain
+
+Version: 5
+Version-Schema: group
+Source: https://registry.npmjs.org/mongodb
+Matching-Pattern: https://registry.npmjs.org/mongodb/-/mongodb-@ANY_VERSION@@ARCHIVE_EXT@
+Search-Mode: plain
+Component: bson
+Source: https://registry.npmjs.org/bson
+Matching-Pattern: https://registry.npmjs.org/bson/-/bson-@ANY_VERSION@@ARCHIVE_EXT@
+Search-Mode: plain
+Component: mongodb-core
+Source: https://registry.npmjs.org/mongodb-core
+Matching-Pattern: https://registry.npmjs.org/mongodb-core/-/mongodb-core-@ANY_VERSION@@ARCHIVE_EXT@
+Search-Mode: plain
+Component: requireoptional
+Source: https://registry.npmjs.org/require_optional
+Matching-Pattern: https://registry.npmjs.org/require_optional/-/require_optional-@ANY_VERSION@@ARCHIVE_EXT@
+Search-Mode: plain
+
+Version: 5
+Version-Schema: checksum
+Source: https://registry.npmjs.org/mongodb
+Matching-Pattern: https://registry.npmjs.org/mongodb/-/mongodb-@ANY_VERSION@@ARCHIVE_EXT@
+Search-Mode: plain
+Component: bson
+Source: https://registry.npmjs.org/bson
+Matching-Pattern: https://registry.npmjs.org/bson/-/bson-@ANY_VERSION@@ARCHIVE_EXT@
+Search-Mode: plain
+Component: mongodb-core
+Source: https://registry.npmjs.org/mongodb-core
+Matching-Pattern: https://registry.npmjs.org/mongodb-core/-/mongodb-core-@ANY_VERSION@@ARCHIVE_EXT@
+Search-Mode: plain
+Component: requireoptional
+Source: https://registry.npmjs.org/require_optional
+Matching-Pattern: https://registry.npmjs.org/require_optional/-/require_optional-@ANY_VERSION@@ARCHIVE_EXT@
+Search-Mode: plain
+
+Version: 5
+Source: http://git.ao2.it/tweeper.git
+Matching-Pattern: refs/tags/v@ANY_VERSION@
+Git-Mode: full
+Mode: git
+
+Version: 5
+Source: https://github.com/Debian/dh-make-golang
+Matching-Pattern: HEAD
+Mode: git
+
+Version: 5
+Source: https://github.com/namespace/project
+Matching-Pattern: [refs/tags/v@ANY_VERSION@|HEAD]
+Git-Mode: shallow
+Git-Modules: all
+Mode: git
+
+Version: 5
+Source: https://github.com/namespace/project
+Matching-Pattern: [refs/tags/v@ANY_VERSION@|HEAD]
+Git-Mode: shallow
+Git-Modules: m4;doc/common
+Mode: git
+
+Version: 5
+Source: svn://svn.code.sf.net/p/jmol/code/tags/
+Matching-Pattern: @ANY_VERSION@\/
+Mode: svn
+
+Source: svn://svn.code.sf.net/p/jmol/code/trunk/
+Matching-Pattern: HEAD
+Mode: svn
+
+Version: 5
+Source: http://grammalecte.net:8080/taglist
+Matching-Pattern: /timeline\?t=@ANY_VERSION@
+Download-Url-Mangle: s#/timeline\?t=(@ANY_VERSION@)#/tarball/Grammalecte.tar.gz?r=$1#
+Filename-Mangle: s/timeline\?t=(@ANY_VERSION@)/@PACKAGE@-$1.tar.gz/
+Search-Mode: plain
