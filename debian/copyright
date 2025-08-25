@@ -44,8 +44,11 @@ Files: readme-debian.el
 Copyright: 2002 Junichi Uekawa <dancer@netfort.gr.jp>
 License: GPL-2+
 
-Files: debian-autopkgtest-control-mode.el
-Copyright: 2024 Xiyue Deng <manphiz@gmail.com>
+Files:
+ debian-autopkgtest-control-mode.el
+ debian-rfc822-mode.el
+ debian-rfc822-watch-mode.el
+Copyright: 2024-2025 Xiyue Deng <manphiz@gmail.com>
 License: GPL-2+
 
 Files: debian/*
