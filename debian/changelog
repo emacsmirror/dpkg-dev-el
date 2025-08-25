@@ -1,6 +1,4 @@
-dpkg-dev-el (37.20~4.gbpb8a580) UNRELEASED; urgency=medium
-
-  ** SNAPSHOT build @b8a58072a0f0ef0f674650831b3ad3ae08df6690 **
+dpkg-dev-el (37.20~exp1) experimental; urgency=medium
 
   * Adapt improvements and fixes by Nicolas Boulenguez (Closes: #1085464)
     - Thanks for the work!
@@ -19,7 +17,7 @@ dpkg-dev-el (37.20~4.gbpb8a580) UNRELEASED; urgency=medium
     - Examples are taken from debian-watch(5).
   * Update d/copyright for newly added files
 
- -- Xiyue Deng <manphiz@gmail.com>  Sun, 24 Aug 2025 17:56:20 -0700
+ -- Xiyue Deng <manphiz@gmail.com>  Sun, 24 Aug 2025 18:01:45 -0700
 
 dpkg-dev-el (37.19) unstable; urgency=medium
 
