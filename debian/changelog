@@ -1,16 +1,25 @@
-dpkg-dev-el (37.20~3.gbpd927ef) UNRELEASED; urgency=medium
+dpkg-dev-el (37.20~4.gbpb8a580) UNRELEASED; urgency=medium
 
-  ** SNAPSHOT build @d927ef386efed1bc2050c1c70bea8d83c34e6ecd **
+  ** SNAPSHOT build @b8a58072a0f0ef0f674650831b3ad3ae08df6690 **
 
-  * UNRELEASED
   * Adapt improvements and fixes by Nicolas Boulenguez (Closes: #1085464)
     - Thanks for the work!
   * Use one debputy lsp entry to manage all supported modes
     - So that a single debputy instance can manage all opened buffers in
       those supported modes.  Thanks Niels Thykier for the suggestion and
       the example setting!
+  * Add debian-rfc822-mode.el defining a base rfc822-style mode
+    - Other rfc822-style modes can derive from this base mode for easy
+      customization.
+  * Derive debian-autopkgtest-control-mode from debian-rfc822-mode
+    - Also update tests on the fontification of a single `@'.
+  * Add debian-rfc822-watch-mode for debian/watch version 5 files
+    - Derive from debian-rfc822-mode. (Closes: #1111341)
+  * Add faceup tests for debian-deb822-watch-mode
+    - Examples are taken from debian-watch(5).
+  * Update d/copyright for newly added files
 
- -- Xiyue Deng <manphiz@gmail.com>  Sat, 23 Aug 2025 02:56:26 -0700
+ -- Xiyue Deng <manphiz@gmail.com>  Sun, 24 Aug 2025 17:56:20 -0700
 
 dpkg-dev-el (37.19) unstable; urgency=medium
 
