@@ -1,3 +1,11 @@
+dpkg-dev-el (37.20~exp2) experimental; urgency=medium
+
+  * Add autoload cookie to derived modes
+    - So that the mode definitions are available when using the major
+      modes.
+
+ -- Xiyue Deng <manphiz@gmail.com>  Mon, 25 Aug 2025 00:34:52 -0700
+
 dpkg-dev-el (37.20~exp1) experimental; urgency=medium
 
   * Adapt improvements and fixes by Nicolas Boulenguez (Closes: #1085464)
