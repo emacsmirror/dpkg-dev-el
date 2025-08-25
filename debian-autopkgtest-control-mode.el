@@ -29,6 +29,7 @@
 
 (require 'debian-rfc822-mode)
 
+;;;###autoload
 (define-derived-mode debian-autopkgtest-control-mode debian-rfc822-mode
   "Debian autopkgtest control mode"
   (setq-local debian-rfc822-mode-field-spec

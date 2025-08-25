@@ -26,6 +26,7 @@
 
 (require 'debian-rfc822-mode)
 
+;;;###autoload
 (define-derived-mode debian-rfc822-watch-mode debian-rfc822-mode
   "Debian rfc822 watch"
   (setq-local debian-rfc822-mode-field-spec
