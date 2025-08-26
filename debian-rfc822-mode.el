@@ -60,7 +60,7 @@ and the corresponding substitute variables like `@string1@',
 
 A derived mode should customize this variable accordingly.")
 
-(defvar debian-rfc822-mode-syntax-table
+(defvar debian-rfc822-mode--syntax-table
   (let ((table (make-syntax-table text-mode-syntax-table)))
     (modify-syntax-entry ?\" ".   " table)
     (modify-syntax-entry ?\\ ".   " table)
@@ -68,12 +68,12 @@ A derived mode should customize this variable accordingly.")
     table)
   "Syntax table for debian-rfc822-mode.")
 
-(defvar debian-rfc822-mode-email-font-lock-spec
+(defvar debian-rfc822-mode--email-font-lock-spec
   '("<?\\([^<> \t\n]+@[^<> \t\n]+\\.[^<> \t\n]+\\)>?"
     (1 font-lock-variable-name-face))
   "The font lock spec for emails.")
 
-(defvar debian-rfc822-mode-url-font-lock-spec
+(defvar debian-rfc822-mode--url-font-lock-spec
   (let* ((protocol-prefixes '("file:///"
                               "ftp://"
                               "git://"
@@ -87,11 +87,11 @@ A derived mode should customize this variable accordingly.")
     `(,url-regexp . font-lock-constant-face))
   "The font lock spec for URLs.")
 
-(defvar debian-rfc822-mode-comment-font-lock-spec
+(defvar debian-rfc822-mode--comment-font-lock-spec
   '("^#.*$" . font-lock-comment-face)
   "The font lock spec for comments.")
 
-(defun debian-rfc822-mode-field-font-lock-spec (field-spec)
+(defun debian-rfc822-mode--field-font-lock-spec (field-spec)
   "Build a font lock spec based on FIELD-SPEC.
 See debian-rfc822-mode-field-spec."
   (let (result)
@@ -114,7 +114,7 @@ See debian-rfc822-mode-field-spec."
                        `(,field-name-regexp . font-lock-keyword-face)))))
     result))
 
-(defun debian-rfc822-mode-variable-font-lock-spec (variable-spec)
+(defun debian-rfc822-mode--variable-font-lock-spec (variable-spec)
   "Build a font lock spec for `@variable@' based on VARIABLE-SPEC.
 See `debian-rfc822-mode-variable-spec'."
   (let ((variable-regexp
@@ -123,12 +123,12 @@ See `debian-rfc822-mode-variable-spec'."
                              variable-spec))))
     `(,variable-regexp . font-lock-variable-name-face)))
 
-(defun debian-rfc822-mode-font-lock-keywords (fields variables)
+(defun debian-rfc822-mode--font-lock-keywords (fields variables)
   "Build font-lock-defaults based on FIELDS and VARIABLES."
-  (let ((mode-font-lock-keywords `(,debian-rfc822-mode-url-font-lock-spec
-                                   ,debian-rfc822-mode-email-font-lock-spec)))
+  (let ((mode-font-lock-keywords `(,debian-rfc822-mode--url-font-lock-spec
+                                   ,debian-rfc822-mode--email-font-lock-spec)))
     (when fields
-      (dolist (spec (debian-rfc822-mode-field-font-lock-spec
+      (dolist (spec (debian-rfc822-mode--field-font-lock-spec
                      fields))
         (add-to-list 'mode-font-lock-keywords spec)))
 
@@ -136,16 +136,16 @@ See `debian-rfc822-mode-variable-spec'."
     ;; priority.
     (when variables
       (add-to-list 'mode-font-lock-keywords
-                   (debian-rfc822-mode-variable-font-lock-spec
+                   (debian-rfc822-mode--variable-font-lock-spec
                     variables)))
 
     ;; Ensure that comment is the top one on the font-lock-keywords so that it
     ;; takes the highest priority.
     (add-to-list 'mode-font-lock-keywords
-                 debian-rfc822-mode-comment-font-lock-spec)
+                 debian-rfc822-mode--comment-font-lock-spec)
     mode-font-lock-keywords))
 
-(defun debian-rfc822-set-font-lock-defaults (&optional more-spec)
+(defun debian-rfc822-mode-set-font-lock-defaults (&optional more-spec)
   "Set font-lock-defaults based on the buffer local customization.
 A derived mode should customize `debian-rfc822-mode-font-field-spec' and
 `debian-rfc822-mode-variable-spec' for highlighting.  When needed,
@@ -153,7 +153,7 @@ MORE-SPEC can be used to specify additional highlighting customization."
   (setq-local font-lock-defaults
               `(;; keywords
                 ,(let ((mode-font-lock-keywords
-                        (debian-rfc822-mode-font-lock-keywords
+                        (debian-rfc822-mode--font-lock-keywords
                          debian-rfc822-mode-field-spec
                          debian-rfc822-mode-variable-spec)))
                    (when more-spec
@@ -167,16 +167,16 @@ MORE-SPEC can be used to specify additional highlighting customization."
                 ;; syntax-alist
                 nil)))
 
-;;;###autoload
 (define-derived-mode debian-rfc822-mode text-mode "Debian rfc822-style mode"
   "Mode for rfc822-style Debian configuration files.
 This should be the parent-mode for a more specific rfc822-style mode.  A
 derived mode should update the buffer local variables
 `debian-rfc822-mode-field-spec' and `debian-rfc822-mode-variable-spec'
 according to the mode's specific usage to enable better highlighting.
-Note that you also need to call `(debian-rfc822-set-font-lock-defaults)'
-explicitly in `define-derived-mode' to let it take effect."
-  (set-syntax-table debian-rfc822-mode-syntax-table)
+Note that you also need to
+call `(debian-rfc822-mode-set-font-lock-defaults)' explicitly in
+`define-derived-mode' to let it take effect."
+  (set-syntax-table debian-rfc822-mode--syntax-table)
   ;; Comments
   (setq-local comment-start-skip "#+ *")
   (setq-local comment-start "#")

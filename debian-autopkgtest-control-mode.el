@@ -59,7 +59,7 @@
   (setq-local debian-rfc822-mode-variable-spec
               '("builddeps"
                 "recommends"))
-  (debian-rfc822-set-font-lock-defaults))
+  (debian-rfc822-mode-set-font-lock-defaults))
 
 ;;;###autoload
 (add-to-list 'auto-mode-alist

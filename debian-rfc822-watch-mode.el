@@ -86,7 +86,7 @@
                 "SIGNATURE_EXT"
                 "STABLE_VERSION"))
 
-  (debian-rfc822-set-font-lock-defaults))
+  (debian-rfc822-mode-set-font-lock-defaults))
 
 ;;;###autoload
 (add-to-list 'auto-mode-alist
