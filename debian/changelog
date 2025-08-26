@@ -1,3 +1,9 @@
+dpkg-dev-el (37.20~exp3) experimental; urgency=medium
+
+  * Style fixes in debian-rfc822-mode
+
+ -- Xiyue Deng <manphiz@gmail.com>  Tue, 26 Aug 2025 01:39:37 -0700
+
 dpkg-dev-el (37.20~exp2) experimental; urgency=medium
 
   * Add autoload cookie to derived modes
