@@ -88,7 +88,7 @@ A derived mode should customize this variable accordingly.")
   "The font lock spec for URLs.")
 
 (defvar debian-rfc822-mode--comment-font-lock-spec
-  '("^#.*$" . font-lock-comment-face)
+  '("^[[:space:]]*\\(#.*\\)$" (1 font-lock-comment-face))
   "The font lock spec for comments.")
 
 (defun debian-rfc822-mode--field-font-lock-spec (field-spec)

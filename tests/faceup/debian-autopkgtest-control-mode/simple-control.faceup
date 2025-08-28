@@ -6,6 +6,8 @@
 «k:Test-Command:» make autopkgtest
 «x:# Highlighting all supported depends.»
 «k:Depends:» @, «v:@builddeps@», «v:@recommends@»
-«k:Architecture:» amd64, !armel
+«k:Architecture:» amd64, !armel,
+ «x:# Comments with leading space.»
+ !mipsel
 «x:# Highlighting all supported restrictions.»
 «k:Restrictions:» «t:allow-stderr», «t:breaks-testbed», «t:build-needed», «t:flaky», «t:hint-testsuite-triggers», «t:isolation-container», «t:isolation-machine», «t:needs-internet», «t:needs-reboot», «t:needs-root», «t:needs-sudo», «t:rw-build-tree», «t:skip-not-installable», «t:skippable», «t:superficial»

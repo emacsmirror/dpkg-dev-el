@@ -6,6 +6,8 @@ Depends: @, @builddeps@
 Test-Command: make autopkgtest
 # Highlighting all supported depends.
 Depends: @, @builddeps@, @recommends@
-Architecture: amd64, !armel
+Architecture: amd64, !armel,
+ # Comments with leading space.
+ !mipsel
 # Highlighting all supported restrictions.
 Restrictions: allow-stderr, breaks-testbed, build-needed, flaky, hint-testsuite-triggers, isolation-container, isolation-machine, needs-internet, needs-reboot, needs-root, needs-sudo, rw-build-tree, skip-not-installable, skippable, superficial
