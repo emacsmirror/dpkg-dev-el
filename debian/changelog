@@ -1,3 +1,10 @@
+dpkg-dev-el (37.20~exp4) experimental; urgency=medium
+
+  * Add support for uscan-template(5) fields
+    - Also highlight "auto" in more supported fields.
+
+ -- Xiyue Deng <manphiz@gmail.com>  Wed, 27 Aug 2025 21:46:29 -0700
+
 dpkg-dev-el (37.20~exp3) experimental; urgency=medium
 
   * Style fixes in debian-rfc822-mode
