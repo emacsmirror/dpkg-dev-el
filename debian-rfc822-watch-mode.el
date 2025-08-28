@@ -35,9 +35,11 @@
                 ("Compression")
                 ("Ctype")
                 ("Date")
-                ("Decompress" . ("yes"))
+                ("Dist")
+                ("Decompress" . ("no"
+                                 "yes"))
                 ("Download-Url-Mangle")
-                ("Dversion-Mangle")
+                ("Dversion-Mangle" . ("auto"))
                 ("Dirversion-Mangle")
                 ("Filename-Mangle")
                 ("Git-Export")
@@ -49,6 +51,7 @@
                            "git"
                            "svn"))
                 ("Oversion-Mangle")
+                ("Owner")
                 ("Page-Mangle")
                 ("Pgp-Mode" . ("auto"
                                "default"
@@ -60,17 +63,23 @@
                                "self"))
                 ("Pgp-Sig-Url-Mangle")
                 ("Pretty")
+                ("Project")
+                ("Release-Only" . ("no"
+                                   "yes"))
                 ("Repacksuffix")
                 ("Repack")
                 ("Search-Mode" . ("html"
                                   "plain"))
                 ("Source")
-                ("Template")
+                ("Template" . ("Github"
+                               "Gitlab"
+                               "Metacpan"
+                               "Npmregistry"))
                 ("User-Agent")
-                ("Uversion-Mangle")
+                ("Uversion-Mangle" . ("auto"))
                 ("Version")
                 ("Version-Constraint" . ("same"))
-                ("Version-Mangle")
+                ("Version-Mangle" . ("auto"))
                 ("Version-Separator")
                 ("Version-Schema" . ("previous"
                                      "group"
