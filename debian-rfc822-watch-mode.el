@@ -32,23 +32,34 @@
   (setq-local debian-rfc822-mode-field-spec
               '(("Bare")
                 ("Component")
-                ("Compression")
-                ("Ctype")
+                ("Compression" . ("bz2"
+                                  "bzip2"
+                                  "default"
+                                  "gz"
+                                  "gzip"
+                                  "lzma"
+                                  "xz"))
+                ("Ctype" . ("nodejs"
+                            "perl"))
                 ("Date")
-                ("Dist")
                 ("Decompress" . ("no"
                                  "yes"))
+                ("Dist")
+                ("Dirversion-Mangle")
                 ("Download-Url-Mangle")
                 ("Dversion-Mangle" . ("auto"))
-                ("Dirversion-Mangle")
-                ("Filename-Mangle")
-                ("Git-Export")
+                ("Filename-Mangle" . ("auto"))
+                ("Git-Date")
+                ("Git-Export" . ("all"
+                                 "default"))
                 ("Git-Mode" . ("shallow"
                                "full"))
                 ("Git-Modules" . ("all"))
+                ("Git-Pretty" . ("describe"))
                 ("Matching-Pattern" . ("HEAD"))
                 ("Mode" . ("LWP"
                            "git"
+                           "gitlab"
                            "svn"))
                 ("Oversion-Mangle")
                 ("Owner")
@@ -66,8 +77,11 @@
                 ("Project")
                 ("Release-Only" . ("no"
                                    "yes"))
-                ("Repacksuffix")
-                ("Repack")
+                ("Repack" . ("no"
+                             "yes"))
+                ("Repacksuffix" . ("+dfsg"
+                                   "+ds"
+                                   "+repack"))
                 ("Search-Mode" . ("html"
                                   "plain"))
                 ("Source")
@@ -80,10 +94,10 @@
                 ("Version")
                 ("Version-Constraint" . ("same"))
                 ("Version-Mangle" . ("auto"))
-                ("Version-Separator")
                 ("Version-Schema" . ("previous"
                                      "group"
-                                     "checksum"))))
+                                     "checksum"))
+                ("Version-Separator")))
 
   (setq-local debian-rfc822-mode-variable-spec
               '("ANY_VERSION"
