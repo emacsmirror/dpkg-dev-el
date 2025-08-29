@@ -399,17 +399,62 @@ This defaults to the value of (in order of precedence):
   :group 'debian-changelog
   :type 'string)
 
+(defvar debian-changelog--allowed-debian-distributions-from-distro-info
+  (when (executable-find "debian-distro-info")
+    (split-string (shell-command-to-string "debian-distro-info --supported")))
+  "Supported Debian distribution suites from distro-info.")
+
+(defvar debian-changelog--allowed-debian-distributions
+  '("bookworm"
+    "trixie"
+    "forky"
+    "sid"
+    "experimental")
+  "Supported Debian distribution suites.")
+
+(defun debian-changelog--allowed-debian-distributions ()
+  "Supported Debian distribution suites.
+It will use the value produced from debian-distro-info in
+`debian-changelog--allowed-debian-distributions-from-distro-info'; if
+that's unavailable, fallback to
+`debian-changelog--allowed-debian-distributions'."
+  (or debian-changelog--allowed-debian-distributions-from-distro-info
+      debian-changelog--allowed-debian-distributions))
+
+(defvar debian-changelog--allowed-ubuntu-distributions-from-distro-info
+  (when (executable-find "ubuntu-distro-info")
+    (split-string (shell-command-to-string "ubuntu-distro-info --supported")))
+  "Supported Ubuntu distribution suites from distro-info.")
+
+(defvar debian-changelog--allowed-ubuntu-distributions
+  '("jammy"
+    "noble"
+    "plucky"
+    "questing")
+  "Supported Ubuntu distribution suites.")
+
+(defun debian-changelog--allowed-ubuntu-distributions ()
+  "Supported Ubuntu distribution suites.
+It will use the value produced from ubuntu-distro-info in
+`debian-changelog--allowed-ubuntu-distributions-from-distro-info'; if
+that's unavailable, fallback to
+`debian-changelog--allowed-ubuntu-distributions'."
+  (or debian-changelog--allowed-ubuntu-distributions-from-distro-info
+      debian-changelog--allowed-ubuntu-distributions))
+
 (defcustom debian-changelog-allowed-distributions
-  '("unstable"
-    "testing"
-    "testing-security"
-    "stable"
-    "stable-security"
-    "stable-proposed-updates"
-    "oldstable-security"
-    "oldstable-proposed-updates"
-    "experimental"
-    "UNRELEASED" )
+  (append
+   '("unstable"
+     "testing"
+     "testing-security"
+     "stable"
+     "stable-security"
+     "stable-proposed-updates"
+     "oldstable-security"
+     "oldstable-proposed-updates"
+     "UNRELEASED")
+   (debian-changelog--allowed-debian-distributions)
+   (debian-changelog--allowed-ubuntu-distributions))
   "*Allowed values for distribution."
   :group 'debian-changelog
   :type '(repeat string))
@@ -432,10 +477,28 @@ This defaults to the value of (in order of precedence):
     "buster"
     "bullseye"
     "bookworm"
-    "trixie")
+    "trixie"
+    "forky"
+    "duke"
+    "sid"
+    "experimental")
   "*Known code names for Debian releases sorted from oldest to newest."
   :group 'debian-changelog
   :type '(repeat string))
+
+(defvar debian-changelog--debian-code-names-from-distro-info
+  (when (executable-find "debian-distro-info")
+    (split-string (shell-command-to-string "debian-distro-info --all")))
+  "Known code names for Debian releases from distro-info, sorted from
+oldest to newest.")
+
+(defun debian-changelog-debian-code-names ()
+  "Known code names for Debian releases sorted from oldest to newest.
+It will use the value produced from debian-distro-info in
+`debian-changelog--debian-code-names-from-distro-info'; if that's
+unavailable, fallback to `debian-changelog-debian-code-names'."
+  (or debian-changelog--debian-code-names-from-distro-info
+      debian-changelog-deiban-code-names))
 
 (defcustom debian-changelog-ubuntu-code-names
   '("warty"
@@ -478,10 +541,25 @@ This defaults to the value of (in order of precedence):
     "lunar"
     "mantic"
     "noble"
-    "oracular")
+    "oracular"
+    "plucky"
+    "questing")
   "*Known code names for Ubuntu releases sorted from oldest to newest."
   :group 'debian-changelog
   :type '(repeat string))
+
+(defvar debian-changelog--ubuntu-code-names-from-distro-info
+  (when (executable-find "ubuntu-distro-info")
+    (split-string (shell-command-to-string "ubuntu-distro-info --all")))
+  "Known code names for Ubuntu releases sorted from oldest to newest, ")
+
+(defun debian-changelog-ubuntu-code-names ()
+  "Known code names for Ubuntu releases sorted from oldest to newest.
+It will use the value produced from ubuntu-distro-info in
+`debian-changelog--ubuntu-code-names-from-distro-info'; if that's
+unavailable, fallback to `debian-changelog-ubuntu-code-names'."
+  (or debian-changelog--ubuntu-code-names-from-distro-info
+      debian-changelog-ubuntu-code-names))
 
 (defcustom debian-changelog-local-variables-maybe-remove t
   "*Ask to remove obsolete \"Local Variables:\" block from changelog.
@@ -714,8 +792,8 @@ Upload to %s anyway?")
 
 (defun debian-changelog--get-all-code-names ()
   "Returns a list of all code names from supported distributions."
-  (append debian-changelog-debian-code-names
-          debian-changelog-ubuntu-code-names))
+  (append (debian-changelog-debian-code-names)
+          (debian-changelog-ubuntu-code-names)))
 
 ;;
 ;; keymap table definition
