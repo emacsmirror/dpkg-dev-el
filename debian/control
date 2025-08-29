@@ -8,6 +8,7 @@ Uploaders:
 Build-Depends: debhelper-compat (= 13),
  dh-elpa,
  elpa-debian-el,
+ distro-info <!nocheck>,
 Standards-Version: 4.7.2
 Homepage: https://salsa.debian.org/emacsen-team/dpkg-dev-el
 Vcs-Browser: https://salsa.debian.org/emacsen-team/dpkg-dev-el
@@ -18,7 +19,7 @@ Testsuite: autopkgtest-pkg-elpa
 Package: elpa-dpkg-dev-el
 Architecture: all
 Depends: ${elpa:Depends}, ${misc:Depends}
-Recommends: emacs
+Recommends: emacs, distro-info
 Enhances: emacs
 Description: Emacs helpers specific to Debian development
  This package contains:
