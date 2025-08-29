@@ -2,8 +2,11 @@ dpkg-dev-el (37.20~exp5) experimental; urgency=medium
 
   * Improve comment handling
     - Allow empty characters before `#'.
+  * Add support for distro-info to get suite names for Debian and Ubuntu
+    - Also added simple test cases.
+  * Add distro-info to Recommends and Build-Depends for tests in d/control
 
- -- Xiyue Deng <manphiz@gmail.com>  Thu, 28 Aug 2025 13:23:26 -0700
+ -- Xiyue Deng <manphiz@gmail.com>  Thu, 28 Aug 2025 17:18:02 -0700
 
 dpkg-dev-el (37.20~exp4) experimental; urgency=medium
 
