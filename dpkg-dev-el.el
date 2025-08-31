@@ -125,6 +125,8 @@ what other rules say."
             (apply 'find-operation-coding-system args))
         'utf-8))))
 
+;; Requested in bug#1112562
+(add-to-list 'auto-mode-alist '("/debian/upstream/metadata" . yaml-mode))
 
 (provide 'dpkg-dev-el)
 
