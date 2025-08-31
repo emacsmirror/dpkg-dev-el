@@ -1,3 +1,10 @@
+dpkg-dev-el (37.20~exp7) experimental; urgency=medium
+
+  * Enable yaml-mode for debian/upstream/metadata
+    - Thanks Niels Thykier for the suggestions. (Closes: #1112562)
+
+ -- Xiyue Deng <manphiz@gmail.com>  Sat, 30 Aug 2025 22:40:03 -0700
+
 dpkg-dev-el (37.20~exp6) experimental; urgency=medium
 
   * Add more rfc822 watch fields supported in the latest devscripts
