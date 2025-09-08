@@ -1,3 +1,9 @@
+dpkg-dev-el (37.20) unstable; urgency=medium
+
+  * Upload to unstable
+
+ -- Xiyue Deng <manphiz@gmail.com>  Sun, 07 Sep 2025 22:26:53 -0700
+
 dpkg-dev-el (37.20~exp7) experimental; urgency=medium
 
   * Enable yaml-mode for debian/upstream/metadata
