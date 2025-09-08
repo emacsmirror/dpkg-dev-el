@@ -56,6 +56,7 @@
                                "full"))
                 ("Git-Modules" . ("all"))
                 ("Git-Pretty" . ("describe"))
+                ("Href-Decode" . ("percentage-encoding"))
                 ("Matching-Pattern" . ("HEAD"))
                 ("Mode" . ("LWP"
                            "git"
@@ -79,9 +80,9 @@
                                    "yes"))
                 ("Repack" . ("no"
                              "yes"))
-                ("Repacksuffix" . ("+dfsg"
-                                   "+ds"
-                                   "+repack"))
+                ("Repack-Suffix" . ("+dfsg"
+                                    "+ds"
+                                    "+repack"))
                 ("Search-Mode" . ("html"
                                   "plain"))
                 ("Source")
