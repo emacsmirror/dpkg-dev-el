@@ -3,7 +3,7 @@ dpkg-dev-el (37.20.1) unstable; urgency=medium
   * Add/Refine more fields in debian/watch version 5 format
   * Bump version to 37.20.1
 
- -- Xiyue Deng <manphiz@gmail.com>  Fri, 12 Sep 2025 01:25:08 -0700
+ -- Xiyue Deng <manphiz@gmail.com>  Fri, 12 Sep 2025 01:58:21 -0700
 
 dpkg-dev-el (37.20) unstable; urgency=medium
 
