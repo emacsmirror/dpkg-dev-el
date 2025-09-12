@@ -116,7 +116,7 @@ Version: 5
 Source: http://some.site.org/some/path/
 Matching-Pattern: foobar-@ANY_VERSION@@ARCHIVE_EXT@
 Dversion-Mangle: s/\+dfsg\d*$//
-Repacksuffix: +dfsg
+Repack-Suffix: +dfsg
 
 
 # HTTP site (Filename-Mangle)

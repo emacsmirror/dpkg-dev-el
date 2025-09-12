@@ -116,7 +116,7 @@
 «k:Source:» «c:http://some.site.org/some/path/»
 «k:Matching-Pattern:» foobar-«v:@ANY_VERSION@@ARCHIVE_EXT@»
 «k:Dversion-Mangle:» s/\+dfsg\d*$//
-«k:Repacksuffix:» «t:+dfsg»
+«k:Repack-Suffix:» «t:+dfsg»
 
 
 «x:# HTTP site (Filename-Mangle)»
