@@ -430,7 +430,8 @@ that's unavailable, fallback to
   '("jammy"
     "noble"
     "plucky"
-    "questing")
+    "questing"
+    "resolute")
   "Supported Ubuntu distribution suites.")
 
 (defun debian-changelog--allowed-ubuntu-distributions ()
@@ -543,7 +544,8 @@ unavailable, fallback to `debian-changelog-debian-code-names'."
     "noble"
     "oracular"
     "plucky"
-    "questing")
+    "questing"
+    "resolute")
   "*Known code names for Ubuntu releases sorted from oldest to newest."
   :group 'debian-changelog
   :type '(repeat string))
