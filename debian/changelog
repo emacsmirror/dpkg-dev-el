@@ -1,3 +1,11 @@
+dpkg-dev-el (37.20.2) unstable; urgency=medium
+
+  * Update Ubuntu distro name list (Closes: #1117745)
+  * Drop `Rules-Requires-Root: no'
+    - This is the default since dpkg 1.22.13.
+
+ -- Xiyue Deng <manphiz@gmail.com>  Fri, 10 Oct 2025 22:23:58 -0700
+
 dpkg-dev-el (37.20.1) unstable; urgency=medium
 
   * Add/Refine more fields in debian/watch version 5 format
