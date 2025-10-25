@@ -1,6 +1,4 @@
-dpkg-dev-el (37.20.3~1.gbpc975fc) UNRELEASED; urgency=medium
-
-  ** SNAPSHOT build @c975fcdbc3f9f58d9a46be0262c25d2cbe394ae3 **
+dpkg-dev-el (37.20.3) unstable; urgency=medium
 
   * Fix adding items to lexical-bind lists
     - Should not use `add-to-list'; use `cl-pushnew' instead.
@@ -16,7 +14,7 @@ dpkg-dev-el (37.20.3~1.gbpc975fc) UNRELEASED; urgency=medium
   * Fix unused lexical argument warning in debian-control-mode.el
     - Add `_' prefix to unused parameter.
 
- -- Xiyue Deng <manphiz@gmail.com>  Sat, 25 Oct 2025 02:43:43 -0700
+ -- Xiyue Deng <manphiz@gmail.com>  Sat, 25 Oct 2025 02:51:10 -0700
 
 dpkg-dev-el (37.20.2) unstable; urgency=medium
 
