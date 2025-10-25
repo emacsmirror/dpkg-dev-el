@@ -324,7 +324,7 @@ It should be immediately followed by a non-slash character.")
     (debian-control-mode-after-change-function (point-min) (point-max) 0))
   (dpkg-dev-common-utils--add-debputy-settings))
 
-(defun debian-control-mode-after-change-function (beg end len)
+(defun debian-control-mode-after-change-function (beg end _len)
   (save-excursion
     (let ((modified (buffer-modified-p))
           (buffer-read-only nil)
