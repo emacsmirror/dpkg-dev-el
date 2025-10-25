@@ -106,12 +106,12 @@ See debian-rfc822-mode-field-spec."
                   `(,sub-item-regexp nil nil
                                      (1 font-lock-type-face))))))
         (if sub-items-spec
-            (add-to-list 'result
-                         `(,field-name-regexp
-                           (0 font-lock-keyword-face)
-                           ,sub-items-spec))
-          (add-to-list 'result
-                       `(,field-name-regexp . font-lock-keyword-face)))))
+            (cl-pushnew `(,field-name-regexp
+                          (0 font-lock-keyword-face)
+                          ,sub-items-spec)
+                        result)
+          (cl-pushnew `(,field-name-regexp . font-lock-keyword-face)
+                      result))))
     result))
 
 (defun debian-rfc822-mode--variable-font-lock-spec (variable-spec)
@@ -130,19 +130,19 @@ See `debian-rfc822-mode-variable-spec'."
     (when fields
       (dolist (spec (debian-rfc822-mode--field-font-lock-spec
                      fields))
-        (add-to-list 'mode-font-lock-keywords spec)))
+        (cl-pushnew spec mode-font-lock-keywords)))
 
     ;; Make variable higher priority than email and URL so that it takes
     ;; priority.
     (when variables
-      (add-to-list 'mode-font-lock-keywords
-                   (debian-rfc822-mode--variable-font-lock-spec
-                    variables)))
+      (cl-pushnew (debian-rfc822-mode--variable-font-lock-spec
+                   variables)
+                  mode-font-lock-keywords))
 
     ;; Ensure that comment is the top one on the font-lock-keywords so that it
     ;; takes the highest priority.
-    (add-to-list 'mode-font-lock-keywords
-                 debian-rfc822-mode--comment-font-lock-spec)
+    (cl-pushnew debian-rfc822-mode--comment-font-lock-spec
+                mode-font-lock-keywords)
     mode-font-lock-keywords))
 
 (defun debian-rfc822-mode-set-font-lock-defaults (&optional more-spec)
@@ -157,8 +157,7 @@ MORE-SPEC can be used to specify additional highlighting customization."
                          debian-rfc822-mode-field-spec
                          debian-rfc822-mode-variable-spec)))
                    (when more-spec
-                     (dolist (spec more-spec)
-                       (add-to-list 'mode-font-lock-keywords spec t)))
+                     (nconc 'mode-font-lock-keywords 'more-spec))
                    mode-font-lock-keywords)
                 ;; keywords-only
                 nil
