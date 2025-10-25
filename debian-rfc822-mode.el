@@ -46,7 +46,7 @@
 
 (defvar-local debian-rfc822-mode-field-spec nil
   "Keyword spec for debian-rfc822-mode.  This consists of a list
-of '(\"field-name\" [. (\"sub-item1\" \"sub-item2\" ...)])', where each
+of `(\"field-name\" [. (\"sub-item1\" \"sub-item2\" ...)])', where each
 string is a regexp.  The field-name are detected at the start of the
 line and ends at `:'.  If any `sub-itemN' is present, they will be
 highlighted if the current line starts with `field-name'.
