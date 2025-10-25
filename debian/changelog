@@ -5,7 +5,7 @@ dpkg-dev-el (37.20.3) unstable; urgency=medium
   * Fix quoting in docstring
   * Add lexical-binding directive to all test files
   * Fix free variable warning in dpkg-dev-common-utils.el
-    - Eval (require 'eglot) when byte-compiling.
+    - Eval (require 'eglot) also when byte-compiling.
   * Fixes in debian-changelog-mode.el
     - Fix typo "deiban" -> "debian".
     - Add missing use of `limit' parameter in
@@ -14,7 +14,7 @@ dpkg-dev-el (37.20.3) unstable; urgency=medium
   * Fix unused lexical argument warning in debian-control-mode.el
     - Add `_' prefix to unused parameter.
 
- -- Xiyue Deng <manphiz@gmail.com>  Sat, 25 Oct 2025 02:51:10 -0700
+ -- Xiyue Deng <manphiz@gmail.com>  Sat, 25 Oct 2025 03:23:00 -0700
 
 dpkg-dev-el (37.20.2) unstable; urgency=medium
 
