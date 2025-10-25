@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t -*-
+
 (require 'debian-bts-control)
 (require 'debian-changelog-mode)
 (require 'debian-control-mode)

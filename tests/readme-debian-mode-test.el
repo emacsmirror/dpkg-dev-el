@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t -*-
+
 (require 'readme-debian)
 (require 'ert)
 (require 'faceup)

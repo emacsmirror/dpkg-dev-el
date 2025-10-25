@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t -*-
+
 (require 'debian-rfc822-watch-mode)
 (require 'ert)
 (require 'faceup)

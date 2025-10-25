@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t -*-
+
 (require 'debian-autopkgtest-control-mode)
 (require 'ert)
 (require 'faceup)

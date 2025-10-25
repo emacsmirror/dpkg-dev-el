@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t -*-
+
 (require 'debian-control-mode)
 (require 'ert)
 (require 'faceup)

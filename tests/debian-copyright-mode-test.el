@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t -*-
+
 (require 'debian-copyright)
 (require 'ert)
 (require 'faceup)

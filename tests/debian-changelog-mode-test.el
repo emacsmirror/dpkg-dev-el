@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t -*-
+
 (require 'cl-lib)
 (require 'debian-changelog-mode)
 (require 'ert)
