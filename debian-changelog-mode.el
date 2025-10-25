@@ -499,7 +499,7 @@ It will use the value produced from debian-distro-info in
 `debian-changelog--debian-code-names-from-distro-info'; if that's
 unavailable, fallback to `debian-changelog-debian-code-names'."
   (or debian-changelog--debian-code-names-from-distro-info
-      debian-changelog-deiban-code-names))
+      debian-changelog-debian-code-names))
 
 (defcustom debian-changelog-ubuntu-code-names
   '("warty"
@@ -1659,7 +1659,7 @@ match 1 -> package name
 ;;; The following is not strictly correct.  The upstream version may actually
 ;;; contain a hyphen if a debian version number also exists, making two hyphens
 ;;; I'm assuming it begins with a digit, which is not enforced
-         "^\\(\\S-+\\) (\\([0-9]:\\)?\\([0-9][0-9a-zA-Z.+:~]*\\)\\(-\\([0-9a-zA-Z.+~]+\\)\\)*)" nil t)
+         "^\\(\\S-+\\) (\\([0-9]:\\)?\\([0-9][0-9a-zA-Z.+:~]*\\)\\(-\\([0-9a-zA-Z.+~]+\\)\\)*)" limit t)
 ;;;                                                                                         ^
 ;;; Note the asterix above, allowing more than one hyphen in the version
 ;;; number, but wrongly assuming that all of it is the Debian version
@@ -1896,10 +1896,7 @@ Also set keymap."
     (save-excursion
       (let ((index-alist '())
             (index-bug-alist '())
-            (index-bugsorted-alist '())
-            (prev-pos 0)
-            (imenu-scanning-message "Scanning changelog for History (%3d%%)")
-            )
+            (index-bugsorted-alist '()))
         (setq debian-changelog-imenu-counter -99)
         (goto-char (point-max))
 ;;;          (message "Scanning changelog history...")
