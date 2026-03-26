@@ -36,19 +36,21 @@
 (ert-deftest debian-changelog-mode-verify-values-from-debian-distro-info ()
   "Verify that the values from debian-distro-info is consistent with local values."
   (skip-unless (executable-find "debian-distro-info"))
-  (should (cl-subsetp
+  (should (equal
            debian-changelog--allowed-debian-distributions-from-distro-info
            debian-changelog--allowed-debian-distributions))
   (should (cl-subsetp
            debian-changelog--debian-code-names-from-distro-info
-           debian-changelog-debian-code-names)))
+           debian-changelog-debian-code-names
+           :test #'equal)))
 
 (ert-deftest debian-changelog-mode-verify-values-from-ubuntu-distro-info ()
   "Verify that the values from ubuntu-distro-info is consistent with local values."
   (skip-unless (executable-find "ubuntu-distro-info"))
-  (should (cl-subsetp
+  (should (equal
            debian-changelog--allowed-ubuntu-distributions-from-distro-info
            debian-changelog--allowed-ubuntu-distributions))
   (should (cl-subsetp
            debian-changelog--ubuntu-code-names-from-distro-info
-           debian-changelog-ubuntu-code-names)))
+           debian-changelog-ubuntu-code-names
+           :test #'equal)))
