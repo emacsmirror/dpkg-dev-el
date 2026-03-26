@@ -429,7 +429,6 @@ that's unavailable, fallback to
 (defvar debian-changelog--allowed-ubuntu-distributions
   '("jammy"
     "noble"
-    "plucky"
     "questing"
     "resolute")
   "Supported Ubuntu distribution suites.")
