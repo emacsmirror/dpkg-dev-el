@@ -1,3 +1,12 @@
+dpkg-dev-el (37.20.5) unstable; urgency=medium
+
+  * Add "stonking" to known and allowed Ubuntu code names (Closes: #1135396)
+  * Update Standards-Version to 4.7.4; no change needed
+  * Update my email address
+  * Bump version
+
+ -- Xiyue Deng <manphiz@debian.org>  Fri, 01 May 2026 23:31:14 -0700
+
 dpkg-dev-el (37.20.4) unstable; urgency=medium
 
   * Fix distro info tests
