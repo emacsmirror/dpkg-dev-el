@@ -405,8 +405,7 @@ This defaults to the value of (in order of precedence):
   "Supported Debian distribution suites from distro-info.")
 
 (defvar debian-changelog--allowed-debian-distributions
-  '("bookworm"
-    "trixie"
+  '("trixie"
     "forky"
     "sid"
     "experimental")
@@ -429,7 +428,6 @@ that's unavailable, fallback to
 (defvar debian-changelog--allowed-ubuntu-distributions
   '("jammy"
     "noble"
-    "questing"
     "resolute"
     "stonking")
   "Supported Ubuntu distribution suites.")
