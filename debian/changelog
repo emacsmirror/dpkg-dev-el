@@ -1,3 +1,16 @@
+dpkg-dev-el (37.21) unstable; urgency=medium
+
+  * Support multiline highlighting
+    - Now sub-items are highlighted as long as they are under the same
+      paragraph of their field, even on different continuation lines.
+  * Update autopkgtest and watch file test cases
+    - Ensure multiline highlighting is working correctly.
+  * Update supported Debian and Ubuntu distributions
+    - Also add notes on why sometimes the test behavior differs during
+      building and autopkgtest.
+
+ -- Xiyue Deng <manphiz@debian.org>  Mon, 13 Jul 2026 04:41:44 -0700
+
 dpkg-dev-el (37.20.5) unstable; urgency=medium
 
   * Add "stonking" to known and allowed Ubuntu code names (Closes: #1135396)
