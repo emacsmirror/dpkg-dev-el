@@ -1,3 +1,12 @@
+dpkg-dev-el (37.21.1) UNRELEASED; urgency=medium
+
+  * Update allow Debian distribution: experimental -> rc-buggy
+    (Closes: #1142668)
+  * Update to debhelper-compat 14
+    - Also drop references to ${misc:Depends}; no longer necessary.
+
+ -- Xiyue Deng <manphiz@debian.org>  Mon, 27 Jul 2026 00:48:40 -0700
+
 dpkg-dev-el (37.21) unstable; urgency=medium
 
   * Support multiline highlighting
