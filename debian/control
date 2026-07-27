@@ -4,7 +4,7 @@ Maintainer: Debian Emacsen team <debian-emacsen@lists.debian.org>
 Uploaders:
  David Bremner <bremner@debian.org>,
  Xiyue Deng <manphiz@debian.org>,
-Build-Depends: debhelper-compat (= 13),
+Build-Depends: debhelper-compat (= 14),
  dh-elpa,
  elpa-debian-el,
  distro-info <!nocheck>,
@@ -16,7 +16,7 @@ Testsuite: autopkgtest-pkg-elpa
 
 Package: elpa-dpkg-dev-el
 Architecture: all
-Depends: ${elpa:Depends}, ${misc:Depends}
+Depends: ${elpa:Depends}
 Recommends: emacs, distro-info
 Enhances: emacs
 Description: Emacs helpers specific to Debian development
