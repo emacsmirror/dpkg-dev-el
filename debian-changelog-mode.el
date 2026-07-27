@@ -408,7 +408,7 @@ This defaults to the value of (in order of precedence):
   '("trixie"
     "forky"
     "sid"
-    "experimental")
+    "rc-buggy")
   "Supported Debian distribution suites.")
 
 (defun debian-changelog--allowed-debian-distributions ()
@@ -480,7 +480,7 @@ that's unavailable, fallback to
     "forky"
     "duke"
     "sid"
-    "experimental")
+    "rc-buggy")
   "*Known code names for Debian releases sorted from oldest to newest."
   :group 'debian-changelog
   :type '(repeat string))
